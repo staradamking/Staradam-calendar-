@@ -1,214 +1,226 @@
-/* === БАЗА === */
+/* БАЗА */
 
-*,
-*::before,
-*::after {
+* {
   box-sizing: border-box;
 }
 
-body {
+html, body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui,
-    sans-serif;
+  padding: 0;
+  height: 100%;
+  font-family: -apple-system, system-ui, sans-serif;
   background: #000;
-  color: #bfffd6;
-  -webkit-font-smoothing: antialiased;
+  color: #0f0;
 }
 
-.neon {
-  background: radial-gradient(circle at top, #031a0d 0, #000 50%, #000 100%);
+body {
+  display: flex;
+  flex-direction: column;
 }
 
-.neon .month-card {
-  border-color: #00ff66;
-  box-shadow: 0 0 14px rgba(0, 255, 120, 0.35);
+/* Матрикс-фон */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% -20%, rgba(0,255,0,0.25), transparent 55%),
+    radial-gradient(circle at 50% 120%, rgba(0,255,0,0.25), transparent 55%),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0,255,0,0.05) 0px,
+      rgba(0,255,0,0.05) 1px,
+      transparent 2px,
+      transparent 4px
+    );
+  opacity: 0.35;
+  z-index: 0;
 }
 
-.matrix {
-  background-color: #020503;
-  background-image: linear-gradient(
-      rgba(0, 255, 120, 0.07) 1px,
-      transparent 1px
-    ),
-    linear-gradient(90deg, rgba(0, 255, 120, 0.07) 1px, transparent 1px);
-  background-size: 18px 18px;
+/* TIGER режим — более жёсткий стелс */
+
+body.tiger::before {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(0,255,128,0.35), transparent 60%),
+    radial-gradient(circle at 80% 100%, rgba(0,255,128,0.35), transparent 60%),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0,255,128,0.08) 0px,
+      rgba(0,255,128,0.08) 1px,
+      transparent 2px,
+      transparent 4px
+    );
+  opacity: 0.55;
 }
 
-.matrix .app-title {
-  text-shadow: 0 0 18px rgba(0, 255, 120, 0.7);
+/* LIGHT тема (Matrix Light) */
+
+body.light {
+  background: #050606;
 }
 
-body.tiger {
-  background: radial-gradient(circle at center, #010409 0, #000 40%, #000 100%);
-  color: #9fe5ff;
+body.light::before {
+  opacity: 0.15;
 }
 
-body.tiger .month-card {
-  border-color: #00c2ff;
-  box-shadow: 0 0 12px rgba(0, 180, 255, 0.4);
-}
+/* ВЕРХНЯЯ ПАНЕЛЬ */
 
-body.tiger .day-cell.today {
-  box-shadow: 0 0 22px rgba(0, 180, 255, 0.9);
-}
-
-/* === ВЕРХНЯЯ ПАНЕЛЬ === */
-
-.top-bar {
+#topBar {
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: 5;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 10px 14px;
-  background: rgba(0, 0, 0, 0.96);
-  border-bottom: 1px solid #004020;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(0,0,0,0.92);
+  border-bottom: 1px solid rgba(0,255,0,0.3);
+  backdrop-filter: blur(8px);
 }
 
-.app-title {
-  color: #00ff66;
-  font-weight: 700;
-  letter-spacing: 0.11em;
-  font-size: 16px;
+#appTitle {
+  flex: 1;
   text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #18ff4f;
+  font-size: 16px;
   text-transform: uppercase;
   cursor: pointer;
 }
 
+/* Кнопка-меню */
+
 .icon-button {
-  position: absolute;
-  right: 14px;
-  top: 8px;
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  border: 1px solid #00ff66;
+  border: 1px solid #18ff4f;
   background: transparent;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 3px;
   padding: 0;
 }
 
 .icon-button span {
   display: block;
-  height: 2px;
   width: 16px;
-  background: #00ff66;
-  margin: 0 auto;
-  transition: transform 0.25s ease, opacity 0.25s ease;
+  height: 2px;
+  background: #18ff4f;
+  margin: 2px 0;
+  border-radius: 1px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.icon-button.active span:nth-child(1) {
+/* Анимация крестика при открытом меню */
+
+#topBar.menu-open .icon-button span:nth-child(1) {
   transform: translateY(4px) rotate(45deg);
 }
 
-.icon-button.active span:nth-child(2) {
+#topBar.menu-open .icon-button span:nth-child(2) {
   opacity: 0;
 }
 
-.icon-button.active span:nth-child(3) {
+#topBar.menu-open .icon-button span:nth-child(3) {
   transform: translateY(-4px) rotate(-45deg);
 }
 
-/* === ИНФО-ПАНЕЛЬ === */
+/* ВЫЕЗЖАЮЩАЯ ИНФО-ПАНЕЛЬ */
 
-.info-panel {
-  overflow: hidden;
+#infoPanel {
+  position: relative;
+  z-index: 4;
+  background: radial-gradient(circle at 50% 0%, rgba(0,255,0,0.12), rgba(0,0,0,0.98));
+  border-bottom: 1px solid rgba(0,255,0,0.25);
+  padding: 0 14px;
   max-height: 0;
-  opacity: 0;
-  background: radial-gradient(circle at top, #02180c 0, #000 60%);
-  border-bottom: 1px solid #003818;
-  transition: max-height 0.4s ease, opacity 0.3s ease;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding-bottom 0.3s ease;
 }
 
-.info-panel.open {
-  max-height: 420px;
-  opacity: 1;
+#infoPanel.open {
+  max-height: 360px;
+  padding-bottom: 10px;
 }
 
-.info-content {
-  padding: 10px 16px 14px;
+.info-block {
   font-size: 13px;
-  line-height: 1.5;
+  margin: 8px 0;
+  line-height: 1.35;
 }
 
-.info-row {
-  margin-bottom: 4px;
-}
+/* Цвета и тотемы */
 
-.info-row b {
-  color: #ffffff;
-}
-
-.info-highlight {
-  color: #00ff66;
-}
-
-.info-small {
-  opacity: 0.7;
-  font-size: 11px;
-}
-
-/* список цветов и тотемов */
-
-.color-totems {
-  margin-top: 8px;
-  border-top: 1px dashed #004b2a;
-  padding-top: 8px;
-}
-
-.color-totems-title {
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.color-totems-grid {
+.color-list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 4px 10px;
-  font-size: 11px;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
 }
 
-/* === КАЛЕНДАРЬ === */
-
-.months-container {
-  padding: 10px 10px 80px;
+.color-item {
+  padding: 4px 6px;
+  border-radius: 6px;
+  border: 1px solid rgba(0,255,0,0.25);
+  background: rgba(0,0,0,0.45);
 }
+
+/* ОСНОВНОЙ КОНТЕНТ */
+
+#app {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  padding: 10px 10px 70px;
+}
+
+/* Карточки месяцев */
 
 .month-card {
-  border: 1px solid #00ff66;
-  border-radius: 14px;
-  padding: 10px 14px 12px;
+  border-radius: 18px;
+  border: 1px solid rgba(0,255,0,0.6);
+  padding: 8px 10px 10px;
   margin-bottom: 10px;
-  background: radial-gradient(circle at top left, #021609 0, #000 65%);
+  background: radial-gradient(circle at 50% -20%, rgba(0,255,0,0.18), rgba(0,0,0,0.96));
+  box-shadow: 0 0 10px rgba(0,255,0,0.18);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.month-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 16px rgba(0,255,0,0.32);
+  border-color: rgba(0,255,0,0.9);
 }
 
 .month-header {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-bottom: 6px;
 }
 
 .month-name {
   font-weight: 700;
-  color: #00ff66;
+  font-size: 15px;
 }
 
 .month-dates {
-  font-size: 11px;
+  font-size: 12px;
   opacity: 0.8;
 }
 
 .month-toggle {
-  font-size: 11px;
-  opacity: 0.8;
+  font-size: 12px;
   text-transform: lowercase;
+  opacity: 0.85;
 }
+
+/* Декады и дни */
 
 .dec-row-label {
   font-size: 11px;
@@ -218,125 +230,121 @@ body.tiger .day-cell.today {
 
 .dec-grid {
   display: grid;
-  grid-template-columns: repeat(10, minmax(0, 1fr));
+  grid-template-columns: repeat(10, 1fr);
   gap: 4px;
 }
 
-/* клетки дней */
-
 .day-cell {
-  border: 1px solid #00aa55;
-  border-radius: 8px;
-  height: 28px;
   font-size: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  background: rgba(0, 0, 0, 0.85);
-  transition: box-shadow 0.18s ease, transform 0.18s ease,
-    border-color 0.18s ease, background 0.18s ease, opacity 0.18s ease;
+  text-align: center;
+  padding: 6px 0;
+  border-radius: 8px;
+  border: 1px solid rgba(0,255,0,0.55);
+  background: rgba(0,0,0,0.9);
+  box-shadow: 0 0 4px rgba(0,255,0,0.2);
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.1s ease;
 }
 
-.day-cell:hover {
-  box-shadow: 0 0 8px rgba(0, 255, 120, 0.6);
-  transform: translateY(-1px);
-}
-
-.day-cell.today {
-  border-color: #00ff99;
-  background: radial-gradient(circle at center, #00994a 0, #001b0e 50%, #000 100%);
-  box-shadow: 0 0 16px rgba(0, 255, 153, 0.9);
+.day-cell:active {
+  transform: scale(0.97);
 }
 
 .day-cell.selected {
-  box-shadow: 0 0 12px rgba(0, 255, 120, 0.7);
+  border-color: #18ff4f;
+  box-shadow: 0 0 10px rgba(0,255,0,0.6);
 }
+
+.day-cell.today {
+  background: radial-gradient(circle at 50% 50%, rgba(0,255,0,0.4), #000);
+  box-shadow: 0 0 12px rgba(0,255,0,0.9);
+  border-color: #18ff4f;
+}
+
+/* Выполненные дни */
 
 .day-cell.done {
-  border-color: #00cfff;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 190, 255, 0.35),
-    rgba(0, 60, 120, 0.9)
-  );
+  background: rgba(0,80,0,0.9);
+  border-color: #18ff4f;
+  box-shadow: 0 0 8px rgba(0,255,0,0.6) inset;
 }
+
+/* Фильтр */
 
 .day-cell.filtered-out {
-  opacity: 0.1;
+  opacity: 0.22;
 }
 
-/* === НИЖНЯЯ ПАНЕЛЬ === */
+/* НИЖНЯЯ ПАНЕЛЬ */
 
-.bottom-bar {
+#bottomBar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 8px 10px 10px;
-  background: rgba(0, 0, 0, 0.96);
-  border-top: 1px solid #003d1f;
+  z-index: 3;
+  padding: 6px 8px 8px;
+  background: radial-gradient(circle at 50% 0%, rgba(0,255,0,0.15), rgba(0,0,0,0.96));
+  border-top: 1px solid rgba(0,255,0,0.25);
   display: flex;
-  justify-content: space-between;
   gap: 6px;
-  z-index: 30;
+  justify-content: space-between;
 }
 
 .nav-button {
   flex: 1;
-  border-radius: 999px;
-  border: 1px solid #00ff66;
-  background: transparent;
-  color: #bfffd6;
-  font-size: 12px;
-  padding: 6px 4px;
+  border-radius: 18px;
+  border: 1px solid #18ff4f;
+  background: rgba(0,0,0,0.9);
+  color: #18ff4f;
+  font-size: 13px;
+  padding: 6px 0;
   text-align: center;
-  letter-spacing: 0.02em;
-  text-transform: none;
+  box-shadow: 0 0 8px rgba(0,255,0,0.35);
 }
 
 .nav-button:active {
   transform: scale(0.97);
-  box-shadow: 0 0 10px rgba(0, 255, 120, 0.6);
 }
 
-/* состояния кнопок */
+/* TIGER кнопка активна */
 
-#playMusic.music-on {
-  border-color: #00c2ff;
-  color: #e0f7ff;
+body.tiger .tiger-btn {
+  background: #18ff4f;
+  color: #000;
+  box-shadow:
+    0 0 8px rgba(0,255,128,0.8),
+    0 0 18px rgba(0,255,128,0.7);
 }
 
-#toggleFilter.filter-done {
-  border-color: #00ff66;
+/* КНОПКА "Добавить в календарь" */
+
+.add-to-calendar {
+  margin-top: 4px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  border: 1px solid #18ff4f;
+  background: rgba(0,0,0,0.85);
+  color: #18ff4f;
+  font-size: 12px;
 }
 
-#toggleFilter.filter-undone {
-  border-color: #ffcc00;
+/* Мелочи */
+
+b {
+  font-weight: 600;
 }
 
-#toggleTiger.tiger-on {
-  border-color: #ff4d00;
-  color: #ffd8c0;
-}
+/* Для маленьких экранов */
 
-/* === ПРОЧЕЕ === */
-
-@media (min-width: 768px) {
-  .months-container {
-    max-width: 680px;
-    margin: 0 auto 80px;
+@media (max-width: 360px) {
+  .month-dates {
+    width: 100%;
   }
-
-  .info-content {
-    max-width: 680px;
-    margin: 0 auto;
-  }
-
-  .bottom-bar {
-    max-width: 680px;
-    margin: 0 auto;
-    left: 50%;
-    transform: translateX(-50%);
+  #infoPanel.open {
+    max-height: 380px;
   }
 }
