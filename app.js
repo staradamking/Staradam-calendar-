@@ -165,6 +165,7 @@ function dayKey(monthIndex, dayNumber) {
 function createMonthCard(month, index) {
   const card = document.createElement("div");
   card.className = "month-card";
+  card.dataset.monthIndex = index; // важно для карты
 
   const header = document.createElement("div");
   header.className = "month-header";
@@ -286,7 +287,7 @@ function onDayClick(monthIndex, dayNumber, cell) {
   const decada = Math.floor((dayNumber - 1) / 10) + 1;
   const done = !!doneMap[key];
 
-  // Новая строка смысла дня: цвет + тотем + emoji
+  // строка смысла дня: цвет + тотем + emoji
   const meaningLine = `День ${dayNumber} — ${color.emoji} ${color.name} (${color.animal})`;
 
   const detailsEl = document.getElementById("dayDetails");
@@ -376,6 +377,65 @@ function renderColorPanel() {
   `;
 }
 
+// --- КОСМИЧЕСКАЯ КОЛЬЦЕВАЯ КАРТА ---
+
+function renderMap() {
+  const panel = document.getElementById("mapPanel");
+  if (!panel) return;
+
+  const total = months.length;
+  const centerInfo = starToday
+    ? `Сейчас: ${months[starToday.monthIndex].name}, день ${starToday.dayNumber}`
+    : "Вне года Звезды";
+
+  let html = `
+    <div class="map-container">
+      <div class="map-circle">
+        <div class="map-center">
+          <div class="map-center-title">STAR ADAM</div>
+          <div class="map-center-sub">Кольцевая карта года</div>
+          <div class="map-today">${centerInfo}</div>
+        </div>
+  `;
+
+  for (let i = 0; i < total; i++) {
+    const angle = (360 / total) * i - 90; // старт сверху
+    const currentClass =
+      starToday && starToday.monthIndex === i ? " map-month-current" : "";
+    html += `
+      <div class="map-month${currentClass}"
+           data-month-index="${i}"
+           style="transform: rotate(${angle}deg) translate(0, -120px) rotate(${-angle}deg);">
+        ${i + 1}. ${months[i].name}
+      </div>
+    `;
+  }
+
+  html += `
+      </div>
+    </div>
+  `;
+  panel.innerHTML = html;
+
+  const nodes = panel.querySelectorAll(".map-month");
+  nodes.forEach(node => {
+    node.addEventListener("click", () => {
+      const idx = parseInt(node.dataset.monthIndex, 10);
+      const card = document.querySelector(
+        '.month-card[data-month-index="' + idx + '"]'
+      );
+      if (card) {
+        const content = card.querySelector(".month-header + div");
+        const header = card.querySelector(".month-header");
+        if (content && content.style.display === "none" && header) {
+          header.click();
+        }
+        card.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  });
+}
+
 // --- СТАТИСТИКА ---
 
 function updateStats() {
@@ -420,7 +480,7 @@ function renderApp() {
   if (starToday) {
     const m = months[starToday.monthIndex];
     const color = colorCycle[(starToday.dayNumber - 1) % 10];
-    // убираем слово "цвет", добавляем emoji
+    // без слова "цвет", с emoji
     status.innerHTML = `
       Сегодня в Star Adam New Age:
       <b>${m.name}</b>, день <b>${starToday.dayNumber}</b>
@@ -432,6 +492,7 @@ function renderApp() {
   }
 
   renderColorPanel();
+  renderMap();
   updateStats();
   applyFilter();
 }
@@ -513,8 +574,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const mapBtn = document.getElementById("toggleMap");
-  mapBtn.addEventListener("click", () => {
-    const on = document.body.classList.toggle("map");
-    mapBtn.textContent = on ? "Карта: ON" : "Карта";
-  });
+  const mapPanel = document.getElementById("mapPanel");
+  if (mapBtn && mapPanel) {
+    mapBtn.addEventListener("click", () => {
+      const on = document.body.classList.toggle("map");
+      mapBtn.textContent = on ? "Карта: ON" : "Карта";
+    });
+  }
 });
