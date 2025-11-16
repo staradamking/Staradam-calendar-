@@ -305,7 +305,6 @@ function onDayClick(monthIndex, dayNumber, cell) {
   `;
 
   const infoPanel = document.getElementById("infoPanel");
-  // при выборе дня автоматически показываем инфо
   infoVisible = true;
   infoPanel.classList.remove("hidden");
 
@@ -442,7 +441,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const playBtn = document.getElementById("playMusic");
   let playing = false;
 
-  // Автоматическое включение музыки отключено — только по клику
+  // Автовключение музыки отключено — только по клику
   if (playBtn && music) {
     playBtn.addEventListener("click", () => {
       if (!playing) {
@@ -504,7 +503,6 @@ document.addEventListener("DOMContentLoaded", () => {
       infoPanel.classList.toggle("hidden", !infoVisible);
 
       if (!infoVisible) {
-        // когда скрываем инфо — сбрасывать текст до базового
         const detailsEl = document.getElementById("dayDetails");
         if (detailsEl) {
           detailsEl.innerHTML =
