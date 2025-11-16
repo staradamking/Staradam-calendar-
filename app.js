@@ -1,31 +1,56 @@
+// МЕСЯЦЫ STARADAM
 const months = [
-  { name: "Звезда", dates: "22 сен – 21 окт 2025" },
-  { name: "Луна", dates: "22 окт – 20 ноя 2025" },
-  { name: "Небо", dates: "21 ноя – 20 дек 2025" },
-  { name: "Снег", dates: "21 дек 2025 – 19 янв 2026" },
-  { name: "Вода", dates: "20 янв – 18 фев 2026" },
-  { name: "Ветер", dates: "19 фев – 20 мар 2026" },
-  { name: "Солнце", dates: "21 мар – 19 апр 2026" },
-  { name: "Жизнь", dates: "20 апр – 19 мая 2026" },
-  { name: "Огонь", dates: "20 мая – 18 июн 2026" },
-  { name: "Земля", dates: "19 июн – 18 июл 2026" },
-  { name: "Космос", dates: "19 июл – 17 авг 2026" },
-  { name: "Эфир", dates: "18 авг – 16 сен 2026" }
+  { name: "ЗВЕЗДА", dates: "22 сен – 21 окт 2025" },
+  { name: "ЛУНА", dates: "22 окт – 20 ноя 2025" },
+  { name: "НЕБО", dates: "21 ноя – 20 дек 2025" },
+  { name: "СНЕГ", dates: "21 дек 2025 – 19 янв 2026" },
+  { name: "ВОДА", dates: "20 янв – 18 фев 2026" },
+  { name: "ВЕТЕР", dates: "19 фев – 20 мар 2026" },
+  { name: "СОЛНЦЕ", dates: "21 мар – 19 апр 2026" },
+  { name: "ЖИЗНЬ", dates: "20 апр – 19 мая 2026" },
+  { name: "ОГОНЬ", dates: "20 мая – 18 июн 2026" },
+  { name: "ЗЕМЛЯ", dates: "19 июн – 18 июл 2026" },
+  { name: "КОСМОС", dates: "19 июл – 17 авг 2026" },
+  { name: "ЭФИР", dates: "18 авг – 16 сен 2026" }
 ];
 
-const dayFunctions = [
-  "День 1 — Атака",
-  "День 2 — Движение",
-  "День 3 — Стратегия",
-  "День 4 — Дисциплина",
-  "День 5 — Созидание",
-  "День 6 — Контроль",
-  "День 7 — Порядок",
-  "День 8 — Укрепление",
-  "День 9 — Закрытие",
-  "День 10 — Переход"
-];
+// ДИАПАЗОНЫ РЕАЛЬНЫХ ДАТ ДЛЯ ПОДСВЕТКИ "СЕГОДНЯ"
+const monthRanges = [
+  { start: "2025-09-22", end: "2025-10-21" },
+  { start: "2025-10-22", end: "2025-11-20" },
+  { start: "2025-11-21", end: "2025-12-20" },
+  { start: "2025-12-21", end: "2026-01-19" },
+  { start: "2026-01-20", end: "2026-02-18" },
+  { start: "2026-02-19", end: "2026-03-20" },
+  { start: "2026-03-21", end: "2026-04-19" },
+  { start: "2026-04-20", end: "2026-05-19" },
+  { start: "2026-05-20", end: "2026-06-18" },
+  { start: "2026-06-19", end: "2026-07-18" },
+  { start: "2026-07-19", end: "2026-08-17" },
+  { start: "2026-08-18", end: "2026-09-16" }
+].map(r => ({
+  start: new Date(r.start + "T00:00:00"),
+  end: new Date(r.end + "T23:59:59")
+}));
 
+function getStarAdamToday() {
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  for (let i = 0; i < monthRanges.length; i++) {
+    const r = monthRanges[i];
+    if (today >= r.start && today <= r.end) {
+      const msDay = 24 * 60 * 60 * 1000;
+      const dayNumber = Math.floor((today - r.start) / msDay) + 1;
+      return { monthIndex: i, dayNumber };
+    }
+  }
+  return null;
+}
+
+const starToday = getStarAdamToday();
+
+// ОТРИСОВКА МЕСЯЦА
 function createMonthCard(month, index) {
   const card = document.createElement("div");
   card.className = "month-card";
@@ -33,105 +58,80 @@ function createMonthCard(month, index) {
   const header = document.createElement("div");
   header.className = "month-header";
 
-  const title = document.createElement("div");
-  title.className = "month-name";
-  title.textContent = `${index + 1}. ${month.name}`;
+  header.innerHTML = `
+    <span>${index + 1}. ${month.name}</span>
+    <span class="month-dates">${month.dates}</span>
+    <span class="toggle">раскрыть</span>
+  `;
 
-  const dates = document.createElement("div");
-  dates.className = "month-dates";
-  dates.textContent = month.dates;
+  const content = document.createElement("div");
+  content.style.display = "none";
 
-  const toggle = document.createElement("div");
-  toggle.className = "month-toggle";
-  toggle.textContent = "раскрыть";
-
-  header.appendChild(title);
-  header.appendChild(dates);
-  header.appendChild(toggle);
-
-  const decadesContainer = document.createElement("div");
-  decadesContainer.className = "decades";
-  decadesContainer.style.display = "none";
-
-  // 3 декады по 10 дней
   for (let d = 0; d < 3; d++) {
     const label = document.createElement("div");
     label.className = "dec-row-label";
-    label.textContent = `Декада ${d + 1}`;
-    decadesContainer.appendChild(label);
+    label.textContent = "Декада " + (d + 1);
+    content.appendChild(label);
 
     const grid = document.createElement("div");
     grid.className = "dec-grid";
 
     for (let i = 1; i <= 10; i++) {
-      const dayNumber = i + d * 10;
+      const day = i + d * 10;
       const cell = document.createElement("div");
       cell.className = "day-cell";
-      cell.textContent = dayNumber;
+      cell.textContent = day;
 
-      cell.addEventListener("click", () => onDayClick(card, month, dayNumber, cell));
+      // ПОДСВЕТКА СЕГОДНЯ
+      if (starToday &&
+          starToday.monthIndex === index &&
+          starToday.dayNumber === day) {
+        cell.classList.add("today");
+      }
 
       grid.appendChild(cell);
     }
-
-    decadesContainer.appendChild(grid);
+    content.appendChild(grid);
   }
 
-  // Панель информации о дне
-  const dayInfo = document.createElement("div");
-  dayInfo.className = "day-info";
-  dayInfo.style.display = "none";
-  card.appendChild(header);
-  card.appendChild(decadesContainer);
-  card.appendChild(dayInfo);
-
   header.addEventListener("click", () => {
-    const isHidden = decadesContainer.style.display === "none";
-    decadesContainer.style.display = isHidden ? "block" : "none";
-    toggle.textContent = isHidden ? "свернуть" : "раскрыть";
+    const t = header.querySelector(".toggle");
+    const hidden = content.style.display === "none";
+    content.style.display = hidden ? "block" : "none";
+    t.textContent = hidden ? "свернуть" : "раскрыть";
   });
 
+  card.appendChild(header);
+  card.appendChild(content);
   return card;
 }
 
-function onDayClick(card, month, dayNumber, cell) {
-  // снять выделение со всех
-  const allCells = card.querySelectorAll(".day-cell");
-  allCells.forEach(c => c.classList.remove("selected"));
-  cell.classList.add("selected");
-
-  const decadeIndex = Math.floor((dayNumber - 1) / 10); // 0,1,2
-  const funcIndex = (dayNumber - 1) % 10; // 0..9
-
-  const infoBox = card.querySelector(".day-info");
-  infoBox.style.display = "block";
-  infoBox.innerHTML = `
-    <div><b>${month.name}, день ${dayNumber}</b></div>
-    <div>${dayFunctions[funcIndex]}</div>
-    <div style="margin-top:4px; opacity:0.8;">Декада ${decadeIndex + 1}</div>
-  `;
-}
-
+// ОТРИСОВКА ВСЕГО КАЛЕНДАРЯ
 function renderApp() {
   const app = document.getElementById("app");
-  app.innerHTML = "";
-
-  months.forEach((m, idx) => {
-    const card = createMonthCard(m, idx);
-    app.appendChild(card);
-  });
+  months.forEach((m, i) => app.appendChild(createMonthCard(m, i)));
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   renderApp();
 
-  const themeButton = document.getElementById("toggleTheme");
-  themeButton.addEventListener("click", () => {
-    document.body.classList.toggle("light");
+  const music = document.getElementById("spaceMusic");
+  const playBtn = document.getElementById("playMusic");
+  let playing = false;
+
+  playBtn.addEventListener("click", () => {
+    if (!playing) {
+      music.volume = 0.25;
+      music.play();
+      playBtn.textContent = "Музыка: Вкл";
+    } else {
+      music.pause();
+      playBtn.textContent = "Музыка";
+    }
+    playing = !playing;
   });
 
-  // Регистрация сервис-воркера
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js").catch(console.error);
-  }
+  document.getElementById("toggleTheme").addEventListener("click", () => {
+    document.body.classList.toggle("light");
+  });
 });
