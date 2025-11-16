@@ -1,10 +1,11 @@
 {
-  "name": "Star Adam New Age",
+  "name": "Star Adam New Age Calendar",
   "short_name": "StarAdam",
-  "start_url": "./index.html",
+  "start_url": ".",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#02040a",
+  "theme_color": "#00ff7f",
+  "orientation": "portrait-primary",
   "icons": [
     {
       "src": "icon-192.png",
