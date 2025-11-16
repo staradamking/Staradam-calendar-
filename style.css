@@ -20,8 +20,6 @@
   --cell-radius: 14px;
   --transition-fast: 0.18s ease-out;
   --bottom-bar-height: 86px;
-  --info-gap: 10px;
-  --header-height: auto;
   --tiger-accent: #ff1744;
   --tiger-accent-soft: rgba(255, 23, 68, 0.35);
 }
@@ -41,7 +39,7 @@ body.light {
   --shadow-soft: 0 0 14px rgba(0, 0, 0, 0.15);
 }
 
-/* Режим TIGER накидываем поверх темы */
+/* Режим TIGER — поверх любой темы */
 
 body.tiger {
   --accent: var(--tiger-accent);
@@ -60,18 +58,18 @@ body {
   min-height: 100vh;
 }
 
-/* В светлой теме другой фон */
+/* Светлый фон */
 
 body.light {
   background: linear-gradient(to bottom, #ffffff 0, #f0f3ff 40%, #e5ecff 100%);
 }
 
+/* TIGER фон */
+
 body.tiger:not(.light),
 body.tiger.light {
   background: radial-gradient(circle at top, #3b0008 0, #090007 45%, #000 100%);
 }
-
-/* ===== СТРАНИЦА ===== */
 
 .page {
   min-height: 100vh;
@@ -163,9 +161,9 @@ body.tiger .app-title {
   font-weight: 500;
   text-align: center;
   cursor: pointer;
-  transition: transform var(--transition-fast),
-    box-shadow var(--transition-fast), background var(--transition-fast),
-    border-color var(--transition-fast), color var(--transition-fast);
+  transition: transform 0.18s ease-out,
+    box-shadow 0.18s ease-out, background 0.18s ease-out,
+    border-color 0.18s ease-out, color 0.18s ease-out;
   outline: none;
 }
 
@@ -299,10 +297,10 @@ body.tiger .month-card {
   color: #f4f9ff;
   cursor: pointer;
   box-shadow: var(--shadow-soft);
-  transition: transform var(--transition-fast),
-    box-shadow var(--transition-fast), border-color var(--transition-fast),
-    background var(--transition-fast), color var(--transition-fast),
-    opacity var(--transition-fast);
+  transition: transform 0.18s ease-out,
+    box-shadow 0.18s ease-out, border-color 0.18s ease-out,
+    background 0.18s ease-out, color 0.18s ease-out,
+    opacity 0.18s ease-out;
   overflow: hidden;
 }
 
@@ -316,14 +314,14 @@ body.tiger .month-card {
   background: radial-gradient(circle at 20% 0, rgba(0, 255, 127, 0.32), transparent 50%);
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--transition-fast);
+  transition: opacity 0.18s ease-out;
 }
 
 .day-cell:hover::before {
   opacity: 1;
 }
 
-/* Цвета по индексу, как в «идеальной» версии */
+/* Цвета по индексам (идеальная версия) */
 
 .day-cell[data-color-index="0"] {
   background: radial-gradient(circle at 30% 0, #000000 0, #02030b 55%, #000 100%);
@@ -356,7 +354,7 @@ body.tiger .month-card {
   background: radial-gradient(circle at 30% 0, #b0b0b0 0, #2f3135 60%, #050608 100%);
 }
 
-/* Светлая тема — пастельные кирпичики */
+/* Светлая тема — пастель */
 
 body.light .day-cell[data-color-index="0"] {
   background: #111827;
