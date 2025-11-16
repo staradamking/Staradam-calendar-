@@ -1,592 +1,318 @@
-/* ===== БАЗА ===== */
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
 :root {
-  --neon-green: #00ff66;
-  --neon-border: #00ff66;
-  --bg-dark: #020308;
-  --bg-panel: rgba(0, 0, 0, 0.85);
-  --text-main: #e0ffe8;
-  --radius-card: 18px;
-  --radius-day: 9px;
+  --bg: #000000;
+  --fg: #00ff66;
+  --accent: #00ff99;
+  --grid-border: #00ff66;
 }
 
-/* Базовая (DARK / кибер) тема */
+/* базовый фон + звёзды */
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui,
-    sans-serif;
-  background: radial-gradient(circle at top, #021910 0, #000000 55%, #020308 100%);
-  color: var(--text-main);
-}
-
-/* Чтобы на айфоне контент не упирался в края */
-.app-wrapper {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  position: relative;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  padding-bottom: calc(100px + env(safe-area-inset-bottom));
-  padding-top: env(safe-area-inset-top);
 }
 
-/* ===== ВЕРХНЯЯ ПАНЕЛЬ ===== */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(0,255,102,0.25) 0, transparent 40%),
+    radial-gradient(circle at 80% 0%, rgba(0,255,255,0.2) 0, transparent 45%),
+    radial-gradient(circle at 50% 100%, rgba(0,128,255,0.25) 0, transparent 50%),
+    #000000;
+  opacity: 0.4;
+  animation: starshift 30s linear infinite alternate;
+}
 
-.top-header {
+@keyframes starshift {
+  from { transform: translate3d(0,0,0); }
+  to   { transform: translate3d(-10px,-10px,0); }
+}
+
+/* Светлая тема */
+body.light {
+  --bg: #f5f5f5;
+  --fg: #111111;
+  --accent: #007744;
+  --grid-border: #444444;
+}
+
+/* TIGER-режим */
+body.tiger {
+  --bg: #120000;
+  --fg: #ff3300;
+  --accent: #ffcc00;
+  --grid-border: #ff3300;
+}
+
+/* Военная карта */
+body.map .day-cell {
+  border-radius: 1px;
+}
+body.map .day-cell.done {
+  background: rgba(0, 255, 0, 0.25);
+}
+body.map .day-cell:not(.done) {
+  background: rgba(255, 0, 0, 0.15);
+}
+
+.top-panel {
   position: sticky;
   top: 0;
-  z-index: 20;
-  text-align: center;
-  padding: 10px 12px 8px;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.96) 0%,
-    rgba(0, 0, 0, 0.9) 45%,
-    rgba(0, 0, 0, 0.3) 100%
-  );
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(0, 255, 102, 0.4);
+  z-index: 10;
+  background: var(--bg);
+  border-bottom: 1px solid var(--fg);
 }
 
-.top-header h1 {
-  margin: 2px 0 4px;
-  font-size: 24px;
-  letter-spacing: 1.5px;
-  color: var(--neon-green);
-  text-shadow: 0 0 8px rgba(0, 255, 102, 0.8);
-}
+/* Шапка */
 
-.subtitle {
-  font-size: 13px;
-  opacity: 0.8;
-  margin-bottom: 4px;
-}
-
-.today-status {
-  font-size: 13px;
-  margin: 2px 0;
-}
-
-.stats-panel {
-  font-size: 13px;
-  margin-top: 2px;
-}
-
-/* ===== ОСНОВНОЙ КОНТЕНТ ===== */
-
-.main-content {
-  padding: 10px 10px 16px;
-}
-
-/* Информационное окно по выбранному дню */
-.day-details-card {
-  border-radius: 14px;
-  border: 1px solid rgba(0, 255, 102, 0.5);
-  padding: 10px 12px;
-  margin-bottom: 10px;
-  background: radial-gradient(circle at top left, #032012 0, #020308 60%);
-  box-shadow: 0 0 18px rgba(0, 255, 102, 0.15);
-  font-size: 13px;
-
-  /* СТICKY-РЕЖИМ ПОД ШАПКОЙ – поднял ниже шапки */
-  position: sticky;
-  top: calc(120px + env(safe-area-inset-top));
-  z-index: 15;
-}
-
-/* скрыто, пока день не выбран */
-.day-details-card.hidden {
-  display: none;
-}
-
-.day-details-card b {
-  color: var(--neon-green);
-}
-
-.day-details-placeholder {
-  opacity: 0.75;
-}
-
-.add-to-calendar-btn {
-  margin-top: 8px;
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--neon-border);
-  background: transparent;
-  color: var(--text-main);
-  font-size: 12px;
-  letter-spacing: 0.2px;
-}
-
-/* ===== МЕСЯЦЫ ===== */
-
-.months-container {
+.app-header {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 10px;
 }
+
+.app-header h1 {
+  margin: 0;
+  font-size: 20px;
+  letter-spacing: 1px;
+  color: var(--fg);
+}
+
+/* Кнопка инфо */
+
+.info-button {
+  border-radius: 999px;
+  border: 1px solid var(--fg);
+  background: transparent;
+  color: var(--fg);
+  padding: 4px 10px;
+  font-size: 16px;
+  line-height: 1;
+  min-width: 34px;
+  text-align: center;
+  transition:
+    background 0.15s ease,
+    transform 0.08s ease,
+    box-shadow 0.15s ease;
+}
+
+.info-button:active {
+  transform: scale(0.94);
+  box-shadow: 0 0 6px rgba(0, 255, 102, 0.6);
+}
+
+/* Информационная панель */
+
+.info-panel {
+  display: none;
+  background: rgba(0, 0, 0, 0.94);
+  border-top: 1px solid var(--fg);
+  border-bottom: 1px solid var(--fg);
+}
+
+.info-panel.open {
+  display: block;
+}
+
+.today-status,
+.day-details,
+.stats-panel,
+.color-panel {
+  padding: 6px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 12px;
+}
+
+.today-status b,
+.day-details b,
+.stats-panel b {
+  font-weight: 600;
+}
+
+/* Панель цветов */
+
+.color-panel {
+  font-size: 11px;
+}
+
+.color-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.color-item {
+  border: 1px solid var(--grid-border);
+  border-radius: 6px;
+  padding: 3px 6px;
+}
+
+/* Основная часть */
+
+#app {
+  padding: 10px;
+}
+
+/* Карточка месяца */
 
 .month-card {
-  border-radius: var(--radius-card);
-  border: 1px solid rgba(0, 255, 102, 0.55);
-  padding: 10px 12px 12px;
-  background: radial-gradient(circle at top left, #041912 0, #020308 58%);
-  box-shadow: 0 0 18px rgba(0, 255, 102, 0.15);
+  border: 1px solid var(--fg);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 12px;
+  background: #050505;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+body.light .month-card {
+  background: #ffffff;
+}
+
+.month-card:hover {
+  box-shadow: 0 0 8px rgba(0, 255, 102, 0.4);
+}
+
+.month-card:active {
+  transform: scale(0.995);
 }
 
 .month-header {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  gap: 6px;
+  font-size: 14px;
   margin-bottom: 6px;
-  gap: 8px;
-  font-size: 13px;
 }
 
 .month-name {
   font-weight: 600;
-  color: var(--neon-green);
 }
 
 .month-dates {
-  font-size: 12px;
+  font-size: 11px;
   opacity: 0.8;
 }
 
 .month-toggle {
-  font-size: 12px;
-  opacity: 0.9;
+  font-size: 11px;
+  opacity: 0.8;
 }
 
-/* ===== ДЕКАДЫ ===== */
+/* Декады */
 
 .dec-row-label {
   font-size: 11px;
-  opacity: 0.7;
+  opacity: 0.8;
   margin: 4px 0 2px;
 }
 
 .dec-grid {
   display: grid;
-  grid-template-columns: repeat(10, minmax(0, 1fr));
-  gap: 4px;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 2px;
 }
 
-/* ===== ДНИ (база DARK) ===== */
+/* Клетки дней */
 
 .day-cell {
-  position: relative;
-  border-radius: var(--radius-day);
-  border: 1px solid #0e3524;
+  border: 1px solid var(--grid-border);
   text-align: center;
-  font-size: 11px;
-  padding: 6px 0;
-  color: #f5fff9;
-  background: radial-gradient(circle at 20% 0, #03140d 0, #020308 65%);
-  box-shadow: 0 0 4px rgba(0, 255, 102, 0.18);
-  transition: transform 0.12s ease, box-shadow 0.12s ease,
-    border-color 0.12s ease, background 0.12s ease, opacity 0.12s ease;
+  font-size: 10px;
+  padding: 4px 0;
+  border-radius: 3px;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.08s ease,
+    border-color 0.15s ease,
+    opacity 0.15s ease;
 }
 
-/* Цветовой цикл — лёгкие оттенки в DARK */
-.day-cell.color-0 {
-  background: radial-gradient(circle at 20% 0, #050505 0, #020308 68%);
-}
-.day-cell.color-1 {
-  background: radial-gradient(circle at 20% 0, #2b1500 0, #020308 68%);
-}
-.day-cell.color-2 {
-  background: radial-gradient(circle at 20% 0, #2c0000 0, #020308 68%);
-}
-.day-cell.color-3 {
-  background: radial-gradient(circle at 20% 0, #2c1100 0, #020308 68%);
-}
-.day-cell.color-4 {
-  background: radial-gradient(circle at 20% 0, #2b2b00 0, #020308 68%);
-}
-.day-cell.color-5 {
-  background: radial-gradient(circle at 20% 0, #00331a 0, #020308 68%);
-}
-.day-cell.color-6 {
-  background: radial-gradient(circle at 20% 0, #002435 0, #020308 68%);
-}
-.day-cell.color-7 {
-  background: radial-gradient(circle at 20% 0, #000638 0, #020308 68%);
-}
-.day-cell.color-8 {
-  background: radial-gradient(circle at 20% 0, #24003a 0, #020308 68%);
-}
-.day-cell.color-9 {
-  background: radial-gradient(circle at 20% 0, #2b2b2b 0, #020308 68%);
-}
-
-/* Hover/тап визуально */
 .day-cell:active {
-  transform: scale(0.96);
-}
-
-/* Выбранный день */
-.day-cell.selected {
-  box-shadow: 0 0 10px rgba(0, 255, 102, 0.9);
-  transform: translateY(-1px);
+  transform: scale(0.94);
 }
 
 /* Сегодня */
-@keyframes todayPulse {
-  0% {
-    box-shadow: 0 0 12px rgba(0, 255, 160, 0.7);
-  }
-  50% {
-    box-shadow: 0 0 18px rgba(0, 255, 200, 1);
-  }
-  100% {
-    box-shadow: 0 0 12px rgba(0, 255, 160, 0.7);
-  }
-}
 
 .day-cell.today {
-  border-color: #00ffc3;
-  animation: todayPulse 1.8s infinite;
+  background: rgba(0, 255, 102, 0.35);
+  border-color: #ffffff;
+  box-shadow: 0 0 8px rgba(0, 255, 102, 1);
+  font-weight: 700;
 }
 
-/* Выполнено — мягкое свечение + точка */
+/* Выбранный день */
+
+.day-cell.selected {
+  box-shadow: 0 0 8px var(--accent);
+  border-color: var(--accent);
+}
+
+/* Выполненный день (дисциплина) */
+
 .day-cell.done {
-  box-shadow: 0 0 10px rgba(0, 255, 102, 0.8);
+  background: rgba(255, 255, 255, 0.05);
+  position: relative;
 }
 
 .day-cell.done::after {
-  content: "";
+  content: "•";
   position: absolute;
-  right: 3px;
-  bottom: 3px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #00ff66;
+  right: 2px;
+  top: 0;
+  font-size: 9px;
+  color: var(--accent);
 }
 
-/* Фильтрованные ячейки */
+/* Отфильтрованные */
+
 .day-cell.filtered-out {
-  opacity: 0.12;
+  opacity: 0.18;
 }
 
-/* ===== НИЖНЯЯ ПАНЕЛЬ ===== */
+/* Футер */
 
-.bottom-bar {
-  position: fixed;
-  left: 0;
-  right: 0;
-
-  /* немного поднял панель от самого низа */
-  bottom: 6px;
-
-  padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
-  background: rgba(0, 0, 0, 0.96);
-  border-top: 1px solid rgba(0, 255, 102, 0.4);
+.app-footer {
+  position: sticky;
+  bottom: 0;
+  background: #050505;
+  border-top: 1px solid var(--fg);
+  padding: 8px 10px;
   display: flex;
-  gap: 10px;
-  justify-content: space-between;
-  z-index: 40;
-  backdrop-filter: blur(14px);
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
 }
 
-.control-btn {
-  flex: 1;
+body.light .app-footer {
+  background: #ffffff;
+}
+
+button {
   border-radius: 999px;
-  border: 1px solid rgba(0, 255, 102, 0.7);
-  background: radial-gradient(circle at top, #012213 0, #020308 80%);
-  color: var(--text-main);
-
-  /* сделал крупнее */
-  font-size: 14px;
-  padding: 11px 6px;
-
-  letter-spacing: 0.4px;
+  border: 1px solid var(--fg);
+  background: transparent;
+  color: var(--fg);
+  padding: 6px 12px;
+  font-size: 12px;
+  transition:
+    background 0.15s ease,
+    transform 0.08s ease,
+    box-shadow 0.15s ease;
 }
 
-/* ===== LIGHT ТЕМА (нормальная) ===== */
-
-body.light {
-  background: radial-gradient(circle at top, #f3f7ff 0, #e4ebf5 45%, #d9e2f0 100%);
-  color: #111111;
-}
-
-body.light .top-header {
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.98) 0%,
-    rgba(255, 255, 255, 0.9) 60%,
-    rgba(255, 255, 255, 0.4) 100%
-  );
-  border-bottom-color: #d0d7e6;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
-}
-
-body.light h1 {
-  color: #111827;
-  text-shadow: none;
-}
-
-body.light .subtitle,
-body.light .today-status,
-body.light .stats-panel {
-  color: #111827;
-}
-
-body.light .day-details-card {
-  background: #ffffff;
-  border-color: #d0d7e6;
-  color: #111827;
-  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
-}
-
-body.light .day-details-card b {
-  color: #0f766e;
-}
-
-body.light .month-card {
-  background: #ffffff;
-  border-color: #d0d7e6;
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
-}
-
-body.light .month-name {
-  color: #0f172a;
-}
-
-/* Светлые пастельные подложки по цветам недели */
-body.light .day-cell {
-  border-color: #e0e7ff;
-  color: #111827;
-  box-shadow: none;
-}
-
-body.light .day-cell.color-0 {
-  background: #e5e7eb;
-}
-body.light .day-cell.color-1 {
-  background: #fbe9dd;
-}
-body.light .day-cell.color-2 {
-  background: #fee2e2;
-}
-body.light .day-cell.color-3 {
-  background: #ffedd5;
-}
-body.light .day-cell.color-4 {
-  background: #fef9c3;
-}
-body.light .day-cell.color-5 {
-  background: #dcfce7;
-}
-body.light .day-cell.color-6 {
-  background: #dbeafe;
-}
-body.light .day-cell.color-7 {
-  background: #e0e7ff;
-}
-body.light .day-cell.color-8 {
-  background: #f5e9ff;
-}
-body.light .day-cell.color-9 {
-  background: #f9fafb;
-}
-
-body.light .day-cell.today {
-  border-color: #22c55e;
-  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.4);
-  animation: none;
-}
-
-body.light .day-cell.done {
-  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.4);
-}
-
-body.light .day-cell.done::after {
-  background: #16a34a;
-}
-
-body.light .bottom-bar {
-  background: rgba(255, 255, 255, 0.96);
-  border-top-color: #d0d7e6;
-  box-shadow: 0 -6px 18px rgba(15, 23, 42, 0.12);
-}
-
-body.light .control-btn {
-  border-color: #d0d7e6;
-  background: #f9fafb;
-  color: #111827;
-}
-
-/* ===== MATRIX ТЕМА ===== */
-
-body.matrix {
-  background:
-    radial-gradient(circle at top, #042011 0, #010303 55%, #000000 100%),
-    #000000;
-  color: #a7f3d0;
-  font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
-}
-
-body.matrix .top-header {
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.98) 0%,
-    rgba(0, 0, 0, 0.9) 50%,
-    rgba(0, 0, 0, 0.2) 100%
-  );
-  border-bottom-color: rgba(74, 222, 128, 0.6);
-}
-
-body.matrix h1 {
-  color: #22c55e;
-  text-shadow: 0 0 12px rgba(34, 197, 94, 0.9);
-}
-
-body.matrix .subtitle,
-body.matrix .today-status,
-body.matrix .stats-panel {
-  color: #bbf7d0;
-}
-
-body.matrix .day-details-card {
-  background: radial-gradient(circle at top left, #02140c 0, #020508 70%);
-  border-color: rgba(34, 197, 94, 0.8);
-  box-shadow: 0 0 24px rgba(34, 197, 94, 0.3);
-}
-
-body.matrix .day-details-card b {
-  color: #4ade80;
-}
-
-body.matrix .month-card {
-  background: radial-gradient(circle at top, #020b06 0, #010203 70%);
-  border-color: rgba(34, 197, 94, 0.8);
-  box-shadow: 0 0 22px rgba(22, 163, 74, 0.5);
-}
-
-body.matrix .month-name {
-  color: #4ade80;
-}
-
-/* матричные клетки: зелёные оттенки и сканлайны */
-body.matrix .day-cell {
-  border-color: #064e3b;
-  color: #bbf7d0;
-  background-image:
-    linear-gradient(to bottom, rgba(16, 185, 129, 0.1) 1px, transparent 1px),
-    radial-gradient(circle at 20% 0, #022c22 0, #020617 70%);
-  background-size: 100% 3px, 100% 100%;
-  box-shadow: 0 0 12px rgba(34, 197, 94, 0.45);
-}
-
-body.matrix .day-cell.today {
-  border-color: #22c55e;
-  box-shadow: 0 0 18px rgba(74, 222, 128, 0.95);
-  animation: todayPulse 1.6s infinite;
-}
-
-body.matrix .day-cell.done {
-  box-shadow: 0 0 18px rgba(22, 163, 74, 0.95);
-}
-
-body.matrix .day-cell.done::after {
-  background: #22c55e;
-}
-
-body.matrix .bottom-bar {
-  background: rgba(0, 0, 0, 0.97);
-  border-top-color: rgba(34, 197, 94, 0.7);
-}
-
-body.matrix .control-btn {
-  border-color: rgba(34, 197, 94, 0.9);
-  background: radial-gradient(circle at top, #022c22 0, #020617 75%);
-  color: #bbf7d0;
-}
-
-/* ===== TIGER — СТЕЛС-КРАСНЫЙ РЕЖИМ ===== */
-
-body.tiger {
-  background:
-    radial-gradient(circle at top, #4d000f 0, #080008 45%, #000000 100%),
-    #000000;
-}
-
-body.tiger .top-header,
-body.tiger .month-card,
-body.tiger .day-details-card,
-body.tiger .bottom-bar {
-  border-color: #ff0033;
-}
-
-body.tiger h1 {
-  color: #ff3344;
-  text-shadow: 0 0 16px rgba(255, 60, 80, 0.95);
-}
-
-body.tiger .subtitle,
-body.tiger .today-status,
-body.tiger .stats-panel {
-  color: #ffe1e5;
-}
-
-body.tiger .month-card {
-  background: radial-gradient(circle at top left, #260008 0, #050005 70%);
-  box-shadow: 0 0 26px rgba(255, 40, 60, 0.5);
-}
-
-body.tiger .day-details-card {
-  background: radial-gradient(circle at top left, #33000f 0, #050005 70%);
-  box-shadow: 0 0 26px rgba(255, 55, 75, 0.7);
-}
-
-/* Ячейки — как красный стелс-панцирь */
-body.tiger .day-cell {
-  border-color: #ff3344;
-  background-image:
-    linear-gradient(
-      135deg,
-      rgba(255, 80, 80, 0.18),
-      rgba(0, 0, 0, 0) 55%
-    ),
-    radial-gradient(circle at 20% 0, #3b0008 0, #050006 70%);
-  box-shadow: 0 0 14px rgba(255, 60, 80, 0.85);
-}
-
-body.tiger .day-cell.today {
-  border-color: #ff8899;
-  box-shadow: 0 0 22px rgba(255, 140, 150, 1);
-}
-
-body.tiger .day-cell.done {
-  box-shadow: 0 0 20px rgba(255, 70, 90, 1);
-}
-
-body.tiger .day-cell.done::after {
-  background: #ff5566;
-}
-
-body.tiger .control-btn {
-  border-color: #ff3344;
-  background: radial-gradient(circle at top, #3b000a 0, #050005 80%);
-}
-
-body.tiger .tiger-btn {
-  background: #ff1133;
-  color: #ffffff;
-}
-
-/* ===== АДАПТИВ ===== */
-
-@media (min-width: 768px) {
-  .app-wrapper {
-    max-width: 480px;
-    margin: 0 auto;
-  }
+button:active {
+  transform: scale(0.96);
+  box-shadow: 0 0 6px rgba(0, 255, 102, 0.6);
 }
