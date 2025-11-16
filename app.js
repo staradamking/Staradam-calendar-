@@ -16,19 +16,19 @@ const months = [
 
 // 10-дневная цветовая неделя
 const colorCycle = [
-  { name: "Чёрный", code: "#000000" },
-  { name: "Коричневый", code: "#7b3f00" },
-  { name: "Красный", code: "#ff0000" },
-  { name: "Оранжевый", code: "#ff7f00" },
-  { name: "Жёлтый", code: "#ffff00" },
-  { name: "Зелёный", code: "#00ff00" },
-  { name: "Голубой", code: "#33ccff" },
-  { name: "Синий", code: "#0000ff" },
-  { name: "Фиолетовый", code: "#8000ff" },
-  { name: "Белый", code: "#ffffff" }
+  { name: "Чёрный",    code: "#000000", meaning: "Пустота, концентрация, старт цикла" },
+  { name: "Коричневый",code: "#7b3f00", meaning: "Земля, база, устойчивость" },
+  { name: "Красный",   code: "#ff0000", meaning: "Атака, действие, энергия" },
+  { name: "Оранжевый", code: "#ff7f00", meaning: "Творчество, открытия, креатив" },
+  { name: "Жёлтый",    code: "#ffff00", meaning: "Ум, фокус, обучение" },
+  { name: "Зелёный",   code: "#00ff00", meaning: "Жизнь, здоровье, восстановление" },
+  { name: "Голубой",   code: "#33ccff", meaning: "Коммуникация, связи, лёгкость" },
+  { name: "Синий",     code: "#0000ff", meaning: "Глубина, серьёзная работа, дисциплина" },
+  { name: "Фиолетовый",code: "#8000ff", meaning: "Магия, смысл, внутренняя работа" },
+  { name: "Белый",     code: "#ffffff", meaning: "Очищение, завершение декады" }
 ];
 
-// Названия 30 дней (можно потом переписать под свою доктрину)
+// Названия 30 дней (можешь потом переписать под свои операции)
 const dayMeanings = [
   "День 1 — Атака",
   "День 2 — Движение",
@@ -83,7 +83,19 @@ const monthRanges = [
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
-// Получаем сегодняшнюю дату в системе Star Adam
+// хранилище дисциплины (выполнен / не выполнен)
+const DISC_KEY = "staradam_discipline_v1";
+let doneMap = {};
+try {
+  const saved = localStorage.getItem(DISC_KEY);
+  if (saved) doneMap = JSON.parse(saved);
+} catch (_) {}
+
+// последняя выборка дня
+let selectedCell = null;
+let selectedMeta = null;
+
+// Сегодня в системе Star Adam
 function getStarAdamToday() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -98,7 +110,7 @@ function getStarAdamToday() {
   return null;
 }
 
-// Реальная дата для любого дня Star Adam
+// Реальная дата для дня Star Adam
 function getRealDate(monthIndex, dayNumber) {
   const range = monthRanges[monthIndex];
   if (!range) return null;
@@ -115,7 +127,10 @@ function formatDateRu(date) {
 
 const starToday = getStarAdamToday();
 
-let selectedCell = null;
+// ключ для карты выполненных дней
+function dayKey(monthIndex, dayNumber) {
+  return `${monthIndex}_${dayNumber}`;
+}
 
 // Создание карточки месяца
 function createMonthCard(month, index) {
@@ -155,23 +170,27 @@ function createMonthCard(month, index) {
     grid.className = "dec-grid";
 
     for (let i = 1; i <= 10; i++) {
-      const day = i + d * 10;
+      const dayNumber = i + d * 10;
       const cell = document.createElement("div");
       cell.className = "day-cell";
-      cell.textContent = day;
+      cell.textContent = dayNumber;
 
-      // Подсветка сегодняшнего дня
+      // Сегодня
       if (
         starToday &&
         starToday.monthIndex === index &&
-        starToday.dayNumber === day
+        starToday.dayNumber === dayNumber
       ) {
         cell.classList.add("today");
       }
 
-      // Клик по дню
+      // Выполненный день
+      if (doneMap[dayKey(index, dayNumber)]) {
+        cell.classList.add("done");
+      }
+
       cell.addEventListener("click", () => {
-        onDayClick(index, day, cell);
+        onDayClick(index, dayNumber, cell);
       });
 
       grid.appendChild(cell);
@@ -191,28 +210,127 @@ function createMonthCard(month, index) {
   return card;
 }
 
+// Клик по дню
 function onDayClick(monthIndex, dayNumber, cell) {
-  // Снимаем прошлый выбор
-  if (selectedCell && selectedCell !== cell) {
-    selectedCell.classList.remove("selected");
+  const key = dayKey(monthIndex, dayNumber);
+
+  // Если уже выбран этот же день — переключаем статус "выполнено"
+  if (
+    selectedMeta &&
+    selectedMeta.monthIndex === monthIndex &&
+    selectedMeta.dayNumber === dayNumber
+  ) {
+    const newState = !doneMap[key];
+    doneMap[key] = newState;
+    if (!newState) delete doneMap[key];
+
+    cell.classList.toggle("done", !!newState);
+
+    try {
+      localStorage.setItem(DISC_KEY, JSON.stringify(doneMap));
+    } catch (_) {}
+
+  } else {
+    // Новый выбранный день
+    if (selectedCell && selectedCell !== cell) {
+      selectedCell.classList.remove("selected");
+    }
+    cell.classList.add("selected");
+    selectedCell = cell;
+    selectedMeta = { monthIndex, dayNumber };
   }
-  selectedCell = cell;
-  cell.classList.add("selected");
 
   const month = months[monthIndex];
   const meaning =
     dayMeanings[dayNumber - 1] || `День ${dayNumber} — без названия`;
   const color = colorCycle[(dayNumber - 1) % 10];
   const real = getRealDate(monthIndex, dayNumber);
+  const decada = Math.floor((dayNumber - 1) / 10) + 1;
+  const done = !!doneMap[key];
 
   const detailsEl = document.getElementById("dayDetails");
-  const decada = Math.floor((dayNumber - 1) / 10) + 1;
-
   detailsEl.innerHTML = `
     Выбран: <b>${month.name}</b>, день <b>${dayNumber}</b> (Декада ${decada})<br>
     ${meaning}<br>
     Цвет недели: <b style="color:${color.code}">${color.name}</b><br>
-    Реальная дата: <b>${real ? formatDateRu(real) : "вне диапазона года Звезды"}</b>
+    Реальная дата: <b>${real ? formatDateRu(real) : "вне диапазона года Звезды"}</b><br>
+    Статус дисциплины: <b>${done ? "ВЫПОЛНЕНО" : "пока не выполнено"}</b><br>
+    <span style="opacity:0.8;font-size:11px;">Нажми ещё раз по этому дню, чтобы переключить статус.</span><br>
+    ${real ? '<button class="add-to-calendar">Добавить в календарь</button>' : ""}
+  `;
+
+  const btn = detailsEl.querySelector(".add-to-calendar");
+  if (btn && real) {
+    btn.addEventListener("click", () => {
+      createIcsEvent(month, dayNumber, meaning, real);
+    });
+  }
+}
+
+// .ics событие для календаря
+function createIcsEvent(month, dayNumber, meaning, date) {
+  const pad = n => (n < 10 ? "0" + n : "" + n);
+  const dateStr =
+    date.getFullYear().toString() +
+    pad(date.getMonth() + 1) +
+    pad(date.getDate());
+
+  const now = new Date();
+  const stamp =
+    now.getUTCFullYear().toString() +
+    pad(now.getUTCMonth() + 1) +
+    pad(now.getUTCDate()) +
+    "T" +
+    pad(now.getUTCHours()) +
+    pad(now.getUTCMinutes()) +
+    pad(now.getUTCSeconds()) +
+    "Z";
+
+  const summary = `StarAdam: ${month.name}, день ${dayNumber}`;
+  const desc = meaning.replace(/\n/g, " ");
+
+  const ics =
+    "BEGIN:VCALENDAR\r\n" +
+    "VERSION:2.0\r\n" +
+    "PRODID:-//StarAdam//NewAge//RU\r\n" +
+    "BEGIN:VEVENT\r\n" +
+    "UID:" + stamp + "@staradam\r\n" +
+    "DTSTAMP:" + stamp + "\r\n" +
+    "DTSTART;VALUE=DATE:" + dateStr + "\r\n" +
+    "SUMMARY:" + summary + "\r\n" +
+    "DESCRIPTION:" + desc + "\r\n" +
+    "END:VEVENT\r\n" +
+    "END:VCALENDAR\r\n";
+
+  const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "staradam-day.ics";
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    URL.revokeObjectURL(url);
+    a.remove();
+  }, 0);
+}
+
+// Панель цветов
+function renderColorPanel() {
+  const panel = document.getElementById("colorPanel");
+  const items = colorCycle
+    .map(
+      (c, i) => `
+      <div class="color-item">
+        <b style="color:${c.code}">${i + 1}. ${c.name}</b><br>
+        <span>${c.meaning}</span>
+      </div>
+    `
+    )
+    .join("");
+  panel.innerHTML = `
+    <div><b>10 цветов декады Star Adam</b></div>
+    <div class="color-list">${items}</div>
   `;
 }
 
@@ -238,12 +356,13 @@ function renderApp() {
     status.textContent =
       "Сегодня вне диапазона календаря Star Adam New Age (год 2025–2026).";
   }
+
+  renderColorPanel();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   renderApp();
 
-  // Музыка
   const music = document.getElementById("spaceMusic");
   const playBtn = document.getElementById("playMusic");
   let playing = false;
@@ -253,7 +372,7 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         music.volume = 0.25;
         music.play();
-      } catch (e) {}
+      } catch (_) {}
       playBtn.textContent = "Музыка: Вкл";
     } else {
       music.pause();
@@ -262,9 +381,21 @@ document.addEventListener("DOMContentLoaded", () => {
     playing = !playing;
   });
 
-  // Смена темы
   const themeBtn = document.getElementById("toggleTheme");
   themeBtn.addEventListener("click", () => {
     document.body.classList.toggle("light");
+  });
+
+  const tigerBtn = document.getElementById("toggleTiger");
+  tigerBtn.addEventListener("click", () => {
+    document.body.classList.toggle("tiger");
+  });
+
+  const colorsBtn = document.getElementById("toggleColors");
+  const colorPanel = document.getElementById("colorPanel");
+  let colorsVisible = false;
+  colorsBtn.addEventListener("click", () => {
+    colorsVisible = !colorsVisible;
+    colorPanel.style.display = colorsVisible ? "block" : "none";
   });
 });
