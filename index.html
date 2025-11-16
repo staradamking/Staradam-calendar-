@@ -4,9 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Star Adam New Age</title>
+
   <link rel="stylesheet" href="style.css" />
+
+  <!-- PWA манифест и иконка -->
   <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="icon-512.png" type="image/png" />
+  <link rel="icon" href="icon-192.png" type="image/png" />
 </head>
 <body>
   <div class="page">
@@ -26,7 +29,7 @@
       </div>
     </header>
 
-    <!-- ИНФО-ПАНЕЛЬ (НЕ STICKY, ЧТОБЫ ВСЁ БЫЛО ВИДНО) -->
+    <!-- ИНФО-ПАНЕЛЬ (РАЗВОРАЧИВАЕТСЯ ПО КНОПКЕ) -->
     <section id="infoPanel" class="info-panel hidden">
       <div id="dayDetails" class="info-card">
         Выбери день в календаре, чтобы увидеть детали.
@@ -49,5 +52,13 @@
   </div>
 
   <script src="app.js"></script>
+  <script>
+    // Простая регистрация service worker (если есть sw.js)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+      });
+    }
+  </script>
 </body>
 </html>
