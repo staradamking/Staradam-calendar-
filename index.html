@@ -20,7 +20,7 @@
 </head>
 <body>
   <div class="app-root">
-    <!-- ВЕРХНЯЯ ПАНЕЛЬ (закреплена, всегда видна) -->
+    <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
     <header class="top-panel">
       <div class="app-title">STAR ADAM NEW AGE</div>
       <div class="app-subtitle">
@@ -32,19 +32,14 @@
       <div id="statsPanel" class="stats-panel"></div>
     </header>
 
-    <!-- ОСНОВНОЙ СКРОЛЛЯЩИЙСЯ КОНТЕНТ -->
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
     <main class="main-scroll">
-      <!-- Панель цветов (10-дневная неделя и тотемы) -->
       <section id="colorPanel" class="color-panel"></section>
-
-      <!-- Космическая кольцевая карта орбит Star Adam -->
       <section id="mapPanel" class="map-panel"></section>
-
-      <!-- Здесь JS рендерит все месяцы и дни -->
       <section id="app"></section>
     </main>
 
-    <!-- НИЖНЯЯ ПАНЕЛЬ КНОПОК -->
+    <!-- НИЖНЯЯ ПАНЕЛЬ -->
     <footer class="bottom-bar">
       <button id="playMusic" class="bottom-btn">Музыка</button>
       <button id="toggleTheme" class="bottom-btn">Тема</button>
@@ -58,7 +53,6 @@
     <audio id="spaceMusic" src="cosmos.mp3" loop></audio>
   </div>
 
-  <!-- ЛОГИКА КАЛЕНДАРЯ -->
   <script src="app.js"></script>
 </body>
 </html>
