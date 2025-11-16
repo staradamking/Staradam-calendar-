@@ -413,6 +413,8 @@ function applyFilter() {
       cell.classList.add("filtered-out");
     } else if (filterMode === "undone" && isDone) {
       cell.classList.add("filtered-out");
+    } else if (filterMode === "all") {
+      // ничего
     }
   });
 }
@@ -487,7 +489,7 @@ document.addEventListener("DOMContentLoaded", () => {
         music.pause();
         playing = false;
         playBtn.textContent = "Музыка";
-        localStorage.setItem("starMusicAuto", "0");
+        localStorage.setItem("starMusicAuto", "0";
       }
     });
   }
@@ -504,16 +506,6 @@ document.addEventListener("DOMContentLoaded", () => {
     tigerBtn.addEventListener("click", () => {
       const on = document.body.classList.toggle("tiger");
       tigerBtn.textContent = on ? "TIGER: ON" : "TIGER";
-    });
-  }
-
-  const colorsBtn = document.getElementById("toggleColors");
-  const colorPanel = document.getElementById("colorPanel");
-  let colorsVisible = false;
-  if (colorsBtn && colorPanel) {
-    colorsBtn.addEventListener("click", () => {
-      colorsVisible = !colorsVisible;
-      colorPanel.style.display = colorsVisible ? "block" : "none";
     });
   }
 
