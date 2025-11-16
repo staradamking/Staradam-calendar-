@@ -361,29 +361,6 @@ function createIcsEvent(month, dayNumber, meaningLine, date) {
   }, 0);
 }
 
-// ===== Панель цветов =====
-
-function renderColorPanel() {
-  const panel = document.getElementById("colorPanel");
-  if (!panel) return;
-
-  const items = colorCycle
-    .map(
-      (c, i) => `
-      <div class="color-item">
-        <b style="color:${c.code}">${i + 1}. ${c.emoji} ${c.name} (${c.animal})</b><br>
-        <span>${c.meaning}</span>
-      </div>
-    `
-    )
-    .join("");
-
-  panel.innerHTML = `
-    <div class="color-title"><b>10 цветов и тотемов цикла Star Adam</b></div>
-    <div class="color-list">${items}</div>
-  `;
-}
-
 // ===== Статистика =====
 
 function updateStats() {
@@ -413,8 +390,6 @@ function applyFilter() {
       cell.classList.add("filtered-out");
     } else if (filterMode === "undone" && isDone) {
       cell.classList.add("filtered-out");
-    } else if (filterMode === "all") {
-      // ничего
     }
   });
 }
@@ -448,7 +423,6 @@ function renderApp() {
     }
   }
 
-  renderColorPanel();
   updateStats();
   applyFilter();
 }
@@ -489,7 +463,7 @@ document.addEventListener("DOMContentLoaded", () => {
         music.pause();
         playing = false;
         playBtn.textContent = "Музыка";
-        localStorage.setItem("starMusicAuto", "0";
+        localStorage.setItem("starMusicAuto", "0");
       }
     });
   }
