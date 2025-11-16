@@ -5,43 +5,42 @@
   <title>Star Adam New Age</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="icon.png" />
+  <meta name="theme-color" content="#00ff66" />
 </head>
 <body>
-  <audio id="spaceMusic" loop>
-    <source src="cosmos.mp3" type="audio/mpeg" />
-  </audio>
+  <!-- космическая музыка -->
+  <audio id="spaceMusic" src="cosmos.mp3" loop></audio>
 
-  <div class="app-wrapper">
+  <div class="page">
     <header class="top-header">
-      <h1>STAR ADAM NEW AGE</h1>
+      <div class="title">STAR ADAM NEW AGE</div>
       <div class="subtitle">Календарь StarAdam · Год Звезды 2025–2026</div>
 
-      <div id="todayStatus" class="today-status">
-        <!-- заполняется из JS -->
-      </div>
+      <div id="todayStatus" class="today-status"></div>
+      <div id="statsPanel" class="stats-panel"></div>
 
-      <div id="statsPanel" class="stats-panel">
-        <!-- Дней выполнено: ... -->
+      <div class="top-controls">
+        <button id="toggleInfo" class="top-btn">Инфо</button>
       </div>
     </header>
 
-    <main class="main-content">
-      <section id="dayDetails" class="day-details-card">
-        <div class="day-details-placeholder">
-          Нажми на любой день в календаре, чтобы увидеть детали и добавить его в системный календарь.
-        </div>
-      </section>
+    <!-- панель информации о выбранном дне -->
+    <section id="dayInfoContainer" class="info-panel">
+      <div id="dayDetails" class="day-details"></div>
+    </section>
 
-      <section id="monthsContainer" class="months-container">
-        <!-- Месяцы и дни рендерятся через app.js -->
-      </section>
-    </main>
+    <!-- сами месяцы -->
+    <main id="app" class="months"></main>
 
+    <!-- нижняя панель управления -->
     <footer class="bottom-bar">
-      <button id="playMusic" class="control-btn">Музыка</button>
-      <button id="toggleTheme" class="control-btn">Тема</button>
-      <button id="toggleFilter" class="control-btn">Фильтр</button>
-      <button id="toggleTiger" class="control-btn tiger-btn">TIGER</button>
+      <button id="playMusic" class="bottom-btn">Музыка</button>
+      <button id="toggleTheme" class="bottom-btn">Тема: Dark</button>
+      <button id="toggleFilter" class="bottom-btn">Фильтр</button>
+      <button id="toggleTiger" class="bottom-btn bottom-btn-accent">
+        TIGER
+      </button>
     </footer>
   </div>
 
