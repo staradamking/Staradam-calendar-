@@ -1,63 +1,46 @@
-// Версия кэша — меняй номер при крупных обновлениях приложения
-const CACHE_NAME = 'staradam-cache-v3';
+// Лёгкий, обновляемый service worker, чтобы не душил кэшем
+
+const CACHE_NAME = "staradam-cache-v3";
 
 const ASSETS = [
-  './',
-  './index.html',
-  './style.css',
-  './app.js',
-  './manifest.json',
-  './cosmos.mp3',
-  './icon-192.png',
-  './icon-512.png'
+  "./",
+  "index.html",
+  "style.css",
+  "app.js",
+  "manifest.json",
+  "icon-192.png",
+  "icon-512.png",
+  "cosmos.mp3"
 ];
 
-// Установка service worker и предзагрузка нужных файлов
-self.addEventListener('install', event => {
+self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(ASSETS))
-      .then(() => self.skipWaiting())
+    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
   );
+  self.skipWaiting();
 });
 
-// Активация — чистим старые кэши
-self.addEventListener('activate', event => {
+self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
         keys
-          .filter(key => key !== CACHE_NAME)
-          .map(key => caches.delete(key))
+          .filter(k => k !== CACHE_NAME)
+          .map(k => caches.delete(k))
       )
-    ).then(() => self.clients.claim())
+    )
   );
+  self.clients.claim();
 });
 
-// Обработка запросов
-self.addEventListener('fetch', event => {
-  const request = event.request;
-
-  // Кэшируем только GET и только тот же домен
-  if (request.method !== 'GET') return;
-  const url = new URL(request.url);
-  if (url.origin !== self.location.origin) return;
+self.addEventListener("fetch", event => {
+  if (event.request.method !== "GET") return;
 
   event.respondWith(
-    caches.match(request).then(cachedResponse => {
-      const fetchPromise = fetch(request)
-        .then(response => {
-          // В кэш кладём только обычные успешные ответы
-          if (response && response.status === 200 && response.type === 'basic') {
-            const copy = response.clone();
-            caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
-          }
-          return response;
-        })
-        .catch(() => cachedResponse); // если оффлайн — поднимаем из кэша
-
-      // Если уже есть в кэше — отдаем его сразу, а в фоне обновляем
-      return cachedResponse || fetchPromise;
-    })
+    fetch(event.request)
+      .then(response => {
+        return response;
+      })
+      .catch(() => caches.match(event.request))
   );
 });
