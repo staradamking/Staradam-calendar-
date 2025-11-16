@@ -15,36 +15,96 @@ const months = [
   { name: "ЭФИР", dates: "18 авг – 16 сен 2026" }
 ];
 
-// ===== 10 цветов и тотемы =====
+// ===== 10-дневная цветовая неделя и тотемы =====
 
 const colorCycle = [
-  { name: "Чёрный", code: "#000000", animal: "Пантера", emoji: "🐆" },
-  { name: "Коричневый", code: "#7b3f00", animal: "Медведь", emoji: "🐻" },
-  { name: "Красный", code: "#ff0000", animal: "Дракон", emoji: "🐉" },
-  { name: "Оранжевый", code: "#ff7f00", animal: "Лев", emoji: "🦁" },
-  { name: "Жёлтый", code: "#ffff00", animal: "Тигр", emoji: "🐯" },
-  { name: "Зелёный", code: "#00ff00", animal: "Аллигатор", emoji: "🐊" },
-  { name: "Голубой", code: "#33ccff", animal: "Дельфин", emoji: "🐬" },
-  { name: "Синий", code: "#0000ff", animal: "Кит", emoji: "🐋" },
-  { name: "Фиолетовый", code: "#8000ff", animal: "Фламинго", emoji: "🦩" },
-  { name: "Белый", code: "#ffffff", animal: "Лебедь", emoji: "🦢" }
+  {
+    name: "Чёрный",
+    code: "#000000",
+    animal: "Пантера",
+    emoji: "🐆",
+    meaning: "Пустота, концентрация, старт цикла"
+  },
+  {
+    name: "Коричневый",
+    code: "#7b3f00",
+    animal: "Медведь",
+    emoji: "🐻",
+    meaning: "Земля, база, устойчивость"
+  },
+  {
+    name: "Красный",
+    code: "#ff0000",
+    animal: "Дракон",
+    emoji: "🐉",
+    meaning: "Атака, огонь, решительность"
+  },
+  {
+    name: "Оранжевый",
+    code: "#ff7f00",
+    animal: "Лев",
+    emoji: "🦁",
+    meaning: "Творчество, храбрость, лидерство"
+  },
+  {
+    name: "Жёлтый",
+    code: "#ffff00",
+    animal: "Тигр",
+    emoji: "🐯",
+    meaning: "Фокус, охота за целями, обучение"
+  },
+  {
+    name: "Зелёный",
+    code: "#00ff00",
+    animal: "Аллигатор",
+    emoji: "🐊",
+    meaning: "Выносливость, восстановление, жизнь"
+  },
+  {
+    name: "Голубой",
+    code: "#33ccff",
+    animal: "Дельфин",
+    emoji: "🐬",
+    meaning: "Коммуникация, игра, связи"
+  },
+  {
+    name: "Синий",
+    code: "#0000ff",
+    animal: "Кит",
+    emoji: "🐋",
+    meaning: "Глубина, серьёзная работа, дисциплина"
+  },
+  {
+    name: "Фиолетовый",
+    code: "#8000ff",
+    animal: "Фламинго",
+    emoji: "🦩",
+    meaning: "Магия, стиль, внутренний баланс"
+  },
+  {
+    name: "Белый",
+    code: "#ffffff",
+    animal: "Лебедь",
+    emoji: "🦢",
+    meaning: "Очищение, завершение, красота"
+  }
 ];
 
-// ===== Реальные диапазоны дат =====
+// ===== Реальные диапазоны дат для каждого месяца =====
 
 const monthRanges = [
-  { start: "2025-09-22", end: "2025-10-21" },
-  { start: "2025-10-22", end: "2025-11-20" },
-  { start: "2025-11-21", end: "2025-12-20" },
-  { start: "2025-12-21", end: "2026-01-19" },
-  { start: "2026-01-20", end: "2026-02-18" },
-  { start: "2026-02-19", end: "2026-03-20" },
-  { start: "2026-03-21", end: "2026-04-19" },
-  { start: "2026-04-20", end: "2026-05-19" },
-  { start: "2026-05-20", end: "2026-06-18" },
-  { start: "2026-06-19", end: "2026-07-18" },
-  { start: "2026-07-19", end: "2026-08-17" },
-  { start: "2026-08-18", end: "2026-09-16" }
+  { start: "2025-09-22", end: "2025-10-21" }, // Звезда
+  { start: "2025-10-22", end: "2025-11-20" }, // Луна
+  { start: "2025-11-21", end: "2025-12-20" }, // Небо
+  { start: "2025-12-21", end: "2026-01-19" }, // Снег
+  { start: "2026-01-20", end: "2026-02-18" }, // Вода
+  { start: "2026-02-19", end: "2026-03-20" }, // Ветер
+  { start: "2026-03-21", end: "2026-04-19" }, // Солнце
+  { start: "2026-04-20", end: "2026-05-19" }, // Жизнь
+  { start: "2026-05-20", end: "2026-06-18" }, // Огонь
+  { start: "2026-06-19", end: "2026-07-18" }, // Земля
+  { start: "2026-07-19", end: "2026-08-17" }, // Космос
+  { start: "2026-08-18", end: "2026-09-16" }  // Эфир
 ].map(r => ({
   start: new Date(r.start + "T00:00:00"),
   end: new Date(r.end + "T23:59:59")
@@ -52,7 +112,7 @@ const monthRanges = [
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
-// ===== ХРАНИЛИЩЕ ДИСЦИПЛИНЫ =====
+// ===== Хранилище дисциплины =====
 
 const DISC_KEY = "staradam_discipline_v1";
 let doneMap = {};
@@ -63,16 +123,14 @@ try {
   doneMap = {};
 }
 
-// состояние выбора / фильтра / инфо
-
 let selectedCell = null;
 let selectedMeta = null;
 let filterMode = "all";
-let infoPinned = true;
+let infoVisible = false;
 
 const starToday = getStarAdamToday();
 
-// ===== ВСПОМОГАТЕЛЬНЫЕ =====
+// ===== Вспомогательные =====
 
 function getStarAdamToday() {
   const today = new Date();
@@ -98,18 +156,8 @@ function getRealDate(monthIndex, dayNumber) {
 
 function formatDateRu(date) {
   const monthsRu = [
-    "января",
-    "февраля",
-    "марта",
-    "апреля",
-    "мая",
-    "июня",
-    "июля",
-    "августа",
-    "сентября",
-    "октября",
-    "ноября",
-    "декабря"
+    "января","февраля","марта","апреля","мая","июня",
+    "июля","августа","сентября","октября","ноября","декабря"
   ];
   return `${date.getDate()} ${monthsRu[date.getMonth()]} ${date.getFullYear()}`;
 }
@@ -118,7 +166,7 @@ function dayKey(monthIndex, dayNumber) {
   return `${monthIndex}_${dayNumber}`;
 }
 
-// ===== ОТРИСОВКА МЕСЯЦА =====
+// ===== Карточки месяцев =====
 
 function createMonthCard(month, index) {
   const card = document.createElement("div");
@@ -167,7 +215,6 @@ function createMonthCard(month, index) {
       cell.dataset.monthIndex = index;
       cell.dataset.dayNumber = dayNumber;
       cell.dataset.colorIndex = colorIndex;
-      cell.classList.add(`color-${colorIndex}`);
 
       if (
         starToday &&
@@ -202,29 +249,17 @@ function createMonthCard(month, index) {
   return card;
 }
 
-// ===== ПАНЕЛЬ ИНФО: ВИДИМОСТЬ =====
-
-function refreshInfoVisibility() {
-  const container = document.getElementById("dayInfoContainer");
-  if (!container) return;
-  if (infoPinned && selectedMeta) {
-    container.classList.add("visible");
-  } else {
-    container.classList.remove("visible");
-  }
-}
-
-// ===== КЛИК ПО ДНЮ =====
+// ===== Клик по дню =====
 
 function onDayClick(monthIndex, dayNumber, cell) {
   const key = dayKey(monthIndex, dayNumber);
 
-  // второй клик по тому же дню — переключаем выполнено
   if (
     selectedMeta &&
     selectedMeta.monthIndex === monthIndex &&
     selectedMeta.dayNumber === dayNumber
   ) {
+    // переключаем статус выполнено/нет
     const newState = !doneMap[key];
     doneMap[key] = newState;
     if (!newState) delete doneMap[key];
@@ -260,34 +295,29 @@ function onDayClick(monthIndex, dayNumber, cell) {
   const meaningLine = `День ${dayNumber} — ${color.emoji} ${color.name} (${color.animal})`;
 
   const detailsEl = document.getElementById("dayDetails");
-  if (detailsEl) {
-    detailsEl.innerHTML = `
-      Выбран: <b>${month.name}</b>, день <b>${dayNumber}</b> (Декада ${decada})<br>
-      ${meaningLine}<br>
-      Реальная дата: <b>${
-        real ? formatDateRu(real) : "вне диапазона года Звезды"
-      }</b><br>
-      Статус дисциплины: <b>${done ? "ВЫПОЛНЕНО" : "пока не выполнено"}</b><br>
-      <span style="opacity:0.8;font-size:11px;">Нажми ещё раз по этому дню, чтобы переключить статус.</span><br>
-      ${
-        real
-          ? '<button class="add-to-calendar">Добавить в календарь</button>'
-          : ""
-      }
-    `;
+  detailsEl.innerHTML = `
+    Выбран: <b>${month.name}</b>, день <b>${dayNumber}</b> (Декада ${decada})<br>
+    ${meaningLine}<br>
+    Реальная дата: <b>${real ? formatDateRu(real) : "вне диапазона года Звезды"}</b><br>
+    Статус дисциплины: <b>${done ? "ВЫПОЛНЕНО" : "пока не выполнено"}</b><br>
+    <span style="opacity:0.8;font-size:11px;">Нажми ещё раз по этому дню, чтобы переключить статус.</span><br>
+    ${real ? '<button class="btn-pill add-to-calendar">Добавить в календарь</button>' : ""}
+  `;
 
-    const btn = detailsEl.querySelector(".add-to-calendar");
-    if (btn && real) {
-      btn.addEventListener("click", () => {
-        createIcsEvent(month, dayNumber, meaningLine, real);
-      });
-    }
+  const infoPanel = document.getElementById("infoPanel");
+  // при выборе дня автоматически показываем инфо
+  infoVisible = true;
+  infoPanel.classList.remove("hidden");
+
+  const btn = detailsEl.querySelector(".add-to-calendar");
+  if (btn && real) {
+    btn.addEventListener("click", () => {
+      createIcsEvent(month, dayNumber, meaningLine, real);
+    });
   }
-
-  refreshInfoVisibility();
 }
 
-// ===== СОЗДАНИЕ .ICS СЛОТА =====
+// ===== Создание .ics события =====
 
 function createIcsEvent(month, dayNumber, meaningLine, date) {
   const pad = n => (n < 10 ? "0" + n : "" + n);
@@ -316,21 +346,11 @@ function createIcsEvent(month, dayNumber, meaningLine, date) {
     "VERSION:2.0\r\n" +
     "PRODID:-//StarAdam//NewAge//RU\r\n" +
     "BEGIN:VEVENT\r\n" +
-    "UID:" +
-    stamp +
-    "@staradam\r\n" +
-    "DTSTAMP:" +
-    stamp +
-    "\r\n" +
-    "DTSTART;VALUE=DATE:" +
-    dateStr +
-    "\r\n" +
-    "SUMMARY:" +
-    summary +
-    "\r\n" +
-    "DESCRIPTION:" +
-    desc +
-    "\r\n" +
+    "UID:" + stamp + "@staradam\r\n" +
+    "DTSTAMP:" + stamp + "\r\n" +
+    "DTSTART;VALUE=DATE:" + dateStr + "\r\n" +
+    "SUMMARY:" + summary + "\r\n" +
+    "DESCRIPTION:" + desc + "\r\n" +
     "END:VEVENT\r\n" +
     "END:VCALENDAR\r\n";
 
@@ -347,7 +367,7 @@ function createIcsEvent(month, dayNumber, meaningLine, date) {
   }, 0);
 }
 
-// ===== СТАТИСТИКА =====
+// ===== Статистика =====
 
 function updateStats() {
   const statsEl = document.getElementById("statsPanel");
@@ -357,10 +377,12 @@ function updateStats() {
   const doneCount = Object.keys(doneMap).length;
   const percent = Math.round((doneCount * 100) / totalDays);
 
-  statsEl.innerHTML = `Дней выполнено: <b>${doneCount}</b> из <b>${totalDays}</b> (${percent}%)`;
+  statsEl.innerHTML = `
+    Дней выполнено: <b>${doneCount}</b> из <b>${totalDays}</b> (${percent}%)
+  `;
 }
 
-// ===== ФИЛЬТР =====
+// ===== Фильтр =====
 
 function applyFilter() {
   const cells = document.querySelectorAll(".day-cell");
@@ -378,7 +400,7 @@ function applyFilter() {
   });
 }
 
-// ===== РЕНДЕР ВСЕГО ПРИЛОЖЕНИЯ =====
+// ===== Рендер всего приложения =====
 
 function renderApp() {
   const app = document.getElementById("app");
@@ -411,23 +433,23 @@ function renderApp() {
   applyFilter();
 }
 
-// ===== ИНИЦИАЛИЗАЦИЯ =====
+// ===== Инициализация =====
 
 document.addEventListener("DOMContentLoaded", () => {
   renderApp();
-  refreshInfoVisibility(); // на старте инфо скрыто, пока нет выбора
 
   const music = document.getElementById("spaceMusic");
   const playBtn = document.getElementById("playMusic");
   let playing = false;
 
+  // Автоматическое включение музыки отключено — только по клику
   if (playBtn && music) {
     playBtn.addEventListener("click", () => {
       if (!playing) {
         music.volume = 0.25;
         music.play().catch(() => {});
         playing = true;
-        playBtn.textContent = "Музыка: ON";
+        playBtn.textContent = "Музыка: Вкл";
       } else {
         music.pause();
         playing = false;
@@ -436,15 +458,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Переключатель темы
   const themeBtn = document.getElementById("toggleTheme");
   if (themeBtn) {
     themeBtn.addEventListener("click", () => {
       const body = document.body;
-      const lightOn = body.classList.toggle("light");
-      themeBtn.textContent = lightOn ? "Тема: Light" : "Тема: Dark";
+      const isLight = body.classList.toggle("light");
+      themeBtn.textContent = isLight ? "Тема: Light" : "Тема: Dark";
     });
   }
 
+  // TIGER режим
   const tigerBtn = document.getElementById("toggleTiger");
   if (tigerBtn) {
     tigerBtn.addEventListener("click", () => {
@@ -453,6 +477,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Фильтр
   const filterBtn = document.getElementById("toggleFilter");
   if (filterBtn) {
     filterBtn.addEventListener("click", () => {
@@ -470,12 +495,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Кнопка «Инфо»
   const infoBtn = document.getElementById("toggleInfo");
-  if (infoBtn) {
+  const infoPanel = document.getElementById("infoPanel");
+  if (infoBtn && infoPanel) {
     infoBtn.addEventListener("click", () => {
-      infoPinned = !infoPinned;
-      infoBtn.textContent = infoPinned ? "Инфо: ON" : "Инфо";
-      refreshInfoVisibility();
+      infoVisible = !infoVisible;
+      infoPanel.classList.toggle("hidden", !infoVisible);
+
+      if (!infoVisible) {
+        // когда скрываем инфо — сбрасывать текст до базового
+        const detailsEl = document.getElementById("dayDetails");
+        if (detailsEl) {
+          detailsEl.innerHTML =
+            "Выбери день в календаре, чтобы увидеть детали.";
+        }
+      }
     });
   }
 });
