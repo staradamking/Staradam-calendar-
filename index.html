@@ -2,63 +2,49 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Star Adam New Age</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
-
-  <!-- PWA манифест и иконка -->
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="icon-192.png" type="image/png" />
 </head>
 <body>
-  <div class="page">
+  <audio id="spaceMusic" loop>
+    <source src="cosmos.mp3" type="audio/mpeg" />
+  </audio>
 
-    <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
+  <div class="app-wrapper">
     <header class="top-header">
-      <h1 class="app-title">STAR ADAM NEW AGE</h1>
-      <div class="app-subtitle">
-        Календарь StarAdam · Год Звезды 2025–2026
+      <h1>STAR ADAM NEW AGE</h1>
+      <div class="subtitle">Календарь StarAdam · Год Звезды 2025–2026</div>
+
+      <div id="todayStatus" class="today-status">
+        <!-- Заполняется JS -->
       </div>
 
-      <div id="todayStatus" class="today-status"></div>
-      <div id="statsPanel" class="stats-panel"></div>
-
-      <div class="top-controls">
-        <button id="toggleInfo" class="btn-pill btn-outline">Инфо</button>
+      <div id="statsPanel" class="stats-panel">
+        <!-- Заполняется JS -->
       </div>
     </header>
 
-    <!-- ИНФО-ПАНЕЛЬ (РАЗВОРАЧИВАЕТСЯ ПО КНОПКЕ) -->
-    <section id="infoPanel" class="info-panel hidden">
-      <div id="dayDetails" class="info-card">
-        Выбери день в календаре, чтобы увидеть детали.
-      </div>
-    </section>
+    <main class="main-content">
+      <section id="dayDetails" class="day-details-card hidden">
+        <div class="day-details-placeholder">
+          Нажми на любой день в календаре, чтобы увидеть детали и добавить его в системный календарь.
+        </div>
+      </section>
 
-    <!-- ОСНОВНОЙ КАЛЕНДАРЬ -->
-    <main id="app" class="months-wrapper"></main>
+      <section id="monthsContainer" class="months-container">
+        <!-- Месяцы создаёт app.js -->
+      </section>
+    </main>
 
-    <!-- НИЖНЯЯ ПАНЕЛЬ -->
-    <nav class="bottom-bar">
-      <button id="playMusic" class="btn-nav">Музыка</button>
-      <button id="toggleTheme" class="btn-nav">Тема: Dark</button>
-      <button id="toggleFilter" class="btn-nav">Фильтр</button>
-      <button id="toggleTiger" class="btn-nav btn-tiger">TIGER</button>
-    </nav>
-
-    <!-- КОСМИЧЕСКАЯ МУЗЫКА -->
-    <audio id="spaceMusic" src="cosmos.mp3" loop></audio>
+    <footer class="bottom-bar">
+      <button id="playMusic" class="control-btn">Музыка</button>
+      <button id="toggleTheme" class="control-btn">Тема</button>
+      <button id="toggleFilter" class="control-btn">Фильтр</button>
+      <button id="toggleTiger" class="control-btn tiger-btn">TIGER</button>
+    </footer>
   </div>
 
   <script src="app.js"></script>
-  <script>
-    // Простая регистрация service worker (если есть sw.js)
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch(() => {});
-      });
-    }
-  </script>
 </body>
 </html>
