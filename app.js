@@ -44,7 +44,7 @@ const monthRanges = [
   { start: "2026-05-20", end: "2026-06-18" }, // Огонь
   { start: "2026-06-19", end: "2026-07-18" }, // Земля
   { start: "2026-07-19", end: "2026-08-17" }, // Космос
-  { start: "2026-08-18", end: "2026-09-16" } // Эфир
+  { start: "2026-08-18", end: "2026-09-16" }  // Эфир
 ].map(r => ({
   start: new Date(r.start + "T00:00:00"),
   end: new Date(r.end + "T23:59:59")
@@ -61,6 +61,28 @@ try {
   if (saved) doneMap = JSON.parse(saved);
 } catch {
   doneMap = {};
+}
+
+// ===== ТЕМА (Dark / Light / Matrix) =====
+
+const THEME_KEY = "staradam_theme";
+let themeMode = localStorage.getItem(THEME_KEY) || "dark"; // dark | light | matrix
+
+function applyTheme() {
+  document.body.classList.remove("light", "matrix");
+  if (themeMode === "light") document.body.classList.add("light");
+  if (themeMode === "matrix") document.body.classList.add("matrix");
+
+  const btn = document.getElementById("toggleTheme");
+  if (btn) {
+    const label =
+      themeMode === "dark"
+        ? "Тема: Dark"
+        : themeMode === "light"
+        ? "Тема: Light"
+        : "Тема: Matrix";
+    btn.textContent = label;
+  }
 }
 
 // состояние выбора / фильтра
@@ -204,7 +226,7 @@ function createMonthCard(month, index) {
 function onDayClick(monthIndex, dayNumber, cell) {
   const key = dayKey(monthIndex, dayNumber);
 
-  // если второй раз нажали по тому же дню — переключаем "выполнено"
+  // повторный клик по выбранному дню — переключаем выполнено
   if (
     selectedMeta &&
     selectedMeta.monthIndex === monthIndex &&
@@ -227,7 +249,7 @@ function onDayClick(monthIndex, dayNumber, cell) {
     updateStats();
     applyFilter();
   } else {
-    // просто выделяем как выбранный
+    // просто выделяем
     if (selectedCell && selectedCell !== cell) {
       selectedCell.classList.remove("selected");
     }
@@ -267,7 +289,9 @@ function onDayClick(monthIndex, dayNumber, cell) {
 
   const btn = document.getElementById("addToCalendarBtn");
   if (btn && real) {
-    btn.addEventListener("click", () => createIcsEvent(month, dayNumber, meaningLine, real));
+    btn.addEventListener("click", () =>
+      createIcsEvent(month, dayNumber, meaningLine, real)
+    );
   }
 }
 
@@ -362,7 +386,7 @@ function applyFilter() {
   });
 }
 
-// ===== РЕНДЕР ВСЕГО ПРИЛОЖЕНИЯ =====
+// ===== РЕНДЕР =====
 
 function renderApp() {
   const container = document.getElementById("monthsContainer");
@@ -397,6 +421,8 @@ function renderApp() {
 // ===== ИНИЦИАЛИЗАЦИЯ =====
 
 document.addEventListener("DOMContentLoaded", () => {
+  // применяем тему до рендера
+  applyTheme();
   renderApp();
 
   // Музыка
@@ -405,7 +431,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let playing = false;
 
   if (playBtn && music) {
-    // авто-запуск после первого касания
     const autoStart = () => {
       if (!playing) {
         music.volume = 0.25;
@@ -431,15 +456,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Тема
+  // Переключатель темы: Dark → Light → Matrix → Dark
   const themeBtn = document.getElementById("toggleTheme");
   if (themeBtn) {
     themeBtn.addEventListener("click", () => {
-      document.body.classList.toggle("light");
+      if (themeMode === "dark") themeMode = "light";
+      else if (themeMode === "light") themeMode = "matrix";
+      else themeMode = "dark";
+      localStorage.setItem(THEME_KEY, themeMode);
+      applyTheme();
     });
   }
 
-  // TIGER
+  // TIGER режим
   const tigerBtn = document.getElementById("toggleTiger");
   if (tigerBtn) {
     tigerBtn.addEventListener("click", () => {
