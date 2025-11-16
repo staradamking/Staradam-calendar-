@@ -399,15 +399,20 @@ function renderMap() {
   `;
 
   for (let i = 0; i < total; i++) {
-    const angle = (360 / total) * i - 90; // старт сверху
-    const currentClass =
-      starToday && starToday.monthIndex === i ? " map-month-current" : "";
-    html += `
+  const step = 360 / total;
+  const topIndex = 11; // ЭФИР наверху (как 12 часов на циферблате)
+  const angle = step * (i - topIndex) - 90;
+
+  const currentClass =
+    starToday && starToday.monthIndex === i ? " map-month-current" : "";
+  html += `
       <div class="map-month${currentClass}"
            data-month-index="${i}"
            style="transform: rotate(${angle}deg) translate(0, -120px) rotate(${-angle}deg);">
         ${i + 1}. ${months[i].name}
       </div>
+    `;
+}
     `;
   }
 
