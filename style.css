@@ -12,7 +12,7 @@ body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* Светлая тема (переключатель) */
+/* Светлая тема */
 body.light {
   --bg: #f5f5f5;
   --fg: #111111;
@@ -38,13 +38,15 @@ body.light {
   opacity: 0.8;
 }
 
-.today-status {
+.today-status,
+.day-details {
   padding: 8px 12px;
   border-bottom: 1px solid var(--fg);
   font-size: 12px;
 }
 
-.today-status b {
+.today-status b,
+.day-details b {
   font-weight: 600;
 }
 
@@ -52,7 +54,7 @@ body.light {
   padding: 10px;
 }
 
-/* Месяц */
+/* Карточка месяца */
 
 .month-card {
   border: 1px solid var(--fg);
@@ -60,10 +62,16 @@ body.light {
   padding: 10px;
   margin-bottom: 12px;
   background: #050505;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
 body.light .month-card {
   background: #ffffff;
+}
+
+.month-card:active {
+  transform: scale(0.995);
+  box-shadow: 0 0 8px rgba(0, 255, 102, 0.4);
 }
 
 .month-header {
@@ -103,21 +111,36 @@ body.light .month-card {
   gap: 2px;
 }
 
+/* Клетки дней */
+
 .day-cell {
   border: 1px solid var(--grid-border);
   text-align: center;
   font-size: 10px;
   padding: 4px 0;
   border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
 }
 
-/* ПОДСВЕТКА ТЕКУЩЕГО ДНЯ */
+.day-cell:active {
+  transform: scale(0.94);
+}
+
+/* Сегодня */
 
 .day-cell.today {
   background: rgba(0, 255, 102, 0.35);
   border-color: #ffffff;
   box-shadow: 0 0 8px rgba(0, 255, 102, 1);
   font-weight: 700;
+}
+
+/* Выбранный день */
+
+.day-cell.selected {
+  box-shadow: 0 0 8px var(--accent);
+  border-color: var(--accent);
 }
 
 /* Футер */
@@ -144,8 +167,10 @@ button {
   color: var(--fg);
   padding: 6px 16px;
   font-size: 12px;
+  transition: background 0.15s ease, transform 0.08s ease, box-shadow 0.15s ease;
 }
 
 button:active {
-  transform: scale(0.97);
+  transform: scale(0.96);
+  box-shadow: 0 0 6px rgba(0, 255, 102, 0.6);
 }
