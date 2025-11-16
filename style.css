@@ -281,7 +281,7 @@ body.tiger .month-card {
 
 body.tiger .month-name,
 body.tiger .month-toggle {
-  color: #ff8855;
+  color: #ff0000;
 }
 
 body.tiger .day-cell {
@@ -289,7 +289,7 @@ body.tiger .day-cell {
   box-shadow: 0 0 12px rgba(255,80,0,0.6);
   background:
     radial-gradient(circle at 50% -60%, rgba(255,80,0,0.75), #1a0000 70%);
-  color: #ffe6d5;
+  color: #f40000;
 }
 
 body.tiger .day-cell.today {
@@ -359,8 +359,8 @@ body.theme-matrix .month-card {
 /* Тема 2: CyberMatrix (military стекло + неон) */
 body.theme-cyber .app-shell {
   background:
-    radial-gradient(circle at 5% -10%, #39ff14 0, transparent 55%),
-    radial-gradient(circle at 100% 120%, #00e0ff 0, transparent 60%),
+    radial-gradient(circle at 5% -10%, #ff00ff 0, transparent 55%),
+    radial-gradient(circle at 100% 120%, #ffffff 0, transparent 60%),
     #02040a;
 }
 
