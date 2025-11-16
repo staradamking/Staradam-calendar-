@@ -1,4 +1,5 @@
-// МЕСЯЦЫ STAR ADAM NEW AGE
+// --- МЕСЯЦЫ STAR ADAM NEW AGE ---
+
 const months = [
   { name: "ЗВЕЗДА", dates: "22 сен – 21 окт 2025" },
   { name: "ЛУНА", dates: "22 окт – 20 ноя 2025" },
@@ -14,7 +15,8 @@ const months = [
   { name: "ЭФИР", dates: "18 авг – 16 сен 2026" }
 ];
 
-// 10-дневная цветовая неделя + тотемы + emoji
+// --- 10-дневная цветовая неделя ---
+
 const colorCycle = [
   {
     name: "Чёрный",
@@ -88,7 +90,8 @@ const colorCycle = [
   }
 ];
 
-// Диапазоны реальных дат
+// --- Диапазоны реальных дат для каждого месяца ---
+
 const monthRanges = [
   { start: "2025-09-22", end: "2025-10-21" }, // Звезда
   { start: "2025-10-22", end: "2025-11-20" }, // Луна
@@ -109,21 +112,24 @@ const monthRanges = [
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
-// хранилище дисциплины
+// --- Хранилище дисциплины ---
+
 const DISC_KEY = "staradam_discipline_v1";
 let doneMap = {};
 try {
   const saved = localStorage.getItem(DISC_KEY);
   if (saved) doneMap = JSON.parse(saved);
-} catch (_) {}
+} catch (e) {
+  doneMap = {};
+}
 
 let selectedCell = null;
 let selectedMeta = null;
-let filterMode = "all"; // all | done | undone
+let filterMode = "all";
 
 const starToday = getStarAdamToday();
 
-// --- ВСПОМОГАТЕЛЬНЫЕ ---
+// --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
 
 function getStarAdamToday() {
   const today = new Date();
@@ -139,7 +145,6 @@ function getStarAdamToday() {
   return null;
 }
 
-// устойчивая к смене времени функция реальной даты
 function getRealDate(monthIndex, dayNumber) {
   const range = monthRanges[monthIndex];
   if (!range) return null;
@@ -160,12 +165,12 @@ function dayKey(monthIndex, dayNumber) {
   return `${monthIndex}_${dayNumber}`;
 }
 
-// --- ОТРИСОВКА МЕСЯЦЕВ ---
+// --- СОЗДАНИЕ КАРТОЧКИ МЕСЯЦА ---
 
 function createMonthCard(month, index) {
   const card = document.createElement("div");
   card.className = "month-card";
-  card.dataset.monthIndex = index; // важно для карты
+  card.dataset.monthIndex = index;
 
   const header = document.createElement("div");
   header.className = "month-header";
@@ -208,7 +213,7 @@ function createMonthCard(month, index) {
       const colorIndex = (dayNumber - 1) % 10;
       cell.dataset.monthIndex = index;
       cell.dataset.dayNumber = dayNumber;
-      cell.dataset.colorIndex = colorIndex; // для раскраски через CSS
+      cell.dataset.colorIndex = colorIndex;
 
       if (
         starToday &&
@@ -253,21 +258,20 @@ function onDayClick(monthIndex, dayNumber, cell) {
     selectedMeta.monthIndex === monthIndex &&
     selectedMeta.dayNumber === dayNumber
   ) {
-    // переключаем статус выполнено/нет
+    // переключение статуса выполнено/нет
     const newState = !doneMap[key];
     doneMap[key] = newState;
     if (!newState) delete doneMap[key];
 
     cell.classList.toggle("done", !!newState);
 
-    // лёгкая вибрация при отметке «сделано»
-    if (newState && typeof navigator !== "undefined" && navigator.vibrate) {
+    if (newState && navigator && navigator.vibrate) {
       navigator.vibrate(20);
     }
 
     try {
       localStorage.setItem(DISC_KEY, JSON.stringify(doneMap));
-    } catch (_) {}
+    } catch (e) {}
 
     updateStats();
     applyFilter();
@@ -287,7 +291,6 @@ function onDayClick(monthIndex, dayNumber, cell) {
   const decada = Math.floor((dayNumber - 1) / 10) + 1;
   const done = !!doneMap[key];
 
-  // строка смысла дня: цвет + тотем + emoji
   const meaningLine = `День ${dayNumber} — ${color.emoji} ${color.name} (${color.animal})`;
 
   const detailsEl = document.getElementById("dayDetails");
@@ -308,10 +311,11 @@ function onDayClick(monthIndex, dayNumber, cell) {
   }
 }
 
-// --- .ICS СОБЫТИЕ ---
+// --- СОЗДАНИЕ .ICS ФАЙЛА ---
 
 function createIcsEvent(month, dayNumber, meaningLine, date) {
   const pad = n => (n < 10 ? "0" + n : "" + n);
+
   const dateStr =
     date.getFullYear().toString() +
     pad(date.getMonth() + 1) +
@@ -361,6 +365,8 @@ function createIcsEvent(month, dayNumber, meaningLine, date) {
 
 function renderColorPanel() {
   const panel = document.getElementById("colorPanel");
+  if (!panel) return;
+
   const items = colorCycle
     .map(
       (c, i) => `
@@ -371,6 +377,7 @@ function renderColorPanel() {
     `
     )
     .join("");
+
   panel.innerHTML = `
     <div><b>10 цветов и тотемов декады Star Adam</b></div>
     <div class="color-list">${items}</div>
@@ -399,20 +406,19 @@ function renderMap() {
   `;
 
   for (let i = 0; i < total; i++) {
-  const step = 360 / total;
-  const topIndex = 11; // ЭФИР наверху (как 12 часов на циферблате)
-  const angle = step * (i - topIndex) - 90;
+    const step = 360 / total;
+    const topIndex = 11; // ЭФИР наверху на месте "12 часов"
+    const angle = step * (i - topIndex) - 90;
 
-  const currentClass =
-    starToday && starToday.monthIndex === i ? " map-month-current" : "";
-  html += `
+    const currentClass =
+      starToday && starToday.monthIndex === i ? " map-month-current" : "";
+
+    html += `
       <div class="map-month${currentClass}"
            data-month-index="${i}"
            style="transform: rotate(${angle}deg) translate(0, -120px) rotate(${-angle}deg);">
         ${i + 1}. ${months[i].name}
       </div>
-    `;
-}
     `;
   }
 
@@ -420,6 +426,7 @@ function renderMap() {
       </div>
     </div>
   `;
+
   panel.innerHTML = html;
 
   const nodes = panel.querySelectorAll(".map-month");
@@ -445,9 +452,12 @@ function renderMap() {
 
 function updateStats() {
   const statsEl = document.getElementById("statsPanel");
+  if (!statsEl) return;
+
   const totalDays = months.length * 30;
   const doneCount = Object.keys(doneMap).length;
   const percent = Math.round((doneCount * 100) / totalDays);
+
   statsEl.innerHTML = `
     Дней выполнено: <b>${doneCount}</b> из <b>${totalDays}</b> (${percent}%)
   `;
@@ -475,6 +485,8 @@ function applyFilter() {
 
 function renderApp() {
   const app = document.getElementById("app");
+  if (!app) return;
+
   app.innerHTML = "";
   months.forEach((m, idx) => {
     const card = createMonthCard(m, idx);
@@ -482,18 +494,20 @@ function renderApp() {
   });
 
   const status = document.getElementById("todayStatus");
-  if (starToday) {
-    const m = months[starToday.monthIndex];
-    const color = colorCycle[(starToday.dayNumber - 1) % 10];
-    // без слова "цвет", с emoji
-    status.innerHTML = `
-      Сегодня в Star Adam New Age:
-      <b>${m.name}</b>, день <b>${starToday.dayNumber}</b>
-      — ${color.emoji} <b style="color:${color.code}">${color.name}</b> (${color.animal})
-    `;
-  } else {
-    status.textContent =
-      "Сегодня вне диапазона календаря Star Adam New Age (год 2025–2026).";
+  if (status) {
+    if (starToday) {
+      const m = months[starToday.monthIndex];
+      const color = colorCycle[(starToday.dayNumber - 1) % 10];
+
+      status.innerHTML = `
+        Сегодня в Star Adam New Age:
+        <b>${m.name}</b>, день <b>${starToday.dayNumber}</b>
+        — ${color.emoji} <b style="color:${color.code}">${color.name}</b> (${color.animal})
+      `;
+    } else {
+      status.textContent =
+        "Сегодня вне диапазона календаря Star Adam New Age (год 2025–2026).";
+    }
   }
 
   renderColorPanel();
@@ -511,9 +525,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const playBtn = document.getElementById("playMusic");
   let playing = false;
 
-  // автомузыка по желанию
   const autoMusic = localStorage.getItem("starMusicAuto") === "1";
-  if (autoMusic) {
+  if (autoMusic && music) {
     playBtn.textContent = "Музыка: Авто";
     const autoStart = () => {
       if (!playing) {
@@ -527,56 +540,64 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("click", autoStart, { once: true });
   }
 
-  playBtn.addEventListener("click", () => {
-    if (!playing) {
-      try {
+  if (playBtn && music) {
+    playBtn.addEventListener("click", () => {
+      if (!playing) {
         music.volume = 0.25;
-        music.play();
-      } catch (_) {}
-      playing = true;
-      playBtn.textContent = "Музыка: Вкл";
-      localStorage.setItem("starMusicAuto", "1");
-    } else {
-      music.pause();
-      playing = false;
-      playBtn.textContent = "Музыка";
-      localStorage.setItem("starMusicAuto", "0");
-    }
-  });
+        music.play().catch(() => {});
+        playing = true;
+        playBtn.textContent = "Музыка: Вкл";
+        localStorage.setItem("starMusicAuto", "1");
+      } else {
+        music.pause();
+        playing = false;
+        playBtn.textContent = "Музыка";
+        localStorage.setItem("starMusicAuto", "0");
+      }
+    });
+  }
 
   const themeBtn = document.getElementById("toggleTheme");
-  themeBtn.addEventListener("click", () => {
-    document.body.classList.toggle("light");
-  });
+  if (themeBtn) {
+    themeBtn.addEventListener("click", () => {
+      document.body.classList.toggle("light");
+    });
+  }
 
   const tigerBtn = document.getElementById("toggleTiger");
-  tigerBtn.addEventListener("click", () => {
-    const on = document.body.classList.toggle("tiger");
-    tigerBtn.textContent = on ? "TIGER: ON" : "TIGER";
-  });
+  if (tigerBtn) {
+    tigerBtn.addEventListener("click", () => {
+      const on = document.body.classList.toggle("tiger");
+      tigerBtn.textContent = on ? "TIGER: ON" : "TIGER";
+    });
+  }
 
   const colorsBtn = document.getElementById("toggleColors");
   const colorPanel = document.getElementById("colorPanel");
   let colorsVisible = false;
-  colorsBtn.addEventListener("click", () => {
-    colorsVisible = !colorsVisible;
-    colorPanel.style.display = colorsVisible ? "block" : "none";
-  });
+  if (colorsBtn && colorPanel) {
+    colorsBtn.addEventListener("click", () => {
+      colorsVisible = !colorsVisible;
+      colorPanel.style.display = colorsVisible ? "block" : "none";
+    });
+  }
 
   const filterBtn = document.getElementById("toggleFilter");
-  filterBtn.addEventListener("click", () => {
-    if (filterMode === "all") {
-      filterMode = "done";
-      filterBtn.textContent = "Фильтр: ✔";
-    } else if (filterMode === "done") {
-      filterMode = "undone";
-      filterBtn.textContent = "Фильтр: ☐";
-    } else {
-      filterMode = "all";
-      filterBtn.textContent = "Фильтр";
-    }
-    applyFilter();
-  });
+  if (filterBtn) {
+    filterBtn.addEventListener("click", () => {
+      if (filterMode === "all") {
+        filterMode = "done";
+        filterBtn.textContent = "Фильтр: ✔";
+      } else if (filterMode === "done") {
+        filterMode = "undone";
+        filterBtn.textContent = "Фильтр: ☐";
+      } else {
+        filterMode = "all";
+        filterBtn.textContent = "Фильтр";
+      }
+      applyFilter();
+    });
+  }
 
   const mapBtn = document.getElementById("toggleMap");
   const mapPanel = document.getElementById("mapPanel");
