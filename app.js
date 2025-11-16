@@ -70,7 +70,7 @@ try {
 const THEMES = [
   { id: "theme-dark", label: "Dark" },
   { id: "theme-matrix", label: "Matrix" },
-  { id: "theme-cyber", label: "CyberMatrix" }
+  { id: "theme-cyber", label: "Cyber" }
 ];
 
 const THEME_KEY = "staradam_theme_v1";
