@@ -4,40 +4,35 @@
   <meta charset="UTF-8" />
   <title>Star Adam New Age</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
-  <link rel="apple-touch-icon" href="icon-192.png" />
-  <meta name="theme-color" content="#000000" />
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <div class="top-panel">
-    <header class="app-header">
-      <h1>STAR ADAM NEW AGE</h1>
-      <button id="infoToggle" class="info-button">☰</button>
-    </header>
+<body class="neon">
+  <header class="top-bar">
+    <div id="appTitle" class="app-title">STAR ADAM NEW AGE</div>
+    <button id="infoToggle" class="icon-button" aria-label="Информация">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
 
-    <section id="infoPanel" class="info-panel">
-      <div id="todayStatus" class="today-status"></div>
-      <div id="dayDetails" class="day-details"></div>
-      <div id="statsPanel" class="stats-panel"></div>
-      <div id="colorPanel" class="color-panel"></div>
-    </section>
-  </div>
+  <section id="infoPanel" class="info-panel">
+    <div id="infoContent" class="info-content">
+      <!-- наполняется через JS -->
+    </div>
+  </section>
 
-  <main id="app"></main>
+  <main id="app" class="months-container">
+    <!-- месяцы рендерятся через JS -->
+  </main>
 
-  <footer class="app-footer">
-    <button id="playMusic">Музыка</button>
-    <button id="toggleTheme">Тема</button>
-    <button id="toggleFilter">Фильтр</button>
-    <button id="toggleMap">Карта</button>
-    <button id="toggleTiger">TIGER</button>
+  <footer class="bottom-bar">
+    <button id="playMusic" class="nav-button">Музыка</button>
+    <button id="toggleTheme" class="nav-button">Тема</button>
+    <button id="toggleFilter" class="nav-button">Фильтр</button>
+    <button id="toggleTiger" class="nav-button">TIGER</button>
   </footer>
 
-  <audio id="spaceMusic" loop>
-    <source src="cosmos.mp3" type="audio/mpeg">
-  </audio>
+  <audio id="spaceMusic" src="cosmos.mp3" loop></audio>
 
   <script src="app.js"></script>
 </body>
