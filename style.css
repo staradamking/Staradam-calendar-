@@ -1,37 +1,28 @@
-/* ===== БАЗА ===== */
-
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-:root {
-  --neon-green: #00ff66;
-  --neon-border: #00ff66;
-  --bg-dark: #020308;
-  --bg-panel: rgba(0, 0, 0, 0.85);
-  --text-main: #e0ffe8;
-  --radius-card: 18px;
-  --radius-day: 9px;
-}
-
-/* Базовая (DARK / кибер) тема */
+html,
 body {
   margin: 0;
+  padding: 0;
+  height: 100%;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui,
     sans-serif;
-  background: radial-gradient(circle at top, #021910 0, #000000 55%, #020308 100%);
-  color: var(--text-main);
 }
 
-/* Чтобы на айфоне контент не упирался в края */
-.app-wrapper {
+body {
+  background: radial-gradient(circle at top, #041714 0, #020309 55%, #000 100%);
+  color: #e8fff4;
+}
+
+/* базовая страница */
+
+.page {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  padding-bottom: calc(100px + env(safe-area-inset-bottom));
-  padding-top: env(safe-area-inset-top);
+  padding-bottom: 100px; /* запас под нижнюю панель */
 }
 
 /* ===== ВЕРХНЯЯ ПАНЕЛЬ ===== */
@@ -39,117 +30,126 @@ body {
 .top-header {
   position: sticky;
   top: 0;
-  z-index: 20;
-  text-align: center;
-  padding: 10px 12px 8px;
+  z-index: 50;
+  padding: 16px 16px 8px;
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.96) 0%,
-    rgba(0, 0, 0, 0.9) 45%,
-    rgba(0, 0, 0, 0.3) 100%
+    rgba(0, 0, 0, 0.95),
+    rgba(0, 0, 0, 0.6)
   );
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(0, 255, 102, 0.4);
+  border-bottom: 1px solid rgba(0, 255, 140, 0.4);
+  backdrop-filter: blur(18px);
 }
 
-.top-header h1 {
-  margin: 2px 0 4px;
-  font-size: 24px;
-  letter-spacing: 1.5px;
-  color: var(--neon-green);
-  text-shadow: 0 0 8px rgba(0, 255, 102, 0.8);
+.title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #00ff88;
+  text-shadow: 0 0 14px rgba(0, 255, 120, 0.9);
 }
 
 .subtitle {
+  margin-top: 4px;
+  text-align: center;
   font-size: 13px;
-  opacity: 0.8;
-  margin-bottom: 4px;
+  color: #8cfdd1;
 }
 
 .today-status {
+  margin-top: 10px;
   font-size: 13px;
-  margin: 2px 0;
+  text-align: center;
 }
 
 .stats-panel {
+  margin-top: 6px;
   font-size: 13px;
-  margin-top: 2px;
+  text-align: center;
+  color: #9dffe1;
 }
 
-/* ===== ОСНОВНОЙ КОНТЕНТ ===== */
-
-.main-content {
-  padding: 10px 10px 16px;
-}
-
-/* Информационное окно по выбранному дню */
-.day-details-card {
-  border-radius: 14px;
-  border: 1px solid rgba(0, 255, 102, 0.5);
-  padding: 10px 12px;
-  margin-bottom: 10px;
-  background: radial-gradient(circle at top left, #032012 0, #020308 60%);
-  box-shadow: 0 0 18px rgba(0, 255, 102, 0.15);
-  font-size: 13px;
-
-  /* СТICKY-РЕЖИМ ПОД ШАПКОЙ – поднял ниже шапки */
-  position: sticky;
-  top: calc(120px + env(safe-area-inset-top));
-  z-index: 15;
-}
-
-/* скрыто, пока день не выбран */
-.day-details-card.hidden {
-  display: none;
-}
-
-.day-details-card b {
-  color: var(--neon-green);
-}
-
-.day-details-placeholder {
-  opacity: 0.75;
-}
-
-.add-to-calendar-btn {
+.top-controls {
   margin-top: 8px;
-  padding: 6px 12px;
+  display: flex;
+  justify-content: center;
+}
+
+.top-btn {
   border-radius: 999px;
-  border: 1px solid var(--neon-border);
+  padding: 6px 16px;
+  border: 1px solid #00ff88;
   background: transparent;
-  color: var(--text-main);
-  font-size: 12px;
-  letter-spacing: 0.2px;
+  color: #00ff88;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ===== ПАНЕЛЬ ИНФОРМАЦИИ ===== */
+
+.info-panel {
+  display: none; /* включаем/выключаем через класс .visible */
+  position: sticky;
+  top: 120px;
+  z-index: 40;
+  padding: 8px 12px 0;
+}
+
+.info-panel.visible {
+  display: block;
+}
+
+.day-details {
+  border-radius: 12px;
+  padding: 10px 12px 12px;
+  border: 1px solid rgba(0, 255, 140, 0.6);
+  background: radial-gradient(circle at top, #041b16 0, #020308 70%);
+  box-shadow: 0 0 18px rgba(0, 255, 120, 0.4);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.day-details b {
+  color: #9dffe1;
+}
+
+.add-to-calendar {
+  margin-top: 8px;
+  border-radius: 999px;
+  padding: 6px 14px;
+  border: 1px solid #00ff88;
+  background: transparent;
+  color: #00ff88;
+  font-size: 13px;
 }
 
 /* ===== МЕСЯЦЫ ===== */
 
-.months-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.months {
+  padding: 8px 10px 16px;
 }
 
 .month-card {
-  border-radius: var(--radius-card);
-  border: 1px solid rgba(0, 255, 102, 0.55);
+  margin-top: 10px;
+  border-radius: 18px;
+  border: 1px solid rgba(0, 255, 120, 0.65);
   padding: 10px 12px 12px;
-  background: radial-gradient(circle at top left, #041912 0, #020308 58%);
-  box-shadow: 0 0 18px rgba(0, 255, 102, 0.15);
+  background: radial-gradient(circle at top left, #071d16 0, #020308 70%);
+  box-shadow: 0 0 18px rgba(0, 255, 140, 0.24);
 }
 
 .month-header {
   display: flex;
-  justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 6px;
+  justify-content: space-between;
   gap: 8px;
-  font-size: 13px;
+  margin-bottom: 6px;
 }
 
 .month-name {
-  font-weight: 600;
-  color: var(--neon-green);
+  font-weight: 700;
+  color: #a0ffe3;
 }
 
 .month-dates {
@@ -159,15 +159,16 @@ body {
 
 .month-toggle {
   font-size: 12px;
-  opacity: 0.9;
+  color: #7effc5;
 }
 
-/* ===== ДЕКАДЫ ===== */
+/* декады */
 
 .dec-row-label {
+  margin-top: 6px;
+  margin-bottom: 2px;
   font-size: 11px;
-  opacity: 0.7;
-  margin: 4px 0 2px;
+  color: #7bffe0;
 }
 
 .dec-grid {
@@ -176,102 +177,89 @@ body {
   gap: 4px;
 }
 
-/* ===== ДНИ (база DARK) ===== */
+/* ===== ЯЧЕЙКИ ДНЕЙ ===== */
 
 .day-cell {
   position: relative;
-  border-radius: var(--radius-day);
-  border: 1px solid #0e3524;
+  border-radius: 10px;
+  padding: 8px 0;
   text-align: center;
-  font-size: 11px;
-  padding: 6px 0;
-  color: #f5fff9;
-  background: radial-gradient(circle at 20% 0, #03140d 0, #020308 65%);
-  box-shadow: 0 0 4px rgba(0, 255, 102, 0.18);
-  transition: transform 0.12s ease, box-shadow 0.12s ease,
-    border-color 0.12s ease, background 0.12s ease, opacity 0.12s ease;
+  font-size: 13px;
+  border: 1px solid rgba(0, 255, 120, 0.55);
+  color: #e9fff7;
+  background: radial-gradient(circle at 30% 0, #03251a 0, #020308 70%);
+  box-shadow: 0 0 8px rgba(0, 255, 120, 0.35);
+  transition: transform 0.09s ease, box-shadow 0.09s ease, opacity 0.12s;
 }
 
-/* Цветовой цикл — лёгкие оттенки в DARK */
-.day-cell.color-0 {
-  background: radial-gradient(circle at 20% 0, #050505 0, #020308 68%);
-}
-.day-cell.color-1 {
-  background: radial-gradient(circle at 20% 0, #2b1500 0, #020308 68%);
-}
-.day-cell.color-2 {
-  background: radial-gradient(circle at 20% 0, #2c0000 0, #020308 68%);
-}
-.day-cell.color-3 {
-  background: radial-gradient(circle at 20% 0, #2c1100 0, #020308 68%);
-}
-.day-cell.color-4 {
-  background: radial-gradient(circle at 20% 0, #2b2b00 0, #020308 68%);
-}
-.day-cell.color-5 {
-  background: radial-gradient(circle at 20% 0, #00331a 0, #020308 68%);
-}
-.day-cell.color-6 {
-  background: radial-gradient(circle at 20% 0, #002435 0, #020308 68%);
-}
-.day-cell.color-7 {
-  background: radial-gradient(circle at 20% 0, #000638 0, #020308 68%);
-}
-.day-cell.color-8 {
-  background: radial-gradient(circle at 20% 0, #24003a 0, #020308 68%);
-}
-.day-cell.color-9 {
-  background: radial-gradient(circle at 20% 0, #2b2b2b 0, #020308 68%);
-}
-
-/* Hover/тап визуально */
 .day-cell:active {
   transform: scale(0.96);
 }
 
-/* Выбранный день */
-.day-cell.selected {
-  box-shadow: 0 0 10px rgba(0, 255, 102, 0.9);
-  transform: translateY(-1px);
+/* окраска по десятицветному циклу */
+
+.day-cell.color-0 {
+  background: radial-gradient(circle at 30% 0, #050505 0, #000 70%);
+}
+.day-cell.color-1 {
+  background: radial-gradient(circle at 30% 0, #3a2208 0, #090301 70%);
+}
+.day-cell.color-2 {
+  background: radial-gradient(circle at 30% 0, #410000 0, #080001 70%);
+}
+.day-cell.color-3 {
+  background: radial-gradient(circle at 30% 0, #3a1200 0, #090100 70%);
+}
+.day-cell.color-4 {
+  background: radial-gradient(circle at 30% 0, #353000 0, #090700 70%);
+}
+.day-cell.color-5 {
+  background: radial-gradient(circle at 30% 0, #003516 0, #000804 70%);
+}
+.day-cell.color-6 {
+  background: radial-gradient(circle at 30% 0, #00263a 0, #00070c 70%);
+}
+.day-cell.color-7 {
+  background: radial-gradient(circle at 30% 0, #020033 0, #000109 70%);
+}
+.day-cell.color-8 {
+  background: radial-gradient(circle at 30% 0, #220038 0, #05000a 70%);
+}
+.day-cell.color-9 {
+  background: radial-gradient(circle at 30% 0, #292929 0, #050505 70%);
 }
 
-/* Сегодня */
-@keyframes todayPulse {
-  0% {
-    box-shadow: 0 0 12px rgba(0, 255, 160, 0.7);
-  }
-  50% {
-    box-shadow: 0 0 18px rgba(0, 255, 200, 1);
-  }
-  100% {
-    box-shadow: 0 0 12px rgba(0, 255, 160, 0.7);
-  }
-}
+/* сегодня */
 
 .day-cell.today {
-  border-color: #00ffc3;
-  animation: todayPulse 1.8s infinite;
+  box-shadow: 0 0 18px rgba(0, 255, 160, 0.9);
+  border-color: #00ffbb;
 }
 
-/* Выполнено — мягкое свечение + точка */
-.day-cell.done {
-  box-shadow: 0 0 10px rgba(0, 255, 102, 0.8);
+/* выбранный */
+
+.day-cell.selected {
+  outline: 2px solid #00ffbb;
 }
+
+/* выполненный день */
 
 .day-cell.done::after {
   content: "";
   position: absolute;
-  right: 3px;
-  bottom: 3px;
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #00ff66;
+  background: #00ff88;
+  right: 4px;
+  bottom: 4px;
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.9);
 }
 
-/* Фильтрованные ячейки */
+/* фильтр */
+
 .day-cell.filtered-out {
-  opacity: 0.12;
+  opacity: 0.16;
 }
 
 /* ===== НИЖНЯЯ ПАНЕЛЬ ===== */
@@ -280,313 +268,224 @@ body {
   position: fixed;
   left: 0;
   right: 0;
-
-  /* немного поднял панель от самого низа */
-  bottom: 6px;
-
-  padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
-  background: rgba(0, 0, 0, 0.96);
-  border-top: 1px solid rgba(0, 255, 102, 0.4);
+  bottom: 10px;
+  z-index: 60;
+  padding: 6px 10px;
   display: flex;
-  gap: 10px;
   justify-content: space-between;
-  z-index: 40;
-  backdrop-filter: blur(14px);
+  gap: 8px;
+  pointer-events: none;
 }
 
-.control-btn {
+.bottom-btn {
   flex: 1;
+  pointer-events: auto;
   border-radius: 999px;
-  border: 1px solid rgba(0, 255, 102, 0.7);
-  background: radial-gradient(circle at top, #012213 0, #020308 80%);
-  color: var(--text-main);
-
-  /* сделал крупнее */
+  border: 1px solid #00ff88;
+  background: radial-gradient(circle at top, #041a14 0, #000 70%);
+  color: #a0ffe0;
   font-size: 14px;
-  padding: 11px 6px;
-
-  letter-spacing: 0.4px;
+  padding: 10px 4px;
+  font-weight: 600;
+  box-shadow: 0 0 16px rgba(0, 255, 120, 0.5);
 }
 
-/* ===== LIGHT ТЕМА (нормальная) ===== */
+.bottom-btn-accent {
+  border-color: #ff1744;
+  box-shadow: 0 0 18px rgba(255, 23, 68, 0.8);
+}
+
+/* ===== СВЕТЛАЯ ТЕМА ===== */
 
 body.light {
-  background: radial-gradient(circle at top, #f3f7ff 0, #e4ebf5 45%, #d9e2f0 100%);
-  color: #111111;
+  background: linear-gradient(to bottom, #ffffff, #f0f6ff 40%, #d5e3ff 100%);
+  color: #111;
 }
 
 body.light .top-header {
   background: linear-gradient(
     to bottom,
-    rgba(255, 255, 255, 0.98) 0%,
-    rgba(255, 255, 255, 0.9) 60%,
-    rgba(255, 255, 255, 0.4) 100%
+    rgba(255, 255, 255, 0.95),
+    rgba(255, 255, 255, 0.8)
   );
-  border-bottom-color: #d0d7e6;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
+  border-bottom-color: rgba(0, 180, 100, 0.4);
 }
 
-body.light h1 {
-  color: #111827;
-  text-shadow: none;
+body.light .title {
+  color: #008b4c;
+  text-shadow: 0 0 10px rgba(0, 160, 90, 0.6);
 }
 
-body.light .subtitle,
+body.light .subtitle {
+  color: #3e6b5a;
+}
+
 body.light .today-status,
 body.light .stats-panel {
-  color: #111827;
+  color: #174733;
 }
 
-body.light .day-details-card {
+body.light .day-details {
   background: #ffffff;
-  border-color: #d0d7e6;
-  color: #111827;
-  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
-}
-
-body.light .day-details-card b {
-  color: #0f766e;
+  border-color: rgba(0, 150, 90, 0.7);
+  color: #123326;
 }
 
 body.light .month-card {
   background: #ffffff;
-  border-color: #d0d7e6;
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+  border-color: rgba(0, 150, 90, 0.55);
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.12);
 }
 
-body.light .month-name {
-  color: #0f172a;
-}
-
-/* Светлые пастельные подложки по цветам недели */
 body.light .day-cell {
-  border-color: #e0e7ff;
-  color: #111827;
-  box-shadow: none;
+  color: #111;
+  border-color: rgba(0, 150, 90, 0.5);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.18);
 }
+
+/* пастельные цвета в светлой теме */
 
 body.light .day-cell.color-0 {
-  background: #e5e7eb;
+  background: #f3f3f3;
 }
 body.light .day-cell.color-1 {
-  background: #fbe9dd;
+  background: #f6ebe0;
 }
 body.light .day-cell.color-2 {
-  background: #fee2e2;
+  background: #ffe5e5;
 }
 body.light .day-cell.color-3 {
-  background: #ffedd5;
+  background: #ffe9db;
 }
 body.light .day-cell.color-4 {
-  background: #fef9c3;
+  background: #fff7cf;
 }
 body.light .day-cell.color-5 {
-  background: #dcfce7;
+  background: #e6ffe4;
 }
 body.light .day-cell.color-6 {
-  background: #dbeafe;
+  background: #e4f5ff;
 }
 body.light .day-cell.color-7 {
-  background: #e0e7ff;
+  background: #e1e6ff;
 }
 body.light .day-cell.color-8 {
-  background: #f5e9ff;
+  background: #f0e4ff;
 }
 body.light .day-cell.color-9 {
-  background: #f9fafb;
+  background: #f8f8f8;
 }
 
 body.light .day-cell.today {
-  border-color: #22c55e;
-  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.4);
-  animation: none;
+  box-shadow: 0 0 18px rgba(0, 200, 120, 0.9);
 }
 
-body.light .day-cell.done {
-  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.4);
+/* нижняя панель в светлой теме */
+
+body.light .bottom-btn {
+  background: #ffffff;
+  border-color: rgba(0, 150, 90, 0.6);
+  color: #123326;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
 }
 
-body.light .day-cell.done::after {
-  background: #16a34a;
-}
-
-body.light .bottom-bar {
-  background: rgba(255, 255, 255, 0.96);
-  border-top-color: #d0d7e6;
-  box-shadow: 0 -6px 18px rgba(15, 23, 42, 0.12);
-}
-
-body.light .control-btn {
-  border-color: #d0d7e6;
-  background: #f9fafb;
-  color: #111827;
-}
-
-/* ===== MATRIX ТЕМА ===== */
-
-body.matrix {
-  background:
-    radial-gradient(circle at top, #042011 0, #010303 55%, #000000 100%),
-    #000000;
-  color: #a7f3d0;
-  font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
-}
-
-body.matrix .top-header {
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.98) 0%,
-    rgba(0, 0, 0, 0.9) 50%,
-    rgba(0, 0, 0, 0.2) 100%
-  );
-  border-bottom-color: rgba(74, 222, 128, 0.6);
-}
-
-body.matrix h1 {
-  color: #22c55e;
-  text-shadow: 0 0 12px rgba(34, 197, 94, 0.9);
-}
-
-body.matrix .subtitle,
-body.matrix .today-status,
-body.matrix .stats-panel {
-  color: #bbf7d0;
-}
-
-body.matrix .day-details-card {
-  background: radial-gradient(circle at top left, #02140c 0, #020508 70%);
-  border-color: rgba(34, 197, 94, 0.8);
-  box-shadow: 0 0 24px rgba(34, 197, 94, 0.3);
-}
-
-body.matrix .day-details-card b {
-  color: #4ade80;
-}
-
-body.matrix .month-card {
-  background: radial-gradient(circle at top, #020b06 0, #010203 70%);
-  border-color: rgba(34, 197, 94, 0.8);
-  box-shadow: 0 0 22px rgba(22, 163, 74, 0.5);
-}
-
-body.matrix .month-name {
-  color: #4ade80;
-}
-
-/* матричные клетки: зелёные оттенки и сканлайны */
-body.matrix .day-cell {
-  border-color: #064e3b;
-  color: #bbf7d0;
-  background-image:
-    linear-gradient(to bottom, rgba(16, 185, 129, 0.1) 1px, transparent 1px),
-    radial-gradient(circle at 20% 0, #022c22 0, #020617 70%);
-  background-size: 100% 3px, 100% 100%;
-  box-shadow: 0 0 12px rgba(34, 197, 94, 0.45);
-}
-
-body.matrix .day-cell.today {
-  border-color: #22c55e;
-  box-shadow: 0 0 18px rgba(74, 222, 128, 0.95);
-  animation: todayPulse 1.6s infinite;
-}
-
-body.matrix .day-cell.done {
-  box-shadow: 0 0 18px rgba(22, 163, 74, 0.95);
-}
-
-body.matrix .day-cell.done::after {
-  background: #22c55e;
-}
-
-body.matrix .bottom-bar {
-  background: rgba(0, 0, 0, 0.97);
-  border-top-color: rgba(34, 197, 94, 0.7);
-}
-
-body.matrix .control-btn {
-  border-color: rgba(34, 197, 94, 0.9);
-  background: radial-gradient(circle at top, #022c22 0, #020617 75%);
-  color: #bbf7d0;
-}
-
-/* ===== TIGER — СТЕЛС-КРАСНЫЙ РЕЖИМ ===== */
+/* ===== TIGER РЕЖИМ (красный стелс) ===== */
 
 body.tiger {
-  background:
-    radial-gradient(circle at top, #4d000f 0, #080008 45%, #000000 100%),
-    #000000;
+  background: radial-gradient(circle at top, #ff8090 0, #360008 55%, #050006 100%);
+  color: #ffeef0;
 }
 
-body.tiger .top-header,
-body.tiger .month-card,
-body.tiger .day-details-card,
-body.tiger .bottom-bar {
-  border-color: #ff0033;
+body.tiger .top-header {
+  background: linear-gradient(
+    to bottom,
+    rgba(60, 0, 8, 0.98),
+    rgba(20, 0, 4, 0.9)
+  );
+  border-bottom-color: rgba(255, 60, 90, 0.8);
 }
 
-body.tiger h1 {
-  color: #ff3344;
-  text-shadow: 0 0 16px rgba(255, 60, 80, 0.95);
+body.tiger .title {
+  color: #ff1744;
+  text-shadow: 0 0 18px rgba(255, 23, 68, 1);
 }
 
-body.tiger .subtitle,
-body.tiger .today-status,
-body.tiger .stats-panel {
-  color: #ffe1e5;
+body.tiger .subtitle {
+  color: #ff99aa;
+}
+
+body.tiger .day-details {
+  background: radial-gradient(circle at top, #3a0006 0, #090004 70%);
+  border-color: rgba(255, 70, 90, 0.9);
+  box-shadow: 0 0 18px rgba(255, 23, 68, 0.9);
 }
 
 body.tiger .month-card {
-  background: radial-gradient(circle at top left, #260008 0, #050005 70%);
-  box-shadow: 0 0 26px rgba(255, 40, 60, 0.5);
+  background: radial-gradient(circle at top, #330009 0, #060004 70%);
+  border-color: rgba(255, 70, 90, 0.9);
+  box-shadow: 0 0 18px rgba(255, 23, 68, 0.9);
 }
 
-body.tiger .day-details-card {
-  background: radial-gradient(circle at top left, #33000f 0, #050005 70%);
-  box-shadow: 0 0 26px rgba(255, 55, 75, 0.7);
-}
-
-/* Ячейки — как красный стелс-панцирь */
 body.tiger .day-cell {
-  border-color: #ff3344;
-  background-image:
-    linear-gradient(
-      135deg,
-      rgba(255, 80, 80, 0.18),
-      rgba(0, 0, 0, 0) 55%
-    ),
-    radial-gradient(circle at 20% 0, #3b0008 0, #050006 70%);
-  box-shadow: 0 0 14px rgba(255, 60, 80, 0.85);
+  border-color: rgba(255, 120, 150, 0.9);
+  box-shadow: 0 0 14px rgba(255, 60, 90, 0.95);
 }
 
-body.tiger .day-cell.today {
-  border-color: #ff8899;
-  box-shadow: 0 0 22px rgba(255, 140, 150, 1);
+/* Tiger + Light — специальный вариант, чтобы всё было читаемо */
+
+body.light.tiger {
+  background: radial-gradient(circle at top, #ffe4ea 0, #ff1744 45%, #3b0008 100%);
+  color: #2b0508;
 }
 
-body.tiger .day-cell.done {
-  box-shadow: 0 0 20px rgba(255, 70, 90, 1);
+body.light.tiger .top-header {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.94),
+    rgba(255, 230, 235, 0.92)
+  );
+  border-bottom-color: rgba(255, 23, 68, 0.7);
 }
 
-body.tiger .day-cell.done::after {
-  background: #ff5566;
+body.light.tiger .title {
+  color: #ff1744;
+  text-shadow: 0 0 17px rgba(255, 23, 68, 0.95);
 }
 
-body.tiger .control-btn {
-  border-color: #ff3344;
-  background: radial-gradient(circle at top, #3b000a 0, #050005 80%);
+body.light.tiger .subtitle,
+body.light.tiger .today-status,
+body.light.tiger .stats-panel {
+  color: #5b0011;
 }
 
-body.tiger .tiger-btn {
-  background: #ff1133;
+body.light.tiger .day-details {
+  background: #fff2f5;
+  border-color: rgba(255, 23, 68, 0.8);
+  color: #3c000a;
+}
+
+body.light.tiger .month-card {
+  background: #fff0f2;
+  border-color: rgba(255, 23, 68, 0.85);
+  box-shadow: 0 0 18px rgba(255, 23, 68, 0.7);
+}
+
+body.light.tiger .day-cell {
+  color: #2b0206;
+  border-color: rgba(255, 23, 68, 0.9);
+  box-shadow: 0 0 14px rgba(255, 23, 68, 0.85);
+}
+
+body.light.tiger .bottom-btn {
+  background: #fff1f4;
+  border-color: rgba(255, 23, 68, 0.9);
+  color: #3c000a;
+  box-shadow: 0 4px 18px rgba(255, 23, 68, 0.7);
+}
+
+body.light.tiger .bottom-btn-accent {
+  background: #ff1744;
   color: #ffffff;
 }
 
-/* ===== АДАПТИВ ===== */
-
-@media (min-width: 768px) {
-  .app-wrapper {
-    max-width: 480px;
-    margin: 0 auto;
-  }
-}
+/* конец файла */
