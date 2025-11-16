@@ -361,11 +361,11 @@ body.theme-cyber .app-shell {
   background:
     radial-gradient(circle at 5% -10%, #000000 0, transparent 55%),
     radial-gradient(circle at 100% 120%, #6495ed 0, transparent 60%),
-    #02040a;
+    #ff00ff;
 }
 
 body.theme-cyber .month-card {
-  border-color: #ff8c00;
+  border-color: #ff1493;
   box-shadow:
     0 0 22px rgba(60,255,120,0.85),
     0 0 46px rgba(0,224,255,0.55);
@@ -378,12 +378,12 @@ body.theme-cyber .day-cell {
   border-color: rgba(0,224,255,0.7);
   background:
     radial-gradient(circle at 50% -60%, rgba(0,224,255,0.35), #000 70%);
-  box-shadow: 0 0 10px rgba(0,224,255,0.5);
+  box-shadow: 0 0 10px rgba(0,244,255,0.5);
 }
 
 body.theme-cyber .day-cell.today {
   background:
-    radial-gradient(circle at 50% 0, rgba(124,252,0,0.95), #ff00ff 70%);
+    radial-gradient(circle at 50% 0, rgba(144,252,0,0.95), #ff00ff 70%);
   color: #ff1493;
 }
 
