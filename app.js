@@ -362,9 +362,9 @@ function renderApp() {
     const m = months[starToday.monthIndex];
     const color = colorCycle[(starToday.dayNumber - 1) % 10];
     status.innerHTML = `
-      Сегодня в Star Adam New Age:
+      Сегодня:
       <b>${m.name}</b>, день <b>${starToday.dayNumber}</b>
-      — цвет <b style="color:${color.code}">${color.name}</b> (${color.totem})
+      — <b style="color:${color.code}">${color.name}</b> (${color.totem})
     `;
   } else {
     status.textContent =
