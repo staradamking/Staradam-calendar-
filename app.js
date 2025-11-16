@@ -1,4 +1,4 @@
-// --- МЕСЯЦЫ STAR ADAM NEW AGE ---
+// ===== МЕСЯЦЫ STAR ADAM NEW AGE =====
 
 const months = [
   { name: "ЗВЕЗДА", dates: "22 сен – 21 окт 2025" },
@@ -15,7 +15,7 @@ const months = [
   { name: "ЭФИР", dates: "18 авг – 16 сен 2026" }
 ];
 
-// --- 10-дневная цветовая неделя ---
+// ===== 10-дневная цветовая неделя и тотемы =====
 
 const colorCycle = [
   {
@@ -90,7 +90,7 @@ const colorCycle = [
   }
 ];
 
-// --- Диапазоны реальных дат для каждого месяца ---
+// ===== Реальные диапазоны дат для каждого месяца =====
 
 const monthRanges = [
   { start: "2025-09-22", end: "2025-10-21" }, // Звезда
@@ -112,7 +112,7 @@ const monthRanges = [
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
-// --- Хранилище дисциплины ---
+// ===== Хранилище дисциплины =====
 
 const DISC_KEY = "staradam_discipline_v1";
 let doneMap = {};
@@ -129,7 +129,7 @@ let filterMode = "all";
 
 const starToday = getStarAdamToday();
 
-// --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
+// ===== Вспомогательные =====
 
 function getStarAdamToday() {
   const today = new Date();
@@ -165,7 +165,7 @@ function dayKey(monthIndex, dayNumber) {
   return `${monthIndex}_${dayNumber}`;
 }
 
-// --- СОЗДАНИЕ КАРТОЧКИ МЕСЯЦА ---
+// ===== Карточки месяцев =====
 
 function createMonthCard(month, index) {
   const card = document.createElement("div");
@@ -248,7 +248,7 @@ function createMonthCard(month, index) {
   return card;
 }
 
-// --- КЛИК ПО ДНЮ ---
+// ===== Клик по дню =====
 
 function onDayClick(monthIndex, dayNumber, cell) {
   const key = dayKey(monthIndex, dayNumber);
@@ -258,7 +258,7 @@ function onDayClick(monthIndex, dayNumber, cell) {
     selectedMeta.monthIndex === monthIndex &&
     selectedMeta.dayNumber === dayNumber
   ) {
-    // переключение статуса выполнено/нет
+    // переключаем статус выполнено/нет
     const newState = !doneMap[key];
     doneMap[key] = newState;
     if (!newState) delete doneMap[key];
@@ -311,7 +311,7 @@ function onDayClick(monthIndex, dayNumber, cell) {
   }
 }
 
-// --- СОЗДАНИЕ .ICS ФАЙЛА ---
+// ===== Создание .ics события =====
 
 function createIcsEvent(month, dayNumber, meaningLine, date) {
   const pad = n => (n < 10 ? "0" + n : "" + n);
@@ -361,7 +361,7 @@ function createIcsEvent(month, dayNumber, meaningLine, date) {
   }, 0);
 }
 
-// --- ПАНЕЛЬ ЦВЕТОВ ---
+// ===== Панель цветов =====
 
 function renderColorPanel() {
   const panel = document.getElementById("colorPanel");
@@ -379,76 +379,12 @@ function renderColorPanel() {
     .join("");
 
   panel.innerHTML = `
-    <div><b>10 цветов и тотемов декады Star Adam</b></div>
+    <div class="color-title"><b>10 цветов и тотемов цикла Star Adam</b></div>
     <div class="color-list">${items}</div>
   `;
 }
 
-// --- КОСМИЧЕСКАЯ КОЛЬЦЕВАЯ КАРТА ---
-
-function renderMap() {
-  const panel = document.getElementById("mapPanel");
-  if (!panel) return;
-
-  const total = months.length;
-  const centerInfo = starToday
-    ? `Сейчас: ${months[starToday.monthIndex].name}, день ${starToday.dayNumber}`
-    : "Вне года Звезды";
-
-  let html = `
-    <div class="map-container">
-      <div class="map-circle">
-        <div class="map-center">
-          <div class="map-center-title">STAR ADAM</div>
-          <div class="map-center-sub">Кольцевая карта года</div>
-          <div class="map-today">${centerInfo}</div>
-        </div>
-  `;
-
-  for (let i = 0; i < total; i++) {
-    const step = 360 / total;
-    const topIndex = 11; // ЭФИР наверху на месте "12 часов"
-    const angle = step * (i - topIndex) - 90;
-
-    const currentClass =
-      starToday && starToday.monthIndex === i ? " map-month-current" : "";
-
-    html += `
-      <div class="map-month${currentClass}"
-           data-month-index="${i}"
-           style="transform: rotate(${angle}deg) translate(0, -120px) rotate(${-angle}deg);">
-        ${i + 1}. ${months[i].name}
-      </div>
-    `;
-  }
-
-  html += `
-      </div>
-    </div>
-  `;
-
-  panel.innerHTML = html;
-
-  const nodes = panel.querySelectorAll(".map-month");
-  nodes.forEach(node => {
-    node.addEventListener("click", () => {
-      const idx = parseInt(node.dataset.monthIndex, 10);
-      const card = document.querySelector(
-        '.month-card[data-month-index="' + idx + '"]'
-      );
-      if (card) {
-        const content = card.querySelector(".month-header + div");
-        const header = card.querySelector(".month-header");
-        if (content && content.style.display === "none" && header) {
-          header.click();
-        }
-        card.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    });
-  });
-}
-
-// --- СТАТИСТИКА ---
+// ===== Статистика =====
 
 function updateStats() {
   const statsEl = document.getElementById("statsPanel");
@@ -463,7 +399,7 @@ function updateStats() {
   `;
 }
 
-// --- ФИЛЬТР ---
+// ===== Фильтр =====
 
 function applyFilter() {
   const cells = document.querySelectorAll(".day-cell");
@@ -481,7 +417,7 @@ function applyFilter() {
   });
 }
 
-// --- РЕНДЕР ВСЕГО ПРИЛОЖЕНИЯ ---
+// ===== Рендер всего приложения =====
 
 function renderApp() {
   const app = document.getElementById("app");
@@ -511,12 +447,11 @@ function renderApp() {
   }
 
   renderColorPanel();
-  renderMap();
   updateStats();
   applyFilter();
 }
 
-// --- ИНИЦИАЛИЗАЦИЯ ---
+// ===== Инициализация =====
 
 document.addEventListener("DOMContentLoaded", () => {
   renderApp();
@@ -596,15 +531,6 @@ document.addEventListener("DOMContentLoaded", () => {
         filterBtn.textContent = "Фильтр";
       }
       applyFilter();
-    });
-  }
-
-  const mapBtn = document.getElementById("toggleMap");
-  const mapPanel = document.getElementById("mapPanel");
-  if (mapBtn && mapPanel) {
-    mapBtn.addEventListener("click", () => {
-      const on = document.body.classList.toggle("map");
-      mapBtn.textContent = on ? "Карта: ON" : "Карта";
     });
   }
 });
