@@ -270,6 +270,9 @@ function onDayClick(monthIndex, dayNumber, cell) {
   const detailsEl = document.getElementById("dayDetails");
   if (!detailsEl) return;
 
+  // показываем панель, если она была скрыта
+  detailsEl.classList.remove("hidden");
+
   detailsEl.innerHTML = `
     Выбран: <b>${month.name}</b>, день <b>${dayNumber}</b> (Декада ${decada})<br>
     ${meaningLine}<br>
@@ -425,23 +428,19 @@ document.addEventListener("DOMContentLoaded", () => {
   applyTheme();
   renderApp();
 
-  // Музыка
+  // по умолчанию инфо-панель скрыта
+  const detailsEl = document.getElementById("dayDetails");
+  if (detailsEl) {
+    detailsEl.classList.add("hidden");
+    detailsEl.innerHTML = "";
+  }
+
+  // Музыка — ТОЛЬКО ПО КЛИКУ, БЕЗ АВТОСТАРТА
   const music = document.getElementById("spaceMusic");
   const playBtn = document.getElementById("playMusic");
   let playing = false;
 
   if (playBtn && music) {
-    const autoStart = () => {
-      if (!playing) {
-        music.volume = 0.25;
-        music.play().catch(() => {});
-        playing = true;
-        playBtn.textContent = "Музыка: Вкл";
-      }
-    };
-    document.addEventListener("touchstart", autoStart, { once: true });
-    document.addEventListener("click", autoStart, { once: true });
-
     playBtn.addEventListener("click", () => {
       if (!playing) {
         music.volume = 0.25;
@@ -474,6 +473,7 @@ document.addEventListener("DOMContentLoaded", () => {
     tigerBtn.addEventListener("click", () => {
       const on = document.body.classList.toggle("tiger");
       tigerBtn.textContent = on ? "TIGER: ON" : "TIGER";
+      tigerBtn.classList.toggle("tiger-btn", on);
     });
   }
 
