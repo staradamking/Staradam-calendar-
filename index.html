@@ -1,55 +1,45 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  />
-  <title>STAR ADAM NEW AGE</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Adam New Age</title>
 
-  <meta
-    name="description"
-    content="Star Adam New Age — 10-дневный космический календарь года Звезды 2025–2026."
-  />
-
-  <!-- Иконка приложения (звезда) -->
-  <link rel="icon" href="icon-staradam.png" type="image/png" />
-
-  <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <div class="app-root">
-    <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
-    <header class="top-panel">
-      <div class="app-title">STAR ADAM NEW AGE</div>
-      <div class="app-subtitle">
-        Календарь StarAdam · Год Звезды 2025–2026
-      </div>
 
-      <div id="todayStatus" class="today-status"></div>
-      <div id="dayDetails" class="day-details"></div>
-      <div id="statsPanel" class="stats-panel"></div>
-    </header>
+<div class="top-panel">
+    <h1 class="app-title">STAR ADAM NEW AGE</h1>
+    <h2 class="app-subtitle">Календарь StarAdam · Год Звезды 2025–2026</h2>
 
-    <!-- ОСНОВНОЙ КОНТЕНТ -->
-    <main class="main-scroll">
-      <!-- Только месяцы и дни -->
-      <section id="app"></section>
-    </main>
+    <div class="today-status">
+        Сегодня в Star Adam New Age:
+        <span id="todayMonth"></span>,
+        день <span id="todayDay"></span> —
+        <span id="todayColor"></span>
+    </div>
 
-    <!-- НИЖНЯЯ ПАНЕЛЬ УПРАВЛЕНИЯ (всегда видна) -->
-    <footer class="bottom-bar">
-      <button id="playMusic" class="bottom-btn">Музыка</button>
-      <button id="toggleTheme" class="bottom-btn">Тема</button>
-      <button id="toggleFilter" class="bottom-btn">Фильтр</button>
-      <button id="toggleTiger" class="bottom-btn">TIGER</button>
-    </footer>
+    <div class="progress">
+        Дней выполнено: <span id="doneCount">0</span> из 360 (<span id="donePercent">0</span>%)
+    </div>
+</div>
 
-    <!-- Космическая музыка -->
-    <audio id="spaceMusic" src="cosmos.mp3" loop></audio>
-  </div>
+<div id="monthsContainer"></div>
 
-  <script src="app.js"></script>
+<!-- Нижняя панель -->
+<div class="bottom-bar">
+    <button class="bottom-btn" id="musicBtn">Музыка</button>
+    <button class="bottom-btn" id="themeBtn">Тема</button>
+    <button class="bottom-btn" id="filterBtn">Фильтр</button>
+    <button class="bottom-btn" id="tigerBtn">TIGER</button>
+</div>
+
+<audio id="bgMusic" loop>
+    <source src="cosmos.mp3" type="audio/mpeg">
+</audio>
+
+<script src="app.js"></script>
 </body>
 </html>
