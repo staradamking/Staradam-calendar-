@@ -1,421 +1,377 @@
-:root {
-  --bg: #000000;
-  --fg: #00ff66;
-  --accent: #00ff99;
-  --grid-border: #00ff66;
+/* ===== Общие настройки ===== */
+
+* {
+  box-sizing: border-box;
 }
 
-/* базовый фон + звёзды */
+html,
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--fg);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  position: relative;
-  min-height: 100vh;
+  padding: 0;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui,
+    sans-serif;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 10% 20%, rgba(0,255,102,0.25) 0, transparent 40%),
-    radial-gradient(circle at 80% 0%, rgba(0,255,255,0.2) 0, transparent 45%),
-    radial-gradient(circle at 50% 100%, rgba(0,128,255,0.25) 0, transparent 50%),
-    #000000;
-  opacity: 0.4;
-  animation: starshift 30s linear infinite alternate;
+body {
+  background: radial-gradient(circle at top, #00220f 0, #000000 50%, #000011 100%);
+  color: #00ff66;
 }
 
-@keyframes starshift {
-  from { transform: translate3d(0,0,0); }
-  to   { transform: translate3d(-10px,-10px,0); }
-}
-
-/* Светлая тема */
 body.light {
-  --bg: #f5f5f5;
-  --fg: #111111;
-  --accent: #007744;
-  --grid-border: #444444;
+  background: #f5f5f5;
+  color: #111;
 }
 
-/* TIGER-режим */
-body.tiger {
-  --bg: #120000;
-  --fg: #ff3300;
-  --accent: #ffcc00;
-  --grid-border: #ff3300;
+.app-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Военная карта */
-body.map .day-cell {
-  border-radius: 1px;
-}
-body.map .day-cell.done {
-  background: rgba(0, 255, 0, 0.25);
-}
-body.map .day-cell:not(.done) {
-  background: rgba(255, 0, 0, 0.15);
-}
+/* ===== Верхняя панель ===== */
 
 .top-panel {
   position: sticky;
   top: 0;
-  z-index: 10;
-  background: var(--bg);
-  border-bottom: 1px solid var(--fg);
+  z-index: 900;
+  background: rgba(0, 0, 0, 0.95);
+  border-bottom: 1px solid #00ff66;
+  padding: 8px 10px 6px;
 }
 
-/* Шапка */
+body.light .top-panel {
+  background: #ffffff;
+  border-bottom-color: #222;
+}
 
-.app-header {
+.app-title {
+  font-weight: 800;
+  letter-spacing: 0.08em;
   text-align: center;
-  padding: 12px 10px 8px;
+  font-size: 18px;
 }
 
-.app-header h1 {
-  margin: 0;
-  font-size: 20px;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  margin: 4px 0 0;
+.app-subtitle {
+  text-align: center;
   font-size: 12px;
   opacity: 0.8;
+  margin-top: 2px;
 }
 
-.today-status,
-.day-details,
-.stats-panel,
+.today-status {
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+.day-details {
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.stats-panel {
+  margin-top: 6px;
+  font-size: 12px;
+  padding: 4px 6px;
+  border-radius: 999px;
+  border: 1px solid #00ff66;
+  display: inline-block;
+}
+
+/* ===== Основной скролл ===== */
+
+.main-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 8px 110px; /* запас под нижнюю панель */
+}
+
+/* ===== Панель цветов ===== */
+
 .color-panel {
-  padding: 6px 10px;
-  border-top: 1px solid var(--fg);
+  margin-bottom: 8px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid #00ff66;
+  background: rgba(0, 0, 0, 0.6);
   font-size: 12px;
 }
 
-.today-status b,
-.day-details b,
-.stats-panel b {
-  font-weight: 600;
+body.light .color-panel {
+  background: #ffffff;
+  border-color: #222;
 }
 
-/* Панель цветов */
-
-.color-panel {
-  display: none;
-  font-size: 11px;
+.color-title {
+  margin-bottom: 6px;
 }
 
 .color-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 4px;
-  margin-top: 4px;
 }
 
-.color-item {
-  border: 1px solid var(--grid-border);
-  border-radius: 6px;
-  padding: 3px 6px;
+.color-item span {
+  opacity: 0.9;
 }
 
-/* Основная часть */
-
-#app {
-  padding: 10px;
-}
-
-/* Карточка месяца */
+/* ===== Карточки месяцев ===== */
 
 .month-card {
-  border: 1px solid var(--fg);
-  border-radius: 10px;
-  padding: 10px;
-  margin-bottom: 12px;
-  background: #050505;
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  border-radius: 18px;
+  border: 1px solid #00ff66;
+  padding: 8px 10px 10px;
+  margin-bottom: 10px;
+  background: rgba(0, 0, 0, 0.6);
 }
 
 body.light .month-card {
   background: #ffffff;
-}
-
-.month-card:hover {
-  box-shadow: 0 0 8px rgba(0, 255, 102, 0.4);
-}
-
-.month-card:active {
-  transform: scale(0.995);
+  border-color: #222;
 }
 
 .month-header {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   gap: 6px;
-  font-size: 14px;
-  margin-bottom: 6px;
+  cursor: pointer;
+  padding-bottom: 4px;
 }
 
 .month-name {
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 15px;
 }
 
 .month-dates {
-  font-size: 11px;
-  opacity: 0.8;
+  font-size: 12px;
+  opacity: 0.9;
 }
 
 .month-toggle {
-  font-size: 11px;
+  font-size: 12px;
   opacity: 0.8;
 }
 
-/* Декады */
+/* ===== Декады ===== */
 
 .dec-row-label {
+  margin-top: 6px;
+  margin-bottom: 2px;
   font-size: 11px;
   opacity: 0.8;
-  margin: 4px 0 2px;
 }
 
 .dec-grid {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  gap: 2px;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 4px;
 }
 
-/* Клетки дней */
+/* ===== Ячейки дней ===== */
 
 .day-cell {
-  border: 1px solid var(--grid-border);
+  border-radius: 8px;
+  border: 1px solid #00ff66;
   text-align: center;
-  font-size: 10px;
+  font-size: 12px;
   padding: 4px 0;
-  border-radius: 3px;
   cursor: pointer;
-  transition:
-    background 0.15s ease,
-    box-shadow 0.15s ease,
-    transform 0.08s ease,
-    border-color 0.15s ease,
-    opacity 0.15s ease;
+  position: relative;
+  transition: transform 0.08s ease-out, box-shadow 0.08s ease-out,
+    background 0.1s ease-out, border-color 0.1s ease-out, opacity 0.1s;
+  background: rgba(0, 0, 0, 0.4);
 }
 
-.day-cell:active {
-  transform: scale(0.94);
+.day-cell:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 8px rgba(0, 255, 102, 0.4);
 }
 
-/* Сегодня */
+/* Подсветка сегодняшнего дня */
 
 .day-cell.today {
-  background: rgba(0, 255, 102, 0.35);
-  border-color: #ffffff;
-  box-shadow: 0 0 8px rgba(0, 255, 102, 1);
-  font-weight: 700;
+  background: #00ff66;
+  color: #000;
+  border-color: #00ff99;
+  box-shadow: 0 0 14px #00ff66;
 }
 
 /* Выбранный день */
 
 .day-cell.selected {
-  box-shadow: 0 0 8px var(--accent);
-  border-color: var(--accent);
+  outline: 2px solid #ffffff;
+  outline-offset: 1px;
 }
 
-/* Выполненный день (дисциплина) */
+/* Выполненный день */
 
 .day-cell.done {
-  background: rgba(255, 255, 255, 0.05);
-  position: relative;
+  background: rgba(0, 255, 102, 0.2);
+  border-color: #00ff66;
 }
 
-.day-cell.done::after {
-  content: "•";
-  position: absolute;
-  right: 2px;
-  top: 0;
-  font-size: 9px;
-  color: var(--accent);
-}
-
-/* Отфильтрованные */
+/* Фильтрованные дни */
 
 .day-cell.filtered-out {
-  opacity: 0.18;
+  opacity: 0.25;
 }
 
-/* Футер */
+/* ===== Цветовые фоны ячеек по индексу цвета ===== */
 
-.app-footer {
-  position: sticky;
-  bottom: 0;
-  background: #050505;
-  border-top: 1px solid var(--fg);
-  padding: 8px 10px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
+.day-cell[data-color-index="0"] {
+  background: rgba(0, 0, 0, 0.7);
+}
+.day-cell[data-color-index="1"] {
+  background: rgba(123, 63, 0, 0.35);
+}
+.day-cell[data-color-index="2"] {
+  background: rgba(255, 0, 0, 0.25);
+}
+.day-cell[data-color-index="3"] {
+  background: rgba(255, 127, 0, 0.25);
+}
+.day-cell[data-color-index="4"] {
+  background: rgba(255, 255, 0, 0.22);
+}
+.day-cell[data-color-index="5"] {
+  background: rgba(0, 255, 0, 0.25);
+}
+.day-cell[data-color-index="6"] {
+  background: rgba(51, 204, 255, 0.25);
+}
+.day-cell[data-color-index="7"] {
+  background: rgba(0, 0, 255, 0.25);
+}
+.day-cell[data-color-index="8"] {
+  background: rgba(128, 0, 255, 0.25);
+}
+.day-cell[data-color-index="9"] {
+  background: rgba(255, 255, 255, 0.18);
 }
 
-body.light .app-footer {
+/* Светлая тема для ячеек */
+
+body.light .day-cell {
+  border-color: #444;
+  background: #f0f0f0;
+}
+
+body.light .day-cell[data-color-index="0"] {
+  background: #e0e0e0;
+}
+body.light .day-cell[data-color-index="1"] {
+  background: #f0dfd0;
+}
+body.light .day-cell[data-color-index="2"] {
+  background: #ffd6d6;
+}
+body.light .day-cell[data-color-index="3"] {
+  background: #ffe5cc;
+}
+body.light .day-cell[data-color-index="4"] {
+  background: #fffad0;
+}
+body.light .day-cell[data-color-index="5"] {
+  background: #e0ffde;
+}
+body.light .day-cell[data-color-index="6"] {
+  background: #dcf4ff;
+}
+body.light .day-cell[data-color-index="7"] {
+  background: #dfe4ff;
+}
+body.light .day-cell[data-color-index="8"] {
+  background: #ecdfff;
+}
+body.light .day-cell[data-color-index="9"] {
   background: #ffffff;
 }
 
-button {
+/* Сегодня в светлой теме */
+
+body.light .day-cell.today {
+  background: #00d96a;
+  color: #000;
+}
+
+/* ===== Нижняя панель управления ===== */
+
+.bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 10px 8px calc(10px + env(safe-area-inset-bottom));
+  background: rgba(0, 0, 0, 0.96);
+  border-top: 1px solid #00ff66;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  z-index: 1000;
+}
+
+body.light .bottom-bar {
+  background: rgba(255, 255, 255, 0.98);
+  border-top-color: #222;
+}
+
+.bottom-btn {
+  min-width: 90px;
+  padding: 8px 14px;
   border-radius: 999px;
-  border: 1px solid var(--fg);
+  border: 2px solid #00ff66;
   background: transparent;
-  color: var(--fg);
-  padding: 6px 12px;
-  font-size: 12px;
-  transition:
-    background 0.15s ease,
-    transform 0.08s ease,
-    box-shadow 0.15s ease;
+  color: #00ff66;
+  font-size: 14px;
+  font-weight: 500;
 }
 
-button:active {
-  transform: scale(0.96);
-  box-shadow: 0 0 6px rgba(0, 255, 102, 0.6);
+.bottom-btn:active {
+  transform: translateY(1px);
 }
 
-/* Лёгкая раскраска дней по их цвету */
-.day-cell[data-color-index="0"] { background-color: rgba(0, 0, 0, 0.35); }
-.day-cell[data-color-index="1"] { background-color: rgba(123, 63, 0, 0.20); }
-.day-cell[data-color-index="2"] { background-color: rgba(255, 0, 0, 0.16); }
-.day-cell[data-color-index="3"] { background-color: rgba(255, 127, 0, 0.16); }
-.day-cell[data-color-index="4"] { background-color: rgba(255, 255, 0, 0.16); }
-.day-cell[data-color-index="5"] { background-color: rgba(0, 255, 0, 0.16); }
-.day-cell[data-color-index="6"] { background-color: rgba(51, 204, 255, 0.16); }
-.day-cell[data-color-index="7"] { background-color: rgba(0, 0, 255, 0.16); }
-.day-cell[data-color-index="8"] { background-color: rgba(128, 0, 255, 0.16); }
-.day-cell[data-color-index="9"] { background-color: rgba(255, 255, 255, 0.10); }
-
-/* Чтобы текущий день и выполненный день были поверх этой подсветки */
-.day-cell.today {
-  background-color: #00ff99 !important;
-  color: #000;
+body.light .bottom-btn {
+  border-color: #222;
+  color: #222;
 }
 
-.day-cell.done {
-  box-shadow: 0 0 12px #00ff99;
-  border-color: #00ff99;
+/* ===== TIGER режим (оранжевый боевой скин) ===== */
+
+body.tiger {
+  background: radial-gradient(circle at top, #330b00 0, #000000 60%, #190000 100%);
+  color: #ff8c00;
 }
 
-/* КОСМИЧЕСКАЯ КОЛЬЦЕВАЯ КАРТА STAR ADAM */
-
-.map-panel {
-  display: none;
-  margin: 10px auto 4px;
-  max-width: 360px;
-  padding: 6px 0 10px;
+body.tiger .top-panel,
+body.tiger .month-card,
+body.tiger .color-panel {
+  border-color: #ff8c00;
 }
 
-body.map .map-panel {
-  display: block;
-}
-
-.map-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.map-circle {
-  position: relative;
-  width: 260px;
-  height: 260px;
-  border-radius: 50%;
-  border: 1px solid currentColor;
-  box-shadow: 0 0 12px rgba(0, 255, 153, 0.3);
-}
-
-body.tiger .map-circle {
-  box-shadow: 0 0 12px rgba(255, 80, 0, 0.4);
-}
-
-.map-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  font-size: 11px;
-  line-height: 1.3;
-}
-
-.map-center-title {
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-
-.map-center-sub {
-  opacity: 0.7;
-  font-size: 9px;
-}
-
-.map-today {
-  margin-top: 4px;
-  font-size: 9px;
-  opacity: 0.9;
-}
-
-.map-month {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 70px;
-  height: 24px;
-  margin: -12px 0 0 -35px;
-  border-radius: 999px;
-  border: 1px solid currentColor;
-  font-size: 9px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+body.tiger .month-card,
+body.tiger .color-panel {
   background: rgba(0, 0, 0, 0.7);
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
 }
 
-body.light .map-month {
-  background: rgba(255, 255, 255, 0.9);
+body.tiger .day-cell {
+  border-color: #ff8c00;
 }
 
-.map-month-current {
-  box-shadow: 0 0 10px #00ff99;
-  font-weight: 600;
-}
-
-.map-month:hover {
-  box-shadow: 0 0 8px #00ff99;
-}
-
-/* Раскраска дней по их цветам (как было) */
-.day-cell[data-color-index="0"] { background-color: rgba(0, 0, 0, 0.35); }
-.day-cell[data-color-index="1"] { background-color: rgba(123, 63, 0, 0.20); }
-.day-cell[data-color-index="2"] { background-color: rgba(255, 0, 0, 0.16); }
-.day-cell[data-color-index="3"] { background-color: rgba(255, 127, 0, 0.16); }
-.day-cell[data-color-index="4"] { background-color: rgba(255, 255, 0, 0.16); }
-.day-cell[data-color-index="5"] { background-color: rgba(0, 255, 0, 0.16); }
-.day-cell[data-color-index="6"] { background-color: rgba(51, 204, 255, 0.16); }
-.day-cell[data-color-index="7"] { background-color: rgba(0, 0, 255, 0.16); }
-.day-cell[data-color-index="8"] { background-color: rgba(128, 0, 255, 0.16); }
-.day-cell[data-color-index="9"] { background-color: rgba(255, 255, 255, 0.10); }
-
-.day-cell.today {
-  background-color: #00ff99 !important;
+body.tiger .day-cell.today {
+  background: #ff8c00;
   color: #000;
+  box-shadow: 0 0 14px #ff8c00;
 }
 
-.day-cell.done {
-  box-shadow: 0 0 12px #00ff99;
-  border-color: #00ff99;
+body.tiger .bottom-bar {
+  border-top-color: #ff8c00;
+}
+
+body.tiger .bottom-btn {
+  border-color: #ff8c00;
+  color: #ff8c00;
 }
