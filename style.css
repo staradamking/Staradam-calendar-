@@ -7,9 +7,9 @@
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: var(--bg);
   color: var(--fg);
+  font-family: system-ui, Arial, sans-serif;
 }
 
 .app-header {
@@ -18,65 +18,28 @@ body {
   border-bottom: 1px solid var(--fg);
 }
 
-.app-header h1 {
-  margin: 0;
-  font-size: 20px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
 .subtitle {
-  margin: 4px 0 0;
   font-size: 12px;
   opacity: 0.8;
 }
 
-.app-footer {
-  position: sticky;
-  bottom: 0;
-  background: #050505;
-  border-top: 1px solid var(--fg);
-  padding: 8px 12px;
-  display: flex;
-  justify-content: center;
-}
-
-#toggleTheme {
-  background: transparent;
-  border: 1px solid var(--fg);
-  color: var(--fg);
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 12px;
-}
-
-/* Контейнер приложения */
-
 #app {
-  padding: 8px 10px 70px;
+  padding: 12px;
 }
-
-/* Месяц */
 
 .month-card {
   border: 1px solid var(--fg);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   background: #050505;
 }
 
 .month-header {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  cursor: pointer;
-}
-
-.month-name {
   font-size: 16px;
-  font-weight: 600;
-  text-transform: uppercase;
+  margin-bottom: 5px;
 }
 
 .month-dates {
@@ -84,66 +47,45 @@ body {
   opacity: 0.8;
 }
 
-.month-toggle {
-  font-size: 14px;
-  opacity: 0.7;
-}
-
-/* Сетка декад */
-
-.decades {
-  margin-top: 8px;
-}
-
 .dec-row-label {
   font-size: 11px;
   opacity: 0.8;
-  margin: 6px 0 3px;
+  margin: 5px 0 2px;
 }
 
 .dec-grid {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
-  gap: 2px;
+  gap: 3px;
 }
 
 .day-cell {
   border: 1px solid var(--grid-border);
+  padding: 5px 0;
   text-align: center;
-  font-size: 10px;
-  padding: 4px 0;
-  cursor: pointer;
-}
-
-.day-cell:hover {
-  background: rgba(0, 255, 102, 0.12);
-}
-
-.day-cell.selected {
-  background: rgba(0, 255, 102, 0.25);
-  border-color: var(--accent);
-}
-
-/* Панель информации о выбранном дне */
-
-.day-info {
-  margin-top: 6px;
-  padding: 6px;
-  border-radius: 6px;
-  border: 1px dashed var(--accent);
   font-size: 11px;
 }
 
-/* Переключение темы (светлая) */
-
-body.light {
-  --bg: #f3f3f3;
-  --fg: #111111;
-  --accent: #007744;
-  --grid-border: #444444;
+.day-cell.today {
+  background: rgba(0, 255, 102, 0.35);
+  border-color: white;
+  box-shadow: 0 0 6px rgba(0,255,102,1);
 }
 
-body.light .app-header,
-body.light .app-footer {
-  background: #ffffff;
+.app-footer {
+  position: sticky;
+  bottom: 0;
+  background: #050505;
+  padding: 10px;
+  border-top: 1px solid var(--fg);
+  text-align: center;
+}
+
+button {
+  padding: 8px 16px;
+  font-size: 12px;
+  color: var(--fg);
+  background: transparent;
+  border: 1px solid var(--fg);
+  border-radius: 20px;
 }
