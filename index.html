@@ -2,45 +2,57 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  />
   <title>Star Adam New Age</title>
 
-  <!-- Иконки -->
+  <link rel="manifest" href="manifest.json" />
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
   <link rel="apple-touch-icon" href="icon-192.png" />
-
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <audio id="spaceMusic" src="cosmos.mp3" loop></audio>
-
-  <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
-  <header id="topBar">
-    <div id="appTitle">STAR ADAM NEW AGE</div>
-    <button id="menuButton" aria-label="Информация" class="icon-button">
+  <!-- Верхняя панель -->
+  <header class="top-bar">
+    <div id="titleTap" class="app-title">STAR ADAM NEW AGE</div>
+    <button id="infoToggle" class="menu-button" aria-label="Информация">
       <span></span><span></span><span></span>
     </button>
   </header>
 
-  <!-- ВЫЕЗЖАЮЩАЯ ИНФО-ПАНЕЛЬ -->
-  <section id="infoPanel">
-    <div id="todayStatus" class="info-block"></div>
-    <div id="dayDetails" class="info-block"></div>
-    <div id="statsPanel" class="info-block"></div>
-    <div id="colorPanel" class="info-block"></div>
+  <!-- Выдвижная панель информации -->
+  <section id="infoPanel" class="info-panel">
+    <div id="todayStatus" class="info-line"></div>
+    <div id="dayDetails" class="info-line"></div>
+    <div id="statsPanel" class="info-line"></div>
+    <div id="colorPanel" class="color-panel"></div>
   </section>
 
-  <!-- ОСНОВНОЙ КАЛЕНДАРЬ -->
-  <main id="app"></main>
+  <!-- Календарь -->
+  <main id="app" class="calendar"></main>
 
-  <!-- НИЖНЯЯ ПАНЕЛЬ -->
-  <footer id="bottomBar">
-    <button id="playMusic" class="nav-button">Музыка</button>
-    <button id="toggleTheme" class="nav-button">Тема</button>
-    <button id="toggleFilter" class="nav-button">Фильтр</button>
-    <button id="toggleTiger" class="nav-button tiger-btn">TIGER</button>
-  </footer>
+  <!-- Нижняя панель управления -->
+  <nav class="bottom-bar">
+    <button id="playMusic" class="nav-btn">Музыка</button>
+    <button id="toggleTheme" class="nav-btn">Тема</button>
+    <button id="toggleFilter" class="nav-btn">Фильтр</button>
+    <button id="toggleTiger" class="nav-btn">TIGER</button>
+  </nav>
+
+  <!-- Космическая музыка -->
+  <audio id="spaceMusic" loop>
+    <source src="cosmos.mp3" type="audio/mpeg" />
+  </audio>
 
   <script src="app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+      });
+    }
+  </script>
 </body>
 </html>
