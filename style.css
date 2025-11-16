@@ -1,4 +1,25 @@
-/* ====== БАЗА ====== */
+/* =========================
+   БАЗА
+   ========================= */
+
+:root {
+  --bg-main: #000000;
+  --bg-elevated: #020508;
+  --bg-header: #000000;
+  --text-main: #e5ffe5;
+  --text-muted: #7bd6a0;
+
+  --accent: #00ff66;
+  --accent-soft: rgba(0, 255, 102, 0.25);
+  --border-main: #00ff66;
+  --glow-soft: rgba(0, 255, 102, 0.4);
+  --glow-strong: rgba(0, 255, 102, 0.8);
+
+  --card-radius: 18px;
+  --button-radius: 22px;
+  --transition-fast: 0.18s ease-out;
+  --transition-med: 0.28s ease-out;
+}
 
 *,
 *::before,
@@ -16,430 +37,511 @@ body {
 body {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui,
     sans-serif;
-  background: #000000;
-  color: #00ff66;
+  background: radial-gradient(circle at top, #03150b 0%, #000000 55%);
+  color: var(--text-main);
   -webkit-font-smoothing: antialiased;
 }
 
-/* контейнер */
-.app-shell {
+.app-root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: radial-gradient(circle at top, #021b10 0, #000000 60%);
-  color: #e5ffe5;
 }
 
-/* ====== ТЕМЫ (переменные) ====== */
+/* =========================
+   ВЕРХНЯЯ ПАНЕЛЬ
+   ========================= */
 
-:root {
-  --bg-main: #000000;
-  --bg-panel: rgba(0, 10, 5, 0.95);
-  --bg-card: rgba(0, 15, 8, 0.9);
-  --border-main: #00ff66;
-  --border-soft: rgba(0, 255, 120, 0.4);
-  --glow-main: 0 0 12px rgba(0, 255, 120, 0.8);
-  --text-main: #eafff0;
-  --text-muted: #7af5b0;
-  --accent-strong: #00ff66;
-  --accent-weak: #0f3b24;
-  --danger: #ff3366;
-}
-
-/* DARK (по умолчанию – агрессивная неоновая тема) */
-body.dark {
-  --bg-main: #000000;
-  --bg-panel: radial-gradient(circle at top, #170000 0, #000000 60%);
-  --bg-card: rgba(5, 0, 0, 0.95);
-  --border-main: #ff2400;
-  --border-soft: rgba(255, 90, 0, 0.5);
-  --glow-main: 0 0 16px rgba(255, 60, 0, 0.9);
-  --text-main: #ffe8e0;
-  --text-muted: #ff9f7a;
-  --accent-strong: #ff3b00;
-  --accent-weak: rgba(255, 60, 0, 0.17);
-}
-
-/* CYBER MATRIX – стекло, неон, милитари */
-body.matrix {
-  --bg-main: radial-gradient(circle at top, #021915 0, #02040a 55%, #000000 100%);
-  --bg-panel: rgba(3, 16, 12, 0.9);
-  --bg-card: rgba(6, 26, 22, 0.92);
-  --border-main: #38ffb9;
-  --border-soft: rgba(56, 255, 185, 0.5);
-  --glow-main: 0 0 20px rgba(56, 255, 185, 0.95);
-  --text-main: #e8fff9;
-  --text-muted: #7fe9c6;
-  --accent-strong: #38ffb9;
-  --accent-weak: rgba(56, 255, 185, 0.16);
-}
-
-/* TIGER – режим красной боевой концентрации поверх темы */
-body.tiger {
-  --bg-main: radial-gradient(circle at top, #3a0000 0, #050000 60%, #000000 100%);
-  --bg-panel: rgba(32, 0, 0, 0.96);
-  --bg-card: rgba(24, 0, 0, 0.96);
-  --border-main: #ff3100;
-  --border-soft: rgba(255, 120, 60, 0.7);
-  --glow-main: 0 0 24px rgba(255, 40, 0, 1);
-  --text-main: #ffe8e3;
-  --text-muted: #ffb59c;
-  --accent-strong: #ff3100;
-  --accent-weak: rgba(255, 70, 0, 0.3);
-}
-
-/* ====== ФОНЫ И ТЕКСТ ====== */
-
-body,
-.app-shell {
-  background: var(--bg-main);
-  color: var(--text-main);
-}
-
-/* ====== ВЕРХНЯЯ ПАНЕЛЬ ====== */
-
-.top-bar {
+.app-header {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 50;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.9),
+    rgba(0, 0, 0, 0.85),
+    rgba(0, 0, 0, 0.7)
+  );
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 255, 102, 0.3);
+}
+
+.app-header-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 18px 10px;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.96) 0%,
-    rgba(0, 0, 0, 0.92) 40%,
-    rgba(0, 0, 0, 0.7) 100%
-  );
-  border-bottom: 1px solid var(--border-soft);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.8);
+  padding: 10px 14px 8px;
 }
 
-.top-title {
-  font-size: 20px;
-  letter-spacing: 0.22em;
+.app-title {
+  font-size: 18px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   font-weight: 700;
-  color: var(--accent-strong);
-  text-shadow: var(--glow-main);
-  white-space: nowrap;
+  color: var(--accent);
 }
 
-/* Иконка вызова меню (звезда) */
+/* Кнопка меню под звезду */
 .menu-button {
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  height: 34px;
   border-radius: 999px;
-  border: 2px solid var(--border-main);
-  background: radial-gradient(circle at center, var(--accent-weak) 0, #000 55%);
+  border: 1.5px solid var(--accent);
+  background: radial-gradient(circle at 30% 30%, var(--accent-soft), #000000);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--accent-strong);
-  box-shadow: var(--glow-main);
-  cursor: pointer;
+  color: var(--accent);
+  font-size: 18px; /* сюда можно поставить символ ★ или SVG */
+  padding: 0;
   outline: none;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+    border-color var(--transition-fast), background var(--transition-fast);
 }
 
-.menu-button span {
-  font-size: 22px;
-  line-height: 1;
+.menu-button:active {
+  transform: scale(0.95);
+  box-shadow: 0 0 18px var(--glow-soft);
 }
 
-/* Слайдер-панель информации (сегодня/детали/статистика/цвета) */
-
-.top-info-wrapper {
-  position: sticky;
-  top: 56px; /* чуть ниже шапки */
-  z-index: 90;
+/* Выпадающая верхняя панель с инфой */
+.top-panel-wrapper {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease, border-bottom 0.3s ease;
+  border-bottom: 0 solid rgba(0, 255, 102, 0.3);
 }
 
-.top-info-panel {
-  background: var(--bg-panel);
-  border-bottom: 1px solid var(--border-soft);
-  padding: 10px 14px 8px;
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.9);
+.top-panel-wrapper.open {
+  max-height: 260px; /* подстраивается под контент */
+  border-bottom-width: 1px;
 }
 
-/* строки текста информации */
-
-#todayStatus {
+.top-panel {
+  padding: 10px 14px 12px;
   font-size: 13px;
-  margin-bottom: 4px;
+  background: radial-gradient(circle at top, #021b0a 0%, #000000 60%);
 }
 
-#dayDetails {
-  font-size: 12px;
-  line-height: 1.4;
-  margin-bottom: 4px;
+/* =========================
+   ОСНОВНОЙ КОНТЕНТ
+   ========================= */
+
+.main-scroll {
+  flex: 1;
+  padding: 10px 8px 82px; /* запас под нижнюю панель */
 }
 
-#statsPanel {
-  font-size: 12px;
-  opacity: 0.9;
-}
-
-/* блок цветов и тотемов */
-
-#colorPanel {
-  margin-top: 6px;
-  padding-top: 6px;
-  border-top: 1px solid var(--border-soft);
-}
-
-#colorPanel b {
-  font-size: 12px;
-}
-
-.color-list {
-  margin-top: 6px;
-}
-
-.color-item {
-  font-size: 11px;
-  margin-bottom: 4px;
-}
-
-/* ====== КНОПКА “Добавить в календарь” ====== */
-
-.add-to-calendar {
-  margin-top: 6px;
-  padding: 7px 16px;
-  font-size: 12px;
-  border-radius: 999px;
-  border: 1px solid var(--border-main);
-  color: var(--accent-strong);
-  background: radial-gradient(circle at center, var(--accent-weak) 0, #000 60%);
-  box-shadow: var(--glow-main);
-}
-
-/* ====== СЕКЦИЯ МЕСЯЦЕВ ====== */
-
-main,
-#app {
-  flex: 1 0 auto;
-  padding: 8px 10px 90px; /* снизу запас под нижнюю панель */
-}
+/* Карточки месяцев */
 
 .month-card {
+  background:
+    radial-gradient(circle at top, rgba(0, 255, 102, 0.06), #020507 50%),
+    radial-gradient(circle at bottom, rgba(0, 255, 102, 0.05), #000000 70%);
+  border-radius: var(--card-radius);
+  border: 1px solid rgba(0, 255, 102, 0.5);
+  box-shadow:
+    0 0 18px rgba(0, 255, 102, 0.18),
+    0 0 28px rgba(0, 0, 0, 0.9) inset;
+  padding: 10px 12px 12px;
   margin-bottom: 10px;
-  padding: 10px;
-  border-radius: 18px;
-  background: var(--bg-card);
-  border: 1px solid var(--border-soft);
-  box-shadow: 0 0 18px rgba(0, 0, 0, 0.8);
 }
 
-/* при включении Tiger – более ярное свечение */
-body.tiger .month-card {
-  box-shadow: 0 0 22px rgba(255, 60, 0, 0.8);
-}
+/* Шапка месяца */
 
 .month-header {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
+  gap: 8px;
   margin-bottom: 8px;
 }
 
 .month-name {
-  font-size: 16px;
   font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .month-dates {
   font-size: 12px;
-  opacity: 0.85;
+  opacity: 0.8;
 }
 
 .month-toggle {
   font-size: 12px;
   text-transform: lowercase;
-  color: var(--text-muted);
+  color: var(--accent);
 }
 
 /* Декады */
 
 .dec-row-label {
   font-size: 11px;
-  opacity: 0.8;
-  margin: 6px 0 4px;
+  opacity: 0.7;
+  margin: 4px 0 3px;
 }
 
 .dec-grid {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  gap: 6px;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 4px;
 }
 
-/* Клетка дня */
+/* =========================
+   ЯЧЕЙКИ ДНЕЙ
+   ========================= */
 
 .day-cell {
-  height: 30px;
-  border-radius: 9px;
-  border: 1px solid var(--border-soft);
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: radial-gradient(circle at top, #000000 0, #020505 45%, #000 100%);
+  position: relative;
+  font-size: 12px;
+  text-align: center;
+  padding: 6px 0;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 255, 102, 0.4);
   color: var(--text-main);
-  box-shadow: none;
-  transition: transform 0.1s ease-out, box-shadow 0.1s ease-out,
-    background 0.1s ease-out, border-color 0.1s ease-out;
+  background: radial-gradient(circle at top, rgba(0, 255, 102, 0.09), #020304);
+  box-shadow:
+    0 0 8px rgba(0, 255, 102, 0.25),
+    0 0 0 1px rgba(0, 0, 0, 0.9) inset;
+  transition:
+    background var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    opacity var(--transition-fast);
 }
 
-/* Сегодня */
+.day-cell:active {
+  transform: scale(0.95);
+}
+
+/* Текущий день */
 
 .day-cell.today {
-  border-color: var(--accent-strong);
-  box-shadow: 0 0 16px rgba(0, 255, 140, 0.8);
-  background: radial-gradient(circle at center, var(--accent-weak) 0, #000 70%);
+  border-color: #00ffcc;
+  box-shadow:
+    0 0 18px rgba(0, 255, 204, 0.9),
+    0 0 0 1px rgba(0, 0, 0, 0.9) inset;
+  background: radial-gradient(
+    circle at top,
+    rgba(0, 255, 204, 0.4),
+    #00130f 60%
+  );
 }
 
-/* Выполнено */
-
-.day-cell.done {
-  background: radial-gradient(circle at center, #01421f 0, #000 70%);
-  border-color: #24ff8a;
-  box-shadow: 0 0 16px rgba(0, 255, 140, 0.8);
-}
-
-/* Выбрано */
+/* Выбранный день */
 
 .day-cell.selected {
-  transform: translateY(-1px) scale(1.03);
-  border-color: var(--accent-strong);
-  box-shadow: var(--glow-main);
+  border-color: #ffffff;
+  box-shadow:
+    0 0 20px rgba(255, 255, 255, 0.5),
+    0 0 0 1px rgba(0, 0, 0, 0.9) inset;
 }
 
-/* Фильтр – скрытые */
+/* Выполненный день */
+
+.day-cell.done {
+  border-color: #00ff66;
+  background: radial-gradient(circle at top, rgba(0, 255, 102, 0.4), #02140a);
+  box-shadow:
+    0 0 16px rgba(0, 255, 102, 0.75),
+    0 0 0 1px rgba(0, 0, 0, 0.9) inset;
+}
+
+/* Фильтр */
 
 .day-cell.filtered-out {
-  opacity: 0.14;
+  opacity: 0.25;
 }
 
-/* ====== НИЖНЯЯ ПАНЕЛЬ ====== */
+/* =========================
+   СТАТУС / ТЕКСТ
+   ========================= */
+
+#todayStatus {
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+#dayDetails {
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+/* Кнопка "Добавить в календарь" */
+
+.add-to-calendar {
+  margin-top: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: radial-gradient(circle at top, var(--accent-soft), #000000);
+  color: var(--accent);
+  font-size: 12px;
+}
+
+/* Блок статуса */
+
+#statsPanel {
+  font-size: 11px;
+  opacity: 0.9;
+}
+
+/* Блок описания цветов/тотемов — если используется */
+
+#colorPanel {
+  margin-top: 8px;
+  font-size: 11px;
+}
+
+.color-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 10px;
+  margin-top: 4px;
+}
+
+.color-item {
+  padding: 4px 0;
+}
+
+/* =========================
+   НИЖНЯЯ ПАНЕЛЬ
+   ========================= */
 
 .bottom-bar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 120;
-  padding: 8px 10px 12px;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.98) 0%,
-    rgba(0, 0, 0, 0.9) 40%,
-    rgba(0, 0, 0, 0.3) 100%
-  );
-  border-top: 1px solid var(--border-soft);
+  padding: 8px 8px 10px;
+  background: radial-gradient(circle at top, rgba(0, 0, 0, 0.95), #000000 70%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(0, 255, 102, 0.35);
+  z-index: 40;
+}
+
+.bottom-buttons {
   display: flex;
-  justify-content: space-between;
   gap: 8px;
+  justify-content: space-between;
 }
 
-/* большие кнопки во всех темах */
-.bottom-button {
-  flex: 1 1 0;
-  padding: 10px 0;
-  font-size: 15px;
-  border-radius: 999px;
-  border: 1px solid var(--border-main);
-  background: radial-gradient(circle at center, var(--accent-weak) 0, #000 70%);
-  color: var(--accent-strong);
+.bottom-buttons button {
+  flex: 1;
+}
+
+.control-button {
+  border-radius: var(--button-radius);
+  padding: 10px 8px;
+  border: 1.5px solid rgba(0, 255, 102, 0.7);
+  background:
+    radial-gradient(circle at top, rgba(0, 255, 102, 0.2), #000000 55%),
+    linear-gradient(to bottom, #020b05, #000000);
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 500;
   text-align: center;
-  box-shadow: 0 0 16px rgba(0, 255, 120, 0.7);
+  outline: none;
+  transition:
+    background var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
 }
 
-/* Текст текущей темы выводится JS, визуально выделяем */
-.bottom-button.theme-active {
-  border-width: 2px;
+.control-button:active {
+  transform: scale(0.96);
+  box-shadow: 0 0 18px var(--glow-soft);
 }
 
-/* В Tiger-режиме всё краснее и ярче */
+.control-button.primary {
+  border-color: #ffffff;
+}
 
-body.tiger .bottom-bar {
+/* =========================
+   ТЕМЫ
+   ========================= */
+
+/* ---- ТЕМА DARK (брутальный неон) ---- */
+
+body.theme-dark {
+  --bg-main: #000000;
+  --bg-elevated: #050608;
+  --bg-header: #020202;
+  --text-main: #f6f6f6;
+  --text-muted: #ff9966;
+
+  --accent: #00ff66;
+  --accent-soft: rgba(0, 255, 102, 0.28);
+  --border-main: #00ff66;
+  --glow-soft: rgba(0, 255, 102, 0.45);
+  --glow-strong: rgba(0, 255, 102, 0.85);
+
+  background: radial-gradient(circle at top, #140000 0%, #000000 55%);
+}
+
+body.theme-dark .month-card {
+  background:
+    radial-gradient(circle at top, rgba(0, 255, 102, 0.05), #050000 50%),
+    radial-gradient(circle at bottom, rgba(255, 0, 0, 0.16), #000000 80%);
+  border-color: rgba(255, 80, 40, 0.8);
+  box-shadow:
+    0 0 26px rgba(255, 30, 0, 0.5),
+    0 0 0 1px rgba(0, 0, 0, 0.9) inset;
+}
+
+body.theme-dark .day-cell {
+  border-color: rgba(255, 120, 60, 0.8);
+  background: radial-gradient(circle at top, rgba(255, 60, 0, 0.3), #050000);
+  box-shadow:
+    0 0 10px rgba(255, 60, 0, 0.6),
+    0 0 0 1px rgba(0, 0, 0, 0.9) inset;
+}
+
+body.theme-dark .day-cell.today {
+  border-color: #ffffff;
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.5), #220000);
+}
+
+body.theme-dark .day-cell.done {
+  border-color: #00ff66;
+  background: radial-gradient(circle at top, rgba(0, 255, 102, 0.5), #021208);
+}
+
+/* ---- ТЕМА CYBER MATRIX ---- */
+
+body.theme-matrix {
+  --bg-main: #02040b;
+  --bg-elevated: rgba(5, 16, 26, 0.85);
+  --bg-header: rgba(0, 0, 0, 0.95);
+  --text-main: #e6f7ff;
+  --text-muted: #79baff;
+
+  --accent: #39ff14;
+  --accent-soft: rgba(57, 255, 20, 0.32);
+  --border-main: #39ff14;
+  --glow-soft: rgba(57, 255, 20, 0.5);
+  --glow-strong: rgba(57, 255, 20, 0.9);
+
+  background: radial-gradient(circle at top, #041118 0%, #000000 70%);
+}
+
+body.theme-matrix .month-card {
+  background:
+    linear-gradient(145deg, rgba(0, 255, 153, 0.14), rgba(0, 102, 255, 0.08)),
+    radial-gradient(circle at top left, rgba(0, 255, 204, 0.25), #02040a 65%);
+  border: 1px solid rgba(0, 255, 153, 0.9);
+  box-shadow:
+    0 0 24px rgba(0, 255, 153, 0.6),
+    0 0 0 1px rgba(0, 0, 0, 0.9) inset;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+body.theme-matrix .day-cell {
+  border-color: rgba(0, 255, 153, 0.9);
+  background:
+    radial-gradient(circle at top, rgba(0, 255, 153, 0.4), rgba(0, 51, 102, 0.9));
+  box-shadow:
+    0 0 14px rgba(0, 255, 153, 0.9),
+    0 0 0 1px rgba(0, 0, 0, 0.8) inset;
+}
+
+body.theme-matrix .day-cell.today {
+  border-color: #ffffff;
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.6), rgba(0, 102, 255, 0.9));
+}
+
+body.theme-matrix .day-cell.done {
+  border-color: #39ff14;
+  background:
+    radial-gradient(circle at top, rgba(57, 255, 20, 0.6), rgba(0, 51, 0, 0.9));
+}
+
+/* Низ в Cyber Matrix — чуть более стеклянный */
+body.theme-matrix .bottom-bar {
   background: linear-gradient(
     to top,
-    rgba(40, 0, 0, 0.98) 0%,
-    rgba(18, 0, 0, 0.9) 40%,
-    rgba(0, 0, 0, 0.4) 100%
+    rgba(0, 0, 0, 0.95),
+    rgba(0, 12, 24, 0.9)
   );
 }
 
-body.tiger .bottom-button {
-  border-color: var(--border-main);
-  color: #ffe4d8;
-  background: radial-gradient(circle at center, #3a0000 0, #050000 60%);
-  box-shadow: 0 0 20px rgba(255, 60, 0, 0.9);
+/* =========================
+   РЕЖИМ TIGER (поверх темы)
+   ========================= */
+
+body.tiger {
+  background: radial-gradient(circle at top, #2b0000 0%, #000000 70%);
 }
 
-/* ====== TIGER ГЛОБАЛЬНАЯ СЕТКА ====== */
-
-body.tiger .month-card,
-body.tiger .day-cell,
-body.tiger .top-info-panel,
-body.tiger .top-bar {
-  border-color: var(--border-main);
-  box-shadow: 0 0 20px rgba(255, 40, 0, 0.9);
+body.tiger .app-header {
+  border-bottom-color: rgba(255, 80, 40, 0.9);
 }
 
-body.tiger .day-cell.today,
-body.tiger .day-cell.selected,
+body.tiger .app-title {
+  color: #ff3300;
+}
+
+body.tiger .menu-button {
+  border-color: #ff3300;
+  color: #ff3300;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 80, 40, 0.5), #000000);
+  box-shadow: 0 0 18px rgba(255, 60, 0, 0.7);
+}
+
+body.tiger .month-card {
+  border-color: rgba(255, 80, 40, 1);
+  background:
+    radial-gradient(circle at top, rgba(255, 80, 40, 0.4), #200000 55%),
+    radial-gradient(circle at bottom, rgba(255, 0, 0, 0.4), #000000 85%);
+  box-shadow:
+    0 0 32px rgba(255, 40, 0, 0.9),
+    0 0 0 1px rgba(0, 0, 0, 0.9) inset;
+}
+
+body.tiger .day-cell {
+  border-color: rgba(255, 160, 120, 0.95);
+  background: radial-gradient(circle at top, rgba(255, 80, 40, 0.55), #1a0000);
+  box-shadow:
+    0 0 22px rgba(255, 80, 40, 0.95),
+    0 0 0 1px rgba(0, 0, 0, 0.95) inset;
+  color: #ffe6e6;
+}
+
+body.tiger .day-cell.today {
+  border-color: #ffffff;
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.75), #3a0000);
+  color: #ffffff;
+}
+
 body.tiger .day-cell.done {
-  background: radial-gradient(circle at center, #ff3100 0, #3a0000 60%);
+  border-color: #00ff99;
+  background: radial-gradient(circle at top, rgba(0, 255, 153, 0.7), #001a0f);
+  color: #e6fff4;
 }
 
-/* ====== CYBER MATRIX СПЕЦЭФФЕКТЫ ====== */
-
-body.matrix .month-card {
-  backdrop-filter: blur(14px);
-  background: linear-gradient(
-    135deg,
-    rgba(8, 40, 30, 0.95),
-    rgba(1, 10, 8, 0.96)
-  );
-  border-width: 1px;
+body.tiger .control-button {
+  border-color: #ff3300;
+  color: #ffccb3;
+  background:
+    radial-gradient(circle at top, rgba(255, 80, 40, 0.6), #000000 70%),
+    linear-gradient(to bottom, #270000, #000000);
+  box-shadow: 0 0 22px rgba(255, 40, 0, 0.9);
 }
 
-body.matrix .day-cell {
-  background: radial-gradient(circle at top, #00110c 0, #000204 65%);
-  box-shadow: 0 0 12px rgba(0, 255, 150, 0.4);
-}
+/* =========================
+   ПРОЧЕЕ
+   ========================= */
 
-body.matrix .day-cell.today,
-body.matrix .day-cell.selected {
-  box-shadow: 0 0 20px rgba(56, 255, 185, 1);
-}
-
-/* ====== MAP РЕЖИМ (если включён) ====== */
-
-body.map .month-card {
-  border-style: dashed;
-}
-
-body.map .day-cell {
-  border-radius: 3px;
-}
-
-/* ====== ПРОЧЕЕ ====== */
-
-button {
-  font-family: inherit;
-  cursor: pointer;
-}
-
-button:active {
-  transform: scale(0.97);
-}
-
-/* для маленьких экранов ещё немного увеличим нижние кнопки */
-@media (max-width: 375px) {
-  .bottom-button {
-    font-size: 14px;
-    padding: 11px 0;
-  }
+b {
+  font-weight: 600;
 }
