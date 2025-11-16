@@ -4,46 +4,40 @@
   <meta charset="UTF-8" />
   <title>Star Adam New Age</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <meta name="theme-color" content="#000000" />
 </head>
 <body>
-  <audio id="spaceMusic" loop>
-    <source src="cosmos.mp3" type="audio/mpeg" />
-  </audio>
-
-  <div class="app-wrapper">
-    <header class="top-header">
+  <div class="top-panel">
+    <header class="app-header">
       <h1>STAR ADAM NEW AGE</h1>
-      <div class="subtitle">Календарь StarAdam · Год Звезды 2025–2026</div>
-
-      <div id="todayStatus" class="today-status">
-        <!-- заполняется из JS -->
-      </div>
-
-      <div id="statsPanel" class="stats-panel">
-        <!-- Дней выполнено: ... -->
-      </div>
+      <button id="infoToggle" class="info-button">☰</button>
     </header>
 
-    <main class="main-content">
-      <section id="dayDetails" class="day-details-card">
-        <div class="day-details-placeholder">
-          Нажми на любой день в календаре, чтобы увидеть детали и добавить его в системный календарь.
-        </div>
-      </section>
-
-      <section id="monthsContainer" class="months-container">
-        <!-- Месяцы и дни рендерятся через app.js -->
-      </section>
-    </main>
-
-    <footer class="bottom-bar">
-      <button id="playMusic" class="control-btn">Музыка</button>
-      <button id="toggleTheme" class="control-btn">Тема</button>
-      <button id="toggleFilter" class="control-btn">Фильтр</button>
-      <button id="toggleTiger" class="control-btn tiger-btn">TIGER</button>
-    </footer>
+    <section id="infoPanel" class="info-panel">
+      <div id="todayStatus" class="today-status"></div>
+      <div id="dayDetails" class="day-details"></div>
+      <div id="statsPanel" class="stats-panel"></div>
+      <div id="colorPanel" class="color-panel"></div>
+    </section>
   </div>
+
+  <main id="app"></main>
+
+  <footer class="app-footer">
+    <button id="playMusic">Музыка</button>
+    <button id="toggleTheme">Тема</button>
+    <button id="toggleFilter">Фильтр</button>
+    <button id="toggleMap">Карта</button>
+    <button id="toggleTiger">TIGER</button>
+  </footer>
+
+  <audio id="spaceMusic" loop>
+    <source src="cosmos.mp3" type="audio/mpeg">
+  </audio>
 
   <script src="app.js"></script>
 </body>
