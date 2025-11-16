@@ -30,7 +30,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-bottom: calc(88px + env(safe-area-inset-bottom));
+  padding-bottom: calc(100px + env(safe-area-inset-bottom));
   padding-top: env(safe-area-inset-top);
 }
 
@@ -92,9 +92,9 @@ body {
   box-shadow: 0 0 18px rgba(0, 255, 102, 0.15);
   font-size: 13px;
 
-  /* СТICKY-РЕЖИМ ПОД ШАПКОЙ */
+  /* СТICKY-РЕЖИМ ПОД ШАПКОЙ – поднял ниже шапки */
   position: sticky;
-  top: calc(70px + env(safe-area-inset-top));
+  top: calc(120px + env(safe-area-inset-top));
   z-index: 15;
 }
 
@@ -280,12 +280,15 @@ body {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 0;
-  padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+
+  /* немного поднял панель от самого низа */
+  bottom: 6px;
+
+  padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
   background: rgba(0, 0, 0, 0.96);
   border-top: 1px solid rgba(0, 255, 102, 0.4);
   display: flex;
-  gap: 8px;
+  gap: 10px;
   justify-content: space-between;
   z-index: 40;
   backdrop-filter: blur(14px);
@@ -297,8 +300,11 @@ body {
   border: 1px solid rgba(0, 255, 102, 0.7);
   background: radial-gradient(circle at top, #012213 0, #020308 80%);
   color: var(--text-main);
-  font-size: 13px;
-  padding: 9px 4px;
+
+  /* сделал крупнее */
+  font-size: 14px;
+  padding: 11px 6px;
+
   letter-spacing: 0.4px;
 }
 
