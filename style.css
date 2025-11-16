@@ -5,11 +5,34 @@
   --grid-border: #00ff66;
 }
 
+/* базовый фон + звёзды */
 body {
   margin: 0;
   background: var(--bg);
   color: var(--fg);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  position: relative;
+  min-height: 100vh;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(0,255,102,0.25) 0, transparent 40%),
+    radial-gradient(circle at 80% 0%, rgba(0,255,255,0.2) 0, transparent 45%),
+    radial-gradient(circle at 50% 100%, rgba(0,128,255,0.25) 0, transparent 50%),
+    #000000;
+  opacity: 0.4;
+  animation: starshift 30s linear infinite alternate;
+}
+
+@keyframes starshift {
+  from { transform: translate3d(0,0,0); }
+  to   { transform: translate3d(-10px,-10px,0); }
 }
 
 /* Светлая тема */
@@ -20,10 +43,27 @@ body.light {
   --grid-border: #444444;
 }
 
+/* TIGER-режим */
+body.tiger {
+  --bg: #120000;
+  --fg: #ff3300;
+  --accent: #ffcc00;
+  --grid-border: #ff3300;
+}
+
+.top-panel {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
+  border-bottom: 1px solid var(--fg);
+}
+
+/* Шапка */
+
 .app-header {
   text-align: center;
-  padding: 16px 12px;
-  border-bottom: 1px solid var(--fg);
+  padding: 12px 10px 8px;
 }
 
 .app-header h1 {
@@ -39,9 +79,10 @@ body.light {
 }
 
 .today-status,
-.day-details {
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--fg);
+.day-details,
+.color-panel {
+  padding: 6px 10px;
+  border-top: 1px solid var(--fg);
   font-size: 12px;
 }
 
@@ -49,6 +90,28 @@ body.light {
 .day-details b {
   font-weight: 600;
 }
+
+/* Панель цветов */
+
+.color-panel {
+  display: none;
+  font-size: 11px;
+}
+
+.color-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.color-item {
+  border: 1px solid var(--grid-border);
+  border-radius: 6px;
+  padding: 3px 6px;
+}
+
+/* Основная часть */
 
 #app {
   padding: 10px;
@@ -69,9 +132,12 @@ body.light .month-card {
   background: #ffffff;
 }
 
+.month-card:hover {
+  box-shadow: 0 0 8px rgba(0, 255, 102, 0.4);
+}
+
 .month-card:active {
   transform: scale(0.995);
-  box-shadow: 0 0 8px rgba(0, 255, 102, 0.4);
 }
 
 .month-header {
@@ -120,7 +186,11 @@ body.light .month-card {
   padding: 4px 0;
   border-radius: 3px;
   cursor: pointer;
-  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.08s ease,
+    border-color 0.15s ease;
 }
 
 .day-cell:active {
@@ -143,6 +213,22 @@ body.light .month-card {
   border-color: var(--accent);
 }
 
+/* Выполненный день (дисциплина) */
+
+.day-cell.done {
+  background: rgba(255, 255, 255, 0.05);
+  position: relative;
+}
+
+.day-cell.done::after {
+  content: "•";
+  position: absolute;
+  right: 2px;
+  top: 0;
+  font-size: 9px;
+  color: var(--accent);
+}
+
 /* Футер */
 
 .app-footer {
@@ -150,10 +236,11 @@ body.light .month-card {
   bottom: 0;
   background: #050505;
   border-top: 1px solid var(--fg);
-  padding: 8px 12px;
+  padding: 8px 10px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 body.light .app-footer {
@@ -165,9 +252,12 @@ button {
   border: 1px solid var(--fg);
   background: transparent;
   color: var(--fg);
-  padding: 6px 16px;
+  padding: 6px 12px;
   font-size: 12px;
-  transition: background 0.15s ease, transform 0.08s ease, box-shadow 0.15s ease;
+  transition:
+    background 0.15s ease,
+    transform 0.08s ease,
+    box-shadow 0.15s ease;
 }
 
 button:active {
