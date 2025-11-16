@@ -1,5 +1,3 @@
-Это app.js
-
 // ===== МЕСЯЦЫ STAR ADAM NEW AGE (12×30) =====
 
 const months = [
