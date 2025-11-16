@@ -284,3 +284,26 @@ button:active {
   transform: scale(0.96);
   box-shadow: 0 0 6px rgba(0, 255, 102, 0.6);
 }
+
+/* Лёгкая раскраска дней по их цвету */
+.day-cell[data-color-index="0"] { background-color: rgba(0, 0, 0, 0.35); }
+.day-cell[data-color-index="1"] { background-color: rgba(123, 63, 0, 0.20); }
+.day-cell[data-color-index="2"] { background-color: rgba(255, 0, 0, 0.16); }
+.day-cell[data-color-index="3"] { background-color: rgba(255, 127, 0, 0.16); }
+.day-cell[data-color-index="4"] { background-color: rgba(255, 255, 0, 0.16); }
+.day-cell[data-color-index="5"] { background-color: rgba(0, 255, 0, 0.16); }
+.day-cell[data-color-index="6"] { background-color: rgba(51, 204, 255, 0.16); }
+.day-cell[data-color-index="7"] { background-color: rgba(0, 0, 255, 0.16); }
+.day-cell[data-color-index="8"] { background-color: rgba(128, 0, 255, 0.16); }
+.day-cell[data-color-index="9"] { background-color: rgba(255, 255, 255, 0.10); }
+
+/* Чтобы текущий день и выполненный день были поверх этой подсветки */
+.day-cell.today {
+  background-color: #00ff99 !important;
+  color: #000;
+}
+
+.day-cell.done {
+  box-shadow: 0 0 12px #00ff99;
+  border-color: #00ff99;
+}
