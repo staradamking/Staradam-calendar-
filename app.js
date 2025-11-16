@@ -16,19 +16,53 @@ const months = [
 
 // 10-дневная цветовая неделя
 const colorCycle = [
-  { name: "Чёрный",   code: "#000000" },
+  { name: "Чёрный", code: "#000000" },
   { name: "Коричневый", code: "#7b3f00" },
-  { name: "Красный",  code: "#ff0000" },
+  { name: "Красный", code: "#ff0000" },
   { name: "Оранжевый", code: "#ff7f00" },
-  { name: "Жёлтый",   code: "#ffff00" },
-  { name: "Зелёный",  code: "#00ff00" },
-  { name: "Голубой",  code: "#33ccff" },
-  { name: "Синий",    code: "#0000ff" },
+  { name: "Жёлтый", code: "#ffff00" },
+  { name: "Зелёный", code: "#00ff00" },
+  { name: "Голубой", code: "#33ccff" },
+  { name: "Синий", code: "#0000ff" },
   { name: "Фиолетовый", code: "#8000ff" },
-  { name: "Белый",    code: "#ffffff" }
+  { name: "Белый", code: "#ffffff" }
 ];
 
-// РЕАЛЬНЫЕ ДИАПАЗОНЫ ДАТ ДЛЯ ГОДА ЗВЕЗДЫ 2025–2026
+// Названия 30 дней (можно потом переписать под свою доктрину)
+const dayMeanings = [
+  "День 1 — Атака",
+  "День 2 — Движение",
+  "День 3 — Стратегия",
+  "День 4 — Дисциплина",
+  "День 5 — Порядок",
+  "День 6 — Манёвр",
+  "День 7 — Подготовка",
+  "День 8 — Прорыв",
+  "День 9 — Укрепление",
+  "День 10 — Перезагрузка",
+  "День 11 — Разведка",
+  "День 12 — Координация",
+  "День 13 — Наступление",
+  "День 14 — Снабжение",
+  "День 15 — Закрепление",
+  "День 16 — Контроль",
+  "День 17 — Очистка",
+  "День 18 — Усиление",
+  "День 19 — Рефлексия",
+  "День 20 — Баланс",
+  "День 21 — Расширение",
+  "День 22 — Консолидация",
+  "День 23 — Перестройка",
+  "День 24 — Смена курса",
+  "День 25 — Стабилизация",
+  "День 26 — Перенастройка",
+  "День 27 — Калибровка",
+  "День 28 — Сбор ресурсов",
+  "День 29 — Спокойствие",
+  "День 30 — Возрождение"
+];
+
+// Диапазоны реальных дат
 const monthRanges = [
   { start: "2025-09-22", end: "2025-10-21" }, // Звезда
   { start: "2025-10-22", end: "2025-11-20" }, // Луна
@@ -44,10 +78,12 @@ const monthRanges = [
   { start: "2026-08-18", end: "2026-09-16" }  // Эфир
 ].map(r => ({
   start: new Date(r.start + "T00:00:00"),
-  end:   new Date(r.end   + "T23:59:59")
+  end: new Date(r.end + "T23:59:59")
 }));
 
-// Определяем, какой сегодня день в календаре Star Adam
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+// Получаем сегодняшнюю дату в системе Star Adam
 function getStarAdamToday() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -55,18 +91,33 @@ function getStarAdamToday() {
   for (let i = 0; i < monthRanges.length; i++) {
     const range = monthRanges[i];
     if (today >= range.start && today <= range.end) {
-      const msPerDay = 24 * 60 * 60 * 1000;
-      const dayNumber = Math.floor((today - range.start) / msPerDay) + 1; // 1..30
+      const dayNumber = Math.floor((today - range.start) / MS_PER_DAY) + 1;
       return { monthIndex: i, dayNumber };
     }
   }
-  return null; // если сейчас не в диапазоне года Звезды
+  return null;
 }
 
-// вычисляем один раз
+// Реальная дата для любого дня Star Adam
+function getRealDate(monthIndex, dayNumber) {
+  const range = monthRanges[monthIndex];
+  if (!range) return null;
+  return new Date(range.start.getTime() + (dayNumber - 1) * MS_PER_DAY);
+}
+
+function formatDateRu(date) {
+  const monthsRu = [
+    "января","февраля","марта","апреля","мая","июня",
+    "июля","августа","сентября","октября","ноября","декабря"
+  ];
+  return `${date.getDate()} ${monthsRu[date.getMonth()]} ${date.getFullYear()}`;
+}
+
 const starToday = getStarAdamToday();
 
-// СОЗДАЁМ КАРТОЧКУ МЕСЯЦА
+let selectedCell = null;
+
+// Создание карточки месяца
 function createMonthCard(month, index) {
   const card = document.createElement("div");
   card.className = "month-card";
@@ -118,6 +169,11 @@ function createMonthCard(month, index) {
         cell.classList.add("today");
       }
 
+      // Клик по дню
+      cell.addEventListener("click", () => {
+        onDayClick(index, day, cell);
+      });
+
       grid.appendChild(cell);
     }
 
@@ -135,7 +191,32 @@ function createMonthCard(month, index) {
   return card;
 }
 
-// ОТРИСОВКА ВСЕГО ПРИЛОЖЕНИЯ
+function onDayClick(monthIndex, dayNumber, cell) {
+  // Снимаем прошлый выбор
+  if (selectedCell && selectedCell !== cell) {
+    selectedCell.classList.remove("selected");
+  }
+  selectedCell = cell;
+  cell.classList.add("selected");
+
+  const month = months[monthIndex];
+  const meaning =
+    dayMeanings[dayNumber - 1] || `День ${dayNumber} — без названия`;
+  const color = colorCycle[(dayNumber - 1) % 10];
+  const real = getRealDate(monthIndex, dayNumber);
+
+  const detailsEl = document.getElementById("dayDetails");
+  const decada = Math.floor((dayNumber - 1) / 10) + 1;
+
+  detailsEl.innerHTML = `
+    Выбран: <b>${month.name}</b>, день <b>${dayNumber}</b> (Декада ${decada})<br>
+    ${meaning}<br>
+    Цвет недели: <b style="color:${color.code}">${color.name}</b><br>
+    Реальная дата: <b>${real ? formatDateRu(real) : "вне диапазона года Звезды"}</b>
+  `;
+}
+
+// Рендер всего приложения
 function renderApp() {
   const app = document.getElementById("app");
   app.innerHTML = "";
@@ -186,9 +267,4 @@ document.addEventListener("DOMContentLoaded", () => {
   themeBtn.addEventListener("click", () => {
     document.body.classList.toggle("light");
   });
-
-  // service worker для оффлайна
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js").catch(() => {});
-  }
 });
