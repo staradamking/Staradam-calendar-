@@ -14,66 +14,76 @@ const months = [
   { name: "ЭФИР", dates: "18 авг – 16 сен 2026" }
 ];
 
-// 10-дневная цветовая неделя + тотемы
+// 10-дневная цветовая неделя + тотемы + emoji
 const colorCycle = [
   {
     name: "Чёрный",
     code: "#000000",
     animal: "Пантера",
+    emoji: "🐆",
     meaning: "Пустота, концентрация, старт цикла"
   },
   {
     name: "Коричневый",
     code: "#7b3f00",
     animal: "Медведь",
+    emoji: "🐻",
     meaning: "Земля, база, устойчивость"
   },
   {
     name: "Красный",
     code: "#ff0000",
     animal: "Дракон",
+    emoji: "🐉",
     meaning: "Атака, огонь, решительность"
   },
   {
     name: "Оранжевый",
     code: "#ff7f00",
     animal: "Лев",
+    emoji: "🦁",
     meaning: "Творчество, храбрость, лидерство"
   },
   {
     name: "Жёлтый",
     code: "#ffff00",
     animal: "Тигр",
+    emoji: "🐯",
     meaning: "Фокус, охота за целями, обучение"
   },
   {
     name: "Зелёный",
     code: "#00ff00",
     animal: "Аллигатор",
+    emoji: "🐊",
     meaning: "Выносливость, восстановление, жизнь"
   },
   {
     name: "Голубой",
     code: "#33ccff",
     animal: "Дельфин",
+    emoji: "🐬",
     meaning: "Коммуникация, игра, связи"
   },
   {
     name: "Синий",
     code: "#0000ff",
     animal: "Кит",
+    emoji: "🐋",
     meaning: "Глубина, серьёзная работа, дисциплина"
   },
   {
     name: "Фиолетовый",
     code: "#8000ff",
     animal: "Фламинго",
+    emoji: "🦩",
     meaning: "Магия, стиль, внутренний баланс"
   },
   {
     name: "Белый",
     code: "#ffffff",
     animal: "Лебедь",
+    emoji: "🦢",
     meaning: "Очищение, завершение, красота"
   }
 ];
@@ -181,9 +191,9 @@ function createMonthCard(month, index) {
   // 3 декады по 10 дней
   for (let d = 0; d < 3; d++) {
     const label = document.createElement("div");
-      label.className = "dec-row-label";
-      label.textContent = `Декада ${d + 1}`;
-      content.appendChild(label);
+    label.className = "dec-row-label";
+    label.textContent = `Декада ${d + 1}`;
+    content.appendChild(label);
 
     const grid = document.createElement("div");
     grid.className = "dec-grid";
@@ -194,8 +204,10 @@ function createMonthCard(month, index) {
       cell.className = "day-cell";
       cell.textContent = dayNumber;
 
+      const colorIndex = (dayNumber - 1) % 10;
       cell.dataset.monthIndex = index;
       cell.dataset.dayNumber = dayNumber;
+      cell.dataset.colorIndex = colorIndex; // для раскраски через CSS
 
       if (
         starToday &&
@@ -274,8 +286,8 @@ function onDayClick(monthIndex, dayNumber, cell) {
   const decada = Math.floor((dayNumber - 1) / 10) + 1;
   const done = !!doneMap[key];
 
-  // Новая строка смысла дня: цвет + тотем
-  const meaningLine = `День ${dayNumber} — ${color.name} (${color.animal})`;
+  // Новая строка смысла дня: цвет + тотем + emoji
+  const meaningLine = `День ${dayNumber} — ${color.emoji} ${color.name} (${color.animal})`;
 
   const detailsEl = document.getElementById("dayDetails");
   detailsEl.innerHTML = `
@@ -352,7 +364,7 @@ function renderColorPanel() {
     .map(
       (c, i) => `
       <div class="color-item">
-        <b style="color:${c.code}">${i + 1}. ${c.name} (${c.animal})</b><br>
+        <b style="color:${c.code}">${i + 1}. ${c.emoji} ${c.name} (${c.animal})</b><br>
         <span>${c.meaning}</span>
       </div>
     `
@@ -408,10 +420,11 @@ function renderApp() {
   if (starToday) {
     const m = months[starToday.monthIndex];
     const color = colorCycle[(starToday.dayNumber - 1) % 10];
+    // убираем слово "цвет", добавляем emoji
     status.innerHTML = `
       Сегодня в Star Adam New Age:
       <b>${m.name}</b>, день <b>${starToday.dayNumber}</b>
-      — цвет <b style="color:${color.code}">${color.name}</b> (${color.animal})
+      — ${color.emoji} <b style="color:${color.code}">${color.name}</b> (${color.animal})
     `;
   } else {
     status.textContent =
