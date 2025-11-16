@@ -1,174 +1,145 @@
-/* ===== БАЗА ===== */
-
+/* БАЗА */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
   margin: 0;
   padding: 0;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  background: #000;
+  color: #d0ffd0;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  background: #000000;
-  color: #e6ffe6;
-  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
 }
 
-/* Контейнер всего приложения */
-
-.app-root {
+.app-shell {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: radial-gradient(circle at 50% -20%, #00ff66 0, #000 45%);
 }
 
-/* ===== ВЕРХНЯЯ ПАНЕЛЬ ===== */
+/* ВЕРХНЯЯ ОБЛАСТЬ (СТИКИ) */
 
-.top-bar {
+.top-sticky {
   position: sticky;
   top: 0;
   z-index: 50;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(0,0,0,0.85));
+  backdrop-filter: blur(10px);
+}
+
+/* HEADER */
+
+.app-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 16px;
-  background: #000000;
-  border-bottom: 1px solid #00ff66;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(0, 255, 102, 0.4);
 }
 
-.top-title {
-  font-size: 18px;
+.app-title {
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.12em;
   color: #00ff66;
   text-transform: uppercase;
 }
 
-.top-menu-btn {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1px solid #00ff66;
+/* Кнопка-меню (звезда) */
+
+.menu-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 2px solid #00ff66;
   background: transparent;
+  color: #00ff66;
+  font-size: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
+  cursor: pointer;
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
 }
 
-.top-menu-btn .star-icon {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 2px solid #00ff66;
+.menu-btn:active {
+  transform: scale(0.94);
 }
 
-/* Выпадающая инфо-панель (шапка с сегодняшним днём и выбранным днём) */
-
-.info-panel-wrapper {
-  position: sticky;
-  top: 46px; /* высота шапки */
-  z-index: 40;
+.star-btn {
+  box-shadow: 0 0 14px rgba(0, 255, 102, 0.5);
 }
+
+.star-btn.open {
+  background: radial-gradient(circle at 50% 50%, #00ff66 0, #000 60%);
+  box-shadow: 0 0 18px rgba(0, 255, 102, 0.9);
+}
+
+/* ИНФОПАНЕЛЬ */
 
 .info-panel {
-  background: radial-gradient(circle at top, #002b11 0, #000000 55%);
-  border-bottom: 1px solid #00ff66;
-  padding: 8px 14px 10px;
-  font-size: 13px;
-  line-height: 1.35;
+  max-height: 260px;
+  overflow: hidden;
+  padding: 10px 16px 12px;
+  border-bottom: 1px solid rgba(0, 255, 102, 0.35);
+  background: radial-gradient(circle at 0 0, rgba(0,255,102,0.14), transparent 55%);
+  transition: max-height .25s ease;
 }
-
-.info-panel b {
-  color: #00ff66;
-}
-
-.info-panel button.add-to-calendar {
-  margin-top: 6px;
-}
-
-/* Можно скрывать/показывать панель по JS – через класс .collapsed */
 
 .info-panel.collapsed {
-  display: none;
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
-/* ===== КНОПКИ ОБЩИЕ ===== */
-
-button {
-  font-family: inherit;
-}
-
-.primary-btn,
-.bottom-btn {
-  border-radius: 999px;
-  border: 1px solid #00ff66;
-  background: transparent;
-  color: #00ff66;
-  padding: 8px 18px;
-  font-size: 14px;
-}
-
-.primary-btn:active,
-.bottom-btn:active {
-  transform: scale(0.97);
-}
-
-/* Кнопка "Добавить в календарь" */
-
-.add-to-calendar {
-  border-radius: 999px;
-  border: 1px solid #00ff66;
-  background: rgba(0, 255, 102, 0.1);
-  color: #00ff66;
-  padding: 7px 18px;
-  font-size: 14px;
-}
-
-/* ===== БЛОКИ С ТЕКСТОМ ПОД ШАПКОЙ ===== */
-
-#todayStatus,
-#dayDetails,
-#statsPanel {
-  padding: 4px 14px;
+.today-status {
+  margin-bottom: 4px;
   font-size: 13px;
 }
 
-#todayStatus {
-  padding-top: 6px;
+.day-details {
+  font-size: 13px;
+  line-height: 1.4;
+  margin-bottom: 4px;
 }
 
-#dayDetails {
-  margin-top: 4px;
+.stats-panel {
+  font-size: 12px;
+  opacity: 0.9;
 }
 
-/* ===== КАЛЕНДАРЬ МЕСЯЦЕВ ===== */
+/* ОСНОВНОЙ КОНТЕЙНЕР МЕСЯЦЕВ */
 
-main,
-#app {
+.months-container {
   flex: 1;
-  padding: 8px 6px 80px; /* запас под нижнюю панель */
+  padding: 10px 8px 80px;
 }
+
+/* КАРТОЧКИ МЕСЯЦЕВ */
 
 .month-card {
-  margin: 10px 4px;
-  border-radius: 16px;
-  border: 1px solid #00ff66;
-  background: radial-gradient(circle at top, #001a0b 0, #000000 70%);
-  box-shadow: 0 0 16px rgba(0, 255, 102, 0.18);
-  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid rgba(0, 255, 102, 0.5);
+  margin-bottom: 12px;
+  padding: 10px 10px 12px;
+  background: radial-gradient(circle at 50% -40%, rgba(0,255,102,0.3) 0, #000 55%);
+  box-shadow: 0 0 16px rgba(0, 255, 102, 0.22);
 }
 
 .month-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 12px;
+  margin-bottom: 6px;
   font-size: 14px;
 }
 
@@ -179,7 +150,7 @@ main,
 
 .month-dates {
   font-size: 12px;
-  opacity: 0.9;
+  opacity: 0.85;
 }
 
 .month-toggle {
@@ -187,9 +158,7 @@ main,
   color: #00ff66;
 }
 
-.month-header + div {
-  padding: 6px 10px 10px;
-}
+/* ДЕКАДЫ */
 
 .dec-row-label {
   font-size: 11px;
@@ -199,177 +168,219 @@ main,
 
 .dec-grid {
   display: grid;
-  grid-template-columns: repeat(10, minmax(0, 1fr));
+  grid-template-columns: repeat(10, 1fr);
   gap: 4px;
+  margin-bottom: 4px;
 }
 
-/* Ячейки дней */
+/* КЛЕТКИ ДНЕЙ */
 
 .day-cell {
-  border-radius: 10px;
-  border: 1px solid #00aa44;
+  border-radius: 9px;
+  border: 1px solid rgba(0, 255, 102, 0.4);
   padding: 6px 0;
-  text-align: center;
   font-size: 12px;
-  color: #e6ffe6;
-  background: rgba(0, 0, 0, 0.6);
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background .18s ease,
+    box-shadow .18s ease,
+    transform .12s ease,
+    border-color .18s ease,
+    color .18s ease;
+  background: radial-gradient(circle at 50% -80%, rgba(0,255,102,0.24), #000 70%);
+}
+
+.day-cell:active {
+  transform: scale(0.92);
 }
 
 .day-cell.today {
-  border-color: #00ff99;
-  box-shadow: 0 0 8px rgba(0, 255, 153, 0.9);
-  background: radial-gradient(circle, rgba(0, 255, 153, 0.25), rgba(0, 0, 0, 0.8));
+  border-color: #00ff9e;
+  box-shadow: 0 0 12px rgba(0, 255, 158, 0.9);
+  background: radial-gradient(circle at 50% 0, rgba(0,255,158,0.7), #000 70%);
+  color: #000;
+  font-weight: 700;
 }
 
 .day-cell.selected {
   border-color: #ffffff;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
 }
 
 .day-cell.done {
-  border-color: #00c8ff;
-  background: radial-gradient(circle, rgba(0, 200, 255, 0.2), rgba(0, 0, 0, 0.8));
+  border-color: #00ff66;
+  background: radial-gradient(circle at 50% 10%, rgba(0,255,102,0.8), #001500 75%);
+  color: #001000;
+  font-weight: 600;
 }
 
 .day-cell.filtered-out {
-  opacity: 0.2;
+  opacity: 0.18;
 }
 
-/* ===== ПАНЕЛЬ ЦВЕТОВ (если включена) ===== */
-
-#colorPanel {
-  padding: 4px 12px 12px;
-  font-size: 12px;
-}
-
-.color-list {
-  margin-top: 4px;
-}
-
-.color-item {
-  margin-bottom: 4px;
-}
-
-/* ===== НИЖНЯЯ ПАНЕЛЬ КНОПОК ===== */
+/* НИЖНЯЯ ПАНЕЛЬ */
 
 .bottom-bar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 6px 6px 10px;
-  background: rgba(0, 0, 0, 0.96);
+  padding: 6px 4px 10px;
+  background: linear-gradient(to top, rgba(0,0,0,0.98), rgba(0,0,0,0.8));
   display: flex;
-  justify-content: space-around;
-  gap: 6px;
+  justify-content: space-between;
+  gap: 4px;
   z-index: 60;
+  backdrop-filter: blur(12px);
 }
 
 .bottom-btn {
   flex: 1;
-  text-align: center;
+  padding: 9px 6px;
   font-size: 13px;
-  padding: 10px 4px;
-  border-width: 1.5px;
+  border-radius: 999px;
+  border: 1px solid #00ff66;
+  background: radial-gradient(circle at 50% -40%, rgba(0,255,102,0.35), #000 70%);
+  color: #e4ffe4;
+  cursor: pointer;
+  text-align: center;
+  transition:
+    background .18s ease,
+    box-shadow .18s ease,
+    transform .12s ease,
+    border-color .18s ease;
+  box-shadow: 0 0 9px rgba(0, 255, 102, 0.35);
 }
 
-/* состояние TIGER для кнопки */
-
-.bottom-btn.tiger-on {
-  border-color: #ff3300;
-  color: #ff3300;
+.bottom-btn:active {
+  transform: scale(0.94);
 }
 
-/* ===== ТЕМЫ ===== */
-
-/* База — Dark */
-
-body.theme-dark {
-  background: radial-gradient(circle at top, #001109 0, #000000 70%);
-  color: #f0f0f0;
+.bottom-btn.active {
+  border-color: #ffffff;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
 }
 
-body.theme-dark .month-card {
-  border-color: #00ff66;
-  box-shadow: 0 0 22px rgba(0, 255, 102, 0.25);
-}
-
-body.theme-dark .day-cell {
-  border-color: #00aa44;
-}
-
-/* Cyber / Matrix */
-
-body.theme-matrix {
-  background: radial-gradient(circle at top, #020c18 0, #000000 70%);
-  color: #e0fffb;
-}
-
-body.theme-matrix .month-card {
-  border-color: #00e5ff;
-  background: radial-gradient(circle at top, #021821 0, #000000 70%);
-  box-shadow: 0 0 26px rgba(0, 229, 255, 0.3);
-}
-
-body.theme-matrix .day-cell {
-  border-color: #00e5ff;
-}
-
-body.theme-matrix .top-title {
-  color: #00e5ff;
-}
-
-body.theme-matrix .top-menu-btn {
-  border-color: #00e5ff;
-}
-
-/* Можно добавить ещё одну тему позже, используя другие классы на body */
-
-/* ===== TIGER (красный боевой слой поверх текущей темы) ===== */
-
-body.tiger {
-  background: radial-gradient(circle at center, #330000 0, #000000 70%);
-}
+/* ====== TIGER РЕЖИМ ====== */
 
 body.tiger .month-card {
-  border-color: #ff3300;
-  background: radial-gradient(circle at top, #330000 0, #000000 75%);
-  box-shadow: 0 0 30px rgba(255, 51, 0, 0.6);
+  border-color: #00ffea;
+  box-shadow:
+    0 0 18px rgba(0,255,234,0.8),
+    0 0 40px rgba(0,255,102,0.4);
+  background:
+    radial-gradient(circle at 50% -60%, rgba(0,255,234,0.4), #000 55%),
+    radial-gradient(circle at -20% 120%, rgba(0,255,102,0.35), transparent 70%);
 }
 
 body.tiger .day-cell {
-  border-color: #ff3300;
+  border-color: rgba(0,255,234,0.7);
+  box-shadow: 0 0 10px rgba(0,255,234,0.5);
 }
 
 body.tiger .day-cell.today {
-  border-color: #ff6600;
-  box-shadow: 0 0 12px rgba(255, 102, 0, 0.9);
-  background: radial-gradient(circle, rgba(255, 102, 0, 0.25), rgba(0, 0, 0, 0.85));
-}
-
-body.tiger .top-bar {
-  border-bottom-color: #ff3300;
-}
-
-body.tiger .top-title {
-  color: #ff3300;
-}
-
-body.tiger .top-menu-btn {
-  border-color: #ff3300;
+  box-shadow:
+    0 0 16px rgba(0,255,234,1),
+    0 0 38px rgba(0,255,102,0.8);
 }
 
 body.tiger .bottom-bar {
-  background: rgba(0, 0, 0, 0.98);
+  box-shadow:
+    0 0 20px rgba(0,255,234,0.9),
+    0 -18px 40px rgba(0,0,0,0.9);
 }
 
-body.tiger .bottom-btn {
-  border-color: #ff3300;
-  color: #ff3300;
+/* ====== ТЕМЫ ====== */
+
+/* Тема 0: Dark (по умолчанию) */
+body.theme-dark {
+  --accent: #00ff66;
+  --accent-soft: rgba(0,255,102,0.4);
 }
 
-/* ===== ПРОЧЕЕ ===== */
+/* Тема 1: Matrix */
+body.theme-matrix .app-shell {
+  background:
+    radial-gradient(circle at 50% -40%, #00ff66 0, #000 55%),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 255, 0, 0.1),
+      rgba(0, 255, 0, 0.1) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+}
 
-a {
-  color: #00ff66;
+body.theme-matrix .month-card {
+  background:
+    radial-gradient(circle at 50% -60%, rgba(0,255,102,0.4), #000 65%);
+}
+
+/* Тема 2: CyberMatrix (киберпанк + матрица) */
+body.theme-cyber .app-shell {
+  background:
+    radial-gradient(circle at 10% -10%, #ff00ff 0, transparent 55%),
+    radial-gradient(circle at 90% 110%, #00ffff 0, transparent 55%),
+    #000;
+}
+
+body.theme-cyber .month-card {
+  border-color: #00ffff;
+  box-shadow:
+    0 0 18px rgba(0,255,255,0.85),
+    0 0 40px rgba(255,0,255,0.4);
+  background:
+    radial-gradient(circle at 20% -40%, rgba(0,255,255,0.5), #020016 60%);
+}
+
+body.theme-cyber .day-cell {
+  border-color: rgba(0,255,255,0.7);
+  background:
+    radial-gradient(circle at 50% -60%, rgba(255,0,255,0.35), #000 70%);
+}
+
+body.theme-cyber .day-cell.today {
+  background:
+    radial-gradient(circle at 50% 0, rgba(0,255,255,0.9), #000 70%);
+}
+
+/* ТЕКСТ ДЛЯ ТЁМ */
+
+body.theme-cyber .app-title,
+body.theme-cyber .month-name {
+  color: #00ffff;
+}
+
+body.theme-cyber .menu-btn,
+body.theme-cyber .bottom-btn {
+  border-color: #00ffff;
+  box-shadow: 0 0 10px rgba(0,255,255,0.7);
+}
+
+/* МЕЛОЧИ */
+
+.add-to-calendar {
+  margin-top: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid #00ff66;
+  background: transparent;
+  color: #d6ffd6;
+  font-size: 11px;
+}
+
+.add-to-calendar:active {
+  transform: scale(0.94);
+}
+
+/* Малые экраны */
+@media (max-width: 360px) {
+  .app-title {
+    font-size: 18px;
+  }
+  .bottom-btn {
+    font-size: 12px;
+    padding: 8px 4px;
+  }
 }
