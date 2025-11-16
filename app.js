@@ -113,10 +113,15 @@ function getStarAdamToday() {
   return null;
 }
 
+// ✅ ИСПРАВЛЕННАЯ ФУНКЦИЯ РЕАЛЬНОЙ ДАТЫ
 function getRealDate(monthIndex, dayNumber) {
   const range = monthRanges[monthIndex];
   if (!range) return null;
-  return new Date(range.start.getTime() + (dayNumber - 1) * MS_PER_DAY);
+  // копируем дату начала месяца
+  const d = new Date(range.start.getTime());
+  // смещаем на (dayNumber - 1) календарных дней — устойчиво к смене времени
+  d.setDate(d.getDate() + (dayNumber - 1));
+  return d;
 }
 
 function formatDateRu(date) {
