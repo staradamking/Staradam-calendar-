@@ -2,42 +2,63 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <title>Star Adam New Age</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="manifest" href="manifest.json" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  />
+  <title>STAR ADAM NEW AGE</title>
+
+  <meta
+    name="description"
+    content="Star Adam New Age — 10-дневный космический календарь года Звезды 2025–2026."
+  />
+
+  <!-- Иконка приложения (png со звездой) -->
+  <link rel="icon" href="icon-staradam.png" type="image/png" />
+
   <link rel="stylesheet" href="style.css" />
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
-  <link rel="apple-touch-icon" href="icon-192.png" />
-  <meta name="theme-color" content="#000000" />
 </head>
 <body>
-  <div class="top-panel">
-    <header class="app-header">
-      <h1>STAR ADAM NEW AGE</h1>
-      <p class="subtitle">Календарь StarAdam · Год Звезды 2025–2026</p>
+  <div class="app-root">
+    <!-- ВЕРХНЯЯ ПАНЕЛЬ (закреплена, всегда видна) -->
+    <header class="top-panel">
+      <div class="app-title">STAR ADAM NEW AGE</div>
+      <div class="app-subtitle">
+        Календарь StarAdam · Год Звезды 2025–2026
+      </div>
+
+      <div id="todayStatus" class="today-status"></div>
+      <div id="dayDetails" class="day-details"></div>
+      <div id="statsPanel" class="stats-panel"></div>
     </header>
 
-    <section id="todayStatus" class="today-status"></section>
-    <section id="dayDetails" class="day-details"></section>
-    <section id="statsPanel" class="stats-panel"></section>
-    <section id="colorPanel" class="color-panel"></section>
+    <!-- ОСНОВНОЙ СКРОЛЛЯЩИЙСЯ КОНТЕНТ -->
+    <main class="main-scroll">
+      <!-- Панель цветов (10-дневная неделя и тотемы) -->
+      <section id="colorPanel" class="color-panel"></section>
+
+      <!-- Космическая кольцевая карта орбит Star Adam -->
+      <section id="mapPanel" class="map-panel"></section>
+
+      <!-- Здесь JS рендерит все месяцы и дни -->
+      <section id="app"></section>
+    </main>
+
+    <!-- НИЖНЯЯ ПАНЕЛЬ КНОПОК -->
+    <footer class="bottom-bar">
+      <button id="playMusic" class="bottom-btn">Музыка</button>
+      <button id="toggleTheme" class="bottom-btn">Тема</button>
+      <button id="toggleColors" class="bottom-btn">Цвета</button>
+      <button id="toggleFilter" class="bottom-btn">Фильтр</button>
+      <button id="toggleMap" class="bottom-btn">Карта</button>
+      <button id="toggleTiger" class="bottom-btn">TIGER</button>
+    </footer>
+
+    <!-- Космическая музыка -->
+    <audio id="spaceMusic" src="cosmos.mp3" loop></audio>
   </div>
 
-  <main id="app"></main>
-
-  <footer class="app-footer">
-    <button id="playMusic">Музыка</button>
-    <button id="toggleTheme">Тема</button>
-    <button id="toggleColors">Цвета</button>
-    <button id="toggleFilter">Фильтр</button>
-    <button id="toggleMap">Карта</button>
-    <button id="toggleTiger">TIGER</button>
-  </footer>
-
-  <audio id="spaceMusic" loop>
-    <source src="cosmos.mp3" type="audio/mpeg">
-  </audio>
-
+  <!-- ЛОГИКА КАЛЕНДАРЯ -->
   <script src="app.js"></script>
 </body>
 </html>
