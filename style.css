@@ -1,201 +1,202 @@
-:root {
-  --bg: #000000;
-  --fg: #00ff66;
-  --accent: #00ff99;
-  --grid-border: #00ff66;
+/* === БАЗА === */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-/* базовый фон + звёзды */
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--fg);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  position: relative;
-  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui,
+    sans-serif;
+  background: #000;
+  color: #bfffd6;
+  -webkit-font-smoothing: antialiased;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 10% 20%, rgba(0,255,102,0.25) 0, transparent 40%),
-    radial-gradient(circle at 80% 0%, rgba(0,255,255,0.2) 0, transparent 45%),
-    radial-gradient(circle at 50% 100%, rgba(0,128,255,0.25) 0, transparent 50%),
-    #000000;
-  opacity: 0.4;
-  animation: starshift 30s linear infinite alternate;
+.neon {
+  background: radial-gradient(circle at top, #031a0d 0, #000 50%, #000 100%);
 }
 
-@keyframes starshift {
-  from { transform: translate3d(0,0,0); }
-  to   { transform: translate3d(-10px,-10px,0); }
+.neon .month-card {
+  border-color: #00ff66;
+  box-shadow: 0 0 14px rgba(0, 255, 120, 0.35);
 }
 
-/* Светлая тема */
-body.light {
-  --bg: #f5f5f5;
-  --fg: #111111;
-  --accent: #007744;
-  --grid-border: #444444;
+.matrix {
+  background-color: #020503;
+  background-image: linear-gradient(
+      rgba(0, 255, 120, 0.07) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(0, 255, 120, 0.07) 1px, transparent 1px);
+  background-size: 18px 18px;
 }
 
-/* TIGER-режим */
+.matrix .app-title {
+  text-shadow: 0 0 18px rgba(0, 255, 120, 0.7);
+}
+
 body.tiger {
-  --bg: #120000;
-  --fg: #ff3300;
-  --accent: #ffcc00;
-  --grid-border: #ff3300;
+  background: radial-gradient(circle at center, #010409 0, #000 40%, #000 100%);
+  color: #9fe5ff;
 }
 
-/* Военная карта */
-body.map .day-cell {
-  border-radius: 1px;
-}
-body.map .day-cell.done {
-  background: rgba(0, 255, 0, 0.25);
-}
-body.map .day-cell:not(.done) {
-  background: rgba(255, 0, 0, 0.15);
+body.tiger .month-card {
+  border-color: #00c2ff;
+  box-shadow: 0 0 12px rgba(0, 180, 255, 0.4);
 }
 
-.top-panel {
+body.tiger .day-cell.today {
+  box-shadow: 0 0 22px rgba(0, 180, 255, 0.9);
+}
+
+/* === ВЕРХНЯЯ ПАНЕЛЬ === */
+
+.top-bar {
   position: sticky;
   top: 0;
-  z-index: 10;
-  background: var(--bg);
-  border-bottom: 1px solid var(--fg);
-}
-
-/* Шапка */
-
-.app-header {
+  z-index: 20;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 10px 10px;
+  justify-content: center;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.96);
+  border-bottom: 1px solid #004020;
 }
 
-.app-header h1 {
-  margin: 0;
-  font-size: 20px;
-  letter-spacing: 1px;
-  color: var(--fg);
-}
-
-/* Кнопка инфо */
-
-.info-button {
-  border-radius: 999px;
-  border: 1px solid var(--fg);
-  background: transparent;
-  color: var(--fg);
-  padding: 4px 10px;
+.app-title {
+  color: #00ff66;
+  font-weight: 700;
+  letter-spacing: 0.11em;
   font-size: 16px;
-  line-height: 1;
-  min-width: 34px;
   text-align: center;
-  transition:
-    background 0.15s ease,
-    transform 0.08s ease,
-    box-shadow 0.15s ease;
+  text-transform: uppercase;
+  cursor: pointer;
 }
 
-.info-button:active {
-  transform: scale(0.94);
-  box-shadow: 0 0 6px rgba(0, 255, 102, 0.6);
+.icon-button {
+  position: absolute;
+  right: 14px;
+  top: 8px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid #00ff66;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  padding: 0;
 }
 
-/* Информационная панель */
+.icon-button span {
+  display: block;
+  height: 2px;
+  width: 16px;
+  background: #00ff66;
+  margin: 0 auto;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.icon-button.active span:nth-child(1) {
+  transform: translateY(4px) rotate(45deg);
+}
+
+.icon-button.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.icon-button.active span:nth-child(3) {
+  transform: translateY(-4px) rotate(-45deg);
+}
+
+/* === ИНФО-ПАНЕЛЬ === */
 
 .info-panel {
-  display: none;
-  background: rgba(0, 0, 0, 0.94);
-  border-top: 1px solid var(--fg);
-  border-bottom: 1px solid var(--fg);
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  background: radial-gradient(circle at top, #02180c 0, #000 60%);
+  border-bottom: 1px solid #003818;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
 }
 
 .info-panel.open {
-  display: block;
+  max-height: 420px;
+  opacity: 1;
 }
 
-.today-status,
-.day-details,
-.stats-panel,
-.color-panel {
-  padding: 6px 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 12px;
+.info-content {
+  padding: 10px 16px 14px;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
-.today-status b,
-.day-details b,
-.stats-panel b {
-  font-weight: 600;
+.info-row {
+  margin-bottom: 4px;
 }
 
-/* Панель цветов */
+.info-row b {
+  color: #ffffff;
+}
 
-.color-panel {
+.info-highlight {
+  color: #00ff66;
+}
+
+.info-small {
+  opacity: 0.7;
   font-size: 11px;
 }
 
-.color-list {
+/* список цветов и тотемов */
+
+.color-totems {
+  margin-top: 8px;
+  border-top: 1px dashed #004b2a;
+  padding-top: 8px;
+}
+
+.color-totems-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.color-totems-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 4px;
-  margin-top: 4px;
+  gap: 4px 10px;
+  font-size: 11px;
 }
 
-.color-item {
-  border: 1px solid var(--grid-border);
-  border-radius: 6px;
-  padding: 3px 6px;
+/* === КАЛЕНДАРЬ === */
+
+.months-container {
+  padding: 10px 10px 80px;
 }
-
-/* Основная часть */
-
-#app {
-  padding: 10px;
-}
-
-/* Карточка месяца */
 
 .month-card {
-  border: 1px solid var(--fg);
-  border-radius: 10px;
-  padding: 10px;
-  margin-bottom: 12px;
-  background: #050505;
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
-}
-
-body.light .month-card {
-  background: #ffffff;
-}
-
-.month-card:hover {
-  box-shadow: 0 0 8px rgba(0, 255, 102, 0.4);
-}
-
-.month-card:active {
-  transform: scale(0.995);
+  border: 1px solid #00ff66;
+  border-radius: 14px;
+  padding: 10px 14px 12px;
+  margin-bottom: 10px;
+  background: radial-gradient(circle at top left, #021609 0, #000 65%);
 }
 
 .month-header {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: baseline;
-  gap: 6px;
-  font-size: 14px;
-  margin-bottom: 6px;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
 .month-name {
-  font-weight: 600;
+  font-weight: 700;
+  color: #00ff66;
 }
 
 .month-dates {
@@ -206,9 +207,8 @@ body.light .month-card {
 .month-toggle {
   font-size: 11px;
   opacity: 0.8;
+  text-transform: lowercase;
 }
-
-/* Декады */
 
 .dec-row-label {
   font-size: 11px;
@@ -218,101 +218,125 @@ body.light .month-card {
 
 .dec-grid {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  gap: 2px;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 4px;
 }
 
-/* Клетки дней */
+/* клетки дней */
 
 .day-cell {
-  border: 1px solid var(--grid-border);
-  text-align: center;
-  font-size: 10px;
-  padding: 4px 0;
-  border-radius: 3px;
+  border: 1px solid #00aa55;
+  border-radius: 8px;
+  height: 28px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  transition:
-    background 0.15s ease,
-    box-shadow 0.15s ease,
-    transform 0.08s ease,
-    border-color 0.15s ease,
-    opacity 0.15s ease;
+  background: rgba(0, 0, 0, 0.85);
+  transition: box-shadow 0.18s ease, transform 0.18s ease,
+    border-color 0.18s ease, background 0.18s ease, opacity 0.18s ease;
 }
 
-.day-cell:active {
-  transform: scale(0.94);
+.day-cell:hover {
+  box-shadow: 0 0 8px rgba(0, 255, 120, 0.6);
+  transform: translateY(-1px);
 }
-
-/* Сегодня */
 
 .day-cell.today {
-  background: rgba(0, 255, 102, 0.35);
-  border-color: #ffffff;
-  box-shadow: 0 0 8px rgba(0, 255, 102, 1);
-  font-weight: 700;
+  border-color: #00ff99;
+  background: radial-gradient(circle at center, #00994a 0, #001b0e 50%, #000 100%);
+  box-shadow: 0 0 16px rgba(0, 255, 153, 0.9);
 }
-
-/* Выбранный день */
 
 .day-cell.selected {
-  box-shadow: 0 0 8px var(--accent);
-  border-color: var(--accent);
+  box-shadow: 0 0 12px rgba(0, 255, 120, 0.7);
 }
-
-/* Выполненный день (дисциплина) */
 
 .day-cell.done {
-  background: rgba(255, 255, 255, 0.05);
-  position: relative;
+  border-color: #00cfff;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 190, 255, 0.35),
+    rgba(0, 60, 120, 0.9)
+  );
 }
-
-.day-cell.done::after {
-  content: "•";
-  position: absolute;
-  right: 2px;
-  top: 0;
-  font-size: 9px;
-  color: var(--accent);
-}
-
-/* Отфильтрованные */
 
 .day-cell.filtered-out {
-  opacity: 0.18;
+  opacity: 0.1;
 }
 
-/* Футер */
+/* === НИЖНЯЯ ПАНЕЛЬ === */
 
-.app-footer {
-  position: sticky;
+.bottom-bar {
+  position: fixed;
   bottom: 0;
-  background: #050505;
-  border-top: 1px solid var(--fg);
-  padding: 8px 10px;
+  left: 0;
+  right: 0;
+  padding: 8px 10px 10px;
+  background: rgba(0, 0, 0, 0.96);
+  border-top: 1px solid #003d1f;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
+  justify-content: space-between;
+  gap: 6px;
+  z-index: 30;
 }
 
-body.light .app-footer {
-  background: #ffffff;
-}
-
-button {
+.nav-button {
+  flex: 1;
   border-radius: 999px;
-  border: 1px solid var(--fg);
+  border: 1px solid #00ff66;
   background: transparent;
-  color: var(--fg);
-  padding: 6px 12px;
+  color: #bfffd6;
   font-size: 12px;
-  transition:
-    background 0.15s ease,
-    transform 0.08s ease,
-    box-shadow 0.15s ease;
+  padding: 6px 4px;
+  text-align: center;
+  letter-spacing: 0.02em;
+  text-transform: none;
 }
 
-button:active {
-  transform: scale(0.96);
-  box-shadow: 0 0 6px rgba(0, 255, 102, 0.6);
+.nav-button:active {
+  transform: scale(0.97);
+  box-shadow: 0 0 10px rgba(0, 255, 120, 0.6);
+}
+
+/* состояния кнопок */
+
+#playMusic.music-on {
+  border-color: #00c2ff;
+  color: #e0f7ff;
+}
+
+#toggleFilter.filter-done {
+  border-color: #00ff66;
+}
+
+#toggleFilter.filter-undone {
+  border-color: #ffcc00;
+}
+
+#toggleTiger.tiger-on {
+  border-color: #ff4d00;
+  color: #ffd8c0;
+}
+
+/* === ПРОЧЕЕ === */
+
+@media (min-width: 768px) {
+  .months-container {
+    max-width: 680px;
+    margin: 0 auto 80px;
+  }
+
+  .info-content {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .bottom-bar {
+    max-width: 680px;
+    margin: 0 auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }
