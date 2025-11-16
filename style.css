@@ -1,25 +1,4 @@
-/* =========================
-   БАЗА
-   ========================= */
-
-:root {
-  --bg-main: #000000;
-  --bg-elevated: #020508;
-  --bg-header: #000000;
-  --text-main: #e5ffe5;
-  --text-muted: #7bd6a0;
-
-  --accent: #00ff66;
-  --accent-soft: rgba(0, 255, 102, 0.25);
-  --border-main: #00ff66;
-  --glow-soft: rgba(0, 255, 102, 0.4);
-  --glow-strong: rgba(0, 255, 102, 0.8);
-
-  --card-radius: 18px;
-  --button-radius: 22px;
-  --transition-fast: 0.18s ease-out;
-  --transition-med: 0.28s ease-out;
-}
+/* ===== БАЗА ===== */
 
 *,
 *::before,
@@ -31,16 +10,16 @@ html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui,
-    sans-serif;
-  background: radial-gradient(circle at top, #03150b 0%, #000000 55%);
-  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  background: #000000;
+  color: #e6ffe6;
   -webkit-font-smoothing: antialiased;
 }
+
+/* Контейнер всего приложения */
 
 .app-root {
   min-height: 100vh;
@@ -48,140 +27,174 @@ body {
   flex-direction: column;
 }
 
-/* =========================
-   ВЕРХНЯЯ ПАНЕЛЬ
-   ========================= */
+/* ===== ВЕРХНЯЯ ПАНЕЛЬ ===== */
 
-.app-header {
+.top-bar {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.9),
-    rgba(0, 0, 0, 0.85),
-    rgba(0, 0, 0, 0.7)
-  );
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 255, 102, 0.3);
-}
-
-.app-header-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px 8px;
+  padding: 10px 16px;
+  background: #000000;
+  border-bottom: 1px solid #00ff66;
 }
 
-.app-title {
+.top-title {
   font-size: 18px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
   font-weight: 700;
-  color: var(--accent);
+  letter-spacing: 0.12em;
+  color: #00ff66;
+  text-transform: uppercase;
 }
 
-/* Кнопка меню под звезду */
-.menu-button {
+.top-menu-btn {
   width: 34px;
   height: 34px;
-  border-radius: 999px;
-  border: 1.5px solid var(--accent);
-  background: radial-gradient(circle at 30% 30%, var(--accent-soft), #000000);
+  border-radius: 50%;
+  border: 1px solid #00ff66;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--accent);
-  font-size: 18px; /* сюда можно поставить символ ★ или SVG */
   padding: 0;
-  outline: none;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast),
-    border-color var(--transition-fast), background var(--transition-fast);
 }
 
-.menu-button:active {
-  transform: scale(0.95);
-  box-shadow: 0 0 18px var(--glow-soft);
+.top-menu-btn .star-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #00ff66;
 }
 
-/* Выпадающая верхняя панель с инфой */
-.top-panel-wrapper {
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.3s ease, border-bottom 0.3s ease;
-  border-bottom: 0 solid rgba(0, 255, 102, 0.3);
+/* Выпадающая инфо-панель (шапка с сегодняшним днём и выбранным днём) */
+
+.info-panel-wrapper {
+  position: sticky;
+  top: 46px; /* высота шапки */
+  z-index: 40;
 }
 
-.top-panel-wrapper.open {
-  max-height: 260px; /* подстраивается под контент */
-  border-bottom-width: 1px;
-}
-
-.top-panel {
-  padding: 10px 14px 12px;
+.info-panel {
+  background: radial-gradient(circle at top, #002b11 0, #000000 55%);
+  border-bottom: 1px solid #00ff66;
+  padding: 8px 14px 10px;
   font-size: 13px;
-  background: radial-gradient(circle at top, #021b0a 0%, #000000 60%);
+  line-height: 1.35;
 }
 
-/* =========================
-   ОСНОВНОЙ КОНТЕНТ
-   ========================= */
+.info-panel b {
+  color: #00ff66;
+}
 
-.main-scroll {
+.info-panel button.add-to-calendar {
+  margin-top: 6px;
+}
+
+/* Можно скрывать/показывать панель по JS – через класс .collapsed */
+
+.info-panel.collapsed {
+  display: none;
+}
+
+/* ===== КНОПКИ ОБЩИЕ ===== */
+
+button {
+  font-family: inherit;
+}
+
+.primary-btn,
+.bottom-btn {
+  border-radius: 999px;
+  border: 1px solid #00ff66;
+  background: transparent;
+  color: #00ff66;
+  padding: 8px 18px;
+  font-size: 14px;
+}
+
+.primary-btn:active,
+.bottom-btn:active {
+  transform: scale(0.97);
+}
+
+/* Кнопка "Добавить в календарь" */
+
+.add-to-calendar {
+  border-radius: 999px;
+  border: 1px solid #00ff66;
+  background: rgba(0, 255, 102, 0.1);
+  color: #00ff66;
+  padding: 7px 18px;
+  font-size: 14px;
+}
+
+/* ===== БЛОКИ С ТЕКСТОМ ПОД ШАПКОЙ ===== */
+
+#todayStatus,
+#dayDetails,
+#statsPanel {
+  padding: 4px 14px;
+  font-size: 13px;
+}
+
+#todayStatus {
+  padding-top: 6px;
+}
+
+#dayDetails {
+  margin-top: 4px;
+}
+
+/* ===== КАЛЕНДАРЬ МЕСЯЦЕВ ===== */
+
+main,
+#app {
   flex: 1;
-  padding: 10px 8px 82px; /* запас под нижнюю панель */
+  padding: 8px 6px 80px; /* запас под нижнюю панель */
 }
-
-/* Карточки месяцев */
 
 .month-card {
-  background:
-    radial-gradient(circle at top, rgba(0, 255, 102, 0.06), #020507 50%),
-    radial-gradient(circle at bottom, rgba(0, 255, 102, 0.05), #000000 70%);
-  border-radius: var(--card-radius);
-  border: 1px solid rgba(0, 255, 102, 0.5);
-  box-shadow:
-    0 0 18px rgba(0, 255, 102, 0.18),
-    0 0 28px rgba(0, 0, 0, 0.9) inset;
-  padding: 10px 12px 12px;
-  margin-bottom: 10px;
+  margin: 10px 4px;
+  border-radius: 16px;
+  border: 1px solid #00ff66;
+  background: radial-gradient(circle at top, #001a0b 0, #000000 70%);
+  box-shadow: 0 0 16px rgba(0, 255, 102, 0.18);
+  overflow: hidden;
 }
-
-/* Шапка месяца */
 
 .month-header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
 }
 
 .month-name {
   font-weight: 700;
-  font-size: 15px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  color: #00ff66;
 }
 
 .month-dates {
   font-size: 12px;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .month-toggle {
   font-size: 12px;
-  text-transform: lowercase;
-  color: var(--accent);
+  color: #00ff66;
 }
 
-/* Декады */
+.month-header + div {
+  padding: 6px 10px 10px;
+}
 
 .dec-row-label {
   font-size: 11px;
-  opacity: 0.7;
-  margin: 4px 0 3px;
+  opacity: 0.8;
+  margin: 4px 0 2px;
 }
 
 .dec-grid {
@@ -190,358 +203,173 @@ body {
   gap: 4px;
 }
 
-/* =========================
-   ЯЧЕЙКИ ДНЕЙ
-   ========================= */
+/* Ячейки дней */
 
 .day-cell {
-  position: relative;
-  font-size: 12px;
-  text-align: center;
-  padding: 6px 0;
   border-radius: 10px;
-  border: 1px solid rgba(0, 255, 102, 0.4);
-  color: var(--text-main);
-  background: radial-gradient(circle at top, rgba(0, 255, 102, 0.09), #020304);
-  box-shadow:
-    0 0 8px rgba(0, 255, 102, 0.25),
-    0 0 0 1px rgba(0, 0, 0, 0.9) inset;
-  transition:
-    background var(--transition-fast),
-    transform var(--transition-fast),
-    box-shadow var(--transition-fast),
-    border-color var(--transition-fast),
-    color var(--transition-fast),
-    opacity var(--transition-fast);
+  border: 1px solid #00aa44;
+  padding: 6px 0;
+  text-align: center;
+  font-size: 12px;
+  color: #e6ffe6;
+  background: rgba(0, 0, 0, 0.6);
 }
-
-.day-cell:active {
-  transform: scale(0.95);
-}
-
-/* Текущий день */
 
 .day-cell.today {
-  border-color: #00ffcc;
-  box-shadow:
-    0 0 18px rgba(0, 255, 204, 0.9),
-    0 0 0 1px rgba(0, 0, 0, 0.9) inset;
-  background: radial-gradient(
-    circle at top,
-    rgba(0, 255, 204, 0.4),
-    #00130f 60%
-  );
+  border-color: #00ff99;
+  box-shadow: 0 0 8px rgba(0, 255, 153, 0.9);
+  background: radial-gradient(circle, rgba(0, 255, 153, 0.25), rgba(0, 0, 0, 0.8));
 }
-
-/* Выбранный день */
 
 .day-cell.selected {
   border-color: #ffffff;
-  box-shadow:
-    0 0 20px rgba(255, 255, 255, 0.5),
-    0 0 0 1px rgba(0, 0, 0, 0.9) inset;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }
-
-/* Выполненный день */
 
 .day-cell.done {
-  border-color: #00ff66;
-  background: radial-gradient(circle at top, rgba(0, 255, 102, 0.4), #02140a);
-  box-shadow:
-    0 0 16px rgba(0, 255, 102, 0.75),
-    0 0 0 1px rgba(0, 0, 0, 0.9) inset;
+  border-color: #00c8ff;
+  background: radial-gradient(circle, rgba(0, 200, 255, 0.2), rgba(0, 0, 0, 0.8));
 }
-
-/* Фильтр */
 
 .day-cell.filtered-out {
-  opacity: 0.25;
+  opacity: 0.2;
 }
 
-/* =========================
-   СТАТУС / ТЕКСТ
-   ========================= */
-
-#todayStatus {
-  font-size: 12px;
-  margin-bottom: 6px;
-}
-
-#dayDetails {
-  font-size: 12px;
-  margin-bottom: 8px;
-}
-
-/* Кнопка "Добавить в календарь" */
-
-.add-to-calendar {
-  margin-top: 6px;
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--accent);
-  background: radial-gradient(circle at top, var(--accent-soft), #000000);
-  color: var(--accent);
-  font-size: 12px;
-}
-
-/* Блок статуса */
-
-#statsPanel {
-  font-size: 11px;
-  opacity: 0.9;
-}
-
-/* Блок описания цветов/тотемов — если используется */
+/* ===== ПАНЕЛЬ ЦВЕТОВ (если включена) ===== */
 
 #colorPanel {
-  margin-top: 8px;
-  font-size: 11px;
+  padding: 4px 12px 12px;
+  font-size: 12px;
 }
 
 .color-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 4px 10px;
   margin-top: 4px;
 }
 
 .color-item {
-  padding: 4px 0;
+  margin-bottom: 4px;
 }
 
-/* =========================
-   НИЖНЯЯ ПАНЕЛЬ
-   ========================= */
+/* ===== НИЖНЯЯ ПАНЕЛЬ КНОПОК ===== */
 
 .bottom-bar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 8px 8px 10px;
-  background: radial-gradient(circle at top, rgba(0, 0, 0, 0.95), #000000 70%);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(0, 255, 102, 0.35);
-  z-index: 40;
-}
-
-.bottom-buttons {
+  padding: 6px 6px 10px;
+  background: rgba(0, 0, 0, 0.96);
   display: flex;
-  gap: 8px;
-  justify-content: space-between;
+  justify-content: space-around;
+  gap: 6px;
+  z-index: 60;
 }
 
-.bottom-buttons button {
+.bottom-btn {
   flex: 1;
-}
-
-.control-button {
-  border-radius: var(--button-radius);
-  padding: 10px 8px;
-  border: 1.5px solid rgba(0, 255, 102, 0.7);
-  background:
-    radial-gradient(circle at top, rgba(0, 255, 102, 0.2), #000000 55%),
-    linear-gradient(to bottom, #020b05, #000000);
-  color: var(--accent);
-  font-size: 13px;
-  font-weight: 500;
   text-align: center;
-  outline: none;
-  transition:
-    background var(--transition-fast),
-    transform var(--transition-fast),
-    box-shadow var(--transition-fast),
-    border-color var(--transition-fast),
-    color var(--transition-fast);
+  font-size: 13px;
+  padding: 10px 4px;
+  border-width: 1.5px;
 }
 
-.control-button:active {
-  transform: scale(0.96);
-  box-shadow: 0 0 18px var(--glow-soft);
+/* состояние TIGER для кнопки */
+
+.bottom-btn.tiger-on {
+  border-color: #ff3300;
+  color: #ff3300;
 }
 
-.control-button.primary {
-  border-color: #ffffff;
-}
+/* ===== ТЕМЫ ===== */
 
-/* =========================
-   ТЕМЫ
-   ========================= */
-
-/* ---- ТЕМА DARK (брутальный неон) ---- */
+/* База — Dark */
 
 body.theme-dark {
-  --bg-main: #000000;
-  --bg-elevated: #050608;
-  --bg-header: #020202;
-  --text-main: #f6f6f6;
-  --text-muted: #ff9966;
-
-  --accent: #00ff66;
-  --accent-soft: rgba(0, 255, 102, 0.28);
-  --border-main: #00ff66;
-  --glow-soft: rgba(0, 255, 102, 0.45);
-  --glow-strong: rgba(0, 255, 102, 0.85);
-
-  background: radial-gradient(circle at top, #140000 0%, #000000 55%);
+  background: radial-gradient(circle at top, #001109 0, #000000 70%);
+  color: #f0f0f0;
 }
 
 body.theme-dark .month-card {
-  background:
-    radial-gradient(circle at top, rgba(0, 255, 102, 0.05), #050000 50%),
-    radial-gradient(circle at bottom, rgba(255, 0, 0, 0.16), #000000 80%);
-  border-color: rgba(255, 80, 40, 0.8);
-  box-shadow:
-    0 0 26px rgba(255, 30, 0, 0.5),
-    0 0 0 1px rgba(0, 0, 0, 0.9) inset;
+  border-color: #00ff66;
+  box-shadow: 0 0 22px rgba(0, 255, 102, 0.25);
 }
 
 body.theme-dark .day-cell {
-  border-color: rgba(255, 120, 60, 0.8);
-  background: radial-gradient(circle at top, rgba(255, 60, 0, 0.3), #050000);
-  box-shadow:
-    0 0 10px rgba(255, 60, 0, 0.6),
-    0 0 0 1px rgba(0, 0, 0, 0.9) inset;
+  border-color: #00aa44;
 }
 
-body.theme-dark .day-cell.today {
-  border-color: #ffffff;
-  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.5), #220000);
-}
-
-body.theme-dark .day-cell.done {
-  border-color: #00ff66;
-  background: radial-gradient(circle at top, rgba(0, 255, 102, 0.5), #021208);
-}
-
-/* ---- ТЕМА CYBER MATRIX ---- */
+/* Cyber / Matrix */
 
 body.theme-matrix {
-  --bg-main: #02040b;
-  --bg-elevated: rgba(5, 16, 26, 0.85);
-  --bg-header: rgba(0, 0, 0, 0.95);
-  --text-main: #e6f7ff;
-  --text-muted: #79baff;
-
-  --accent: #39ff14;
-  --accent-soft: rgba(57, 255, 20, 0.32);
-  --border-main: #39ff14;
-  --glow-soft: rgba(57, 255, 20, 0.5);
-  --glow-strong: rgba(57, 255, 20, 0.9);
-
-  background: radial-gradient(circle at top, #041118 0%, #000000 70%);
+  background: radial-gradient(circle at top, #020c18 0, #000000 70%);
+  color: #e0fffb;
 }
 
 body.theme-matrix .month-card {
-  background:
-    linear-gradient(145deg, rgba(0, 255, 153, 0.14), rgba(0, 102, 255, 0.08)),
-    radial-gradient(circle at top left, rgba(0, 255, 204, 0.25), #02040a 65%);
-  border: 1px solid rgba(0, 255, 153, 0.9);
-  box-shadow:
-    0 0 24px rgba(0, 255, 153, 0.6),
-    0 0 0 1px rgba(0, 0, 0, 0.9) inset;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  border-color: #00e5ff;
+  background: radial-gradient(circle at top, #021821 0, #000000 70%);
+  box-shadow: 0 0 26px rgba(0, 229, 255, 0.3);
 }
 
 body.theme-matrix .day-cell {
-  border-color: rgba(0, 255, 153, 0.9);
-  background:
-    radial-gradient(circle at top, rgba(0, 255, 153, 0.4), rgba(0, 51, 102, 0.9));
-  box-shadow:
-    0 0 14px rgba(0, 255, 153, 0.9),
-    0 0 0 1px rgba(0, 0, 0, 0.8) inset;
+  border-color: #00e5ff;
 }
 
-body.theme-matrix .day-cell.today {
-  border-color: #ffffff;
-  background:
-    radial-gradient(circle at top, rgba(255, 255, 255, 0.6), rgba(0, 102, 255, 0.9));
+body.theme-matrix .top-title {
+  color: #00e5ff;
 }
 
-body.theme-matrix .day-cell.done {
-  border-color: #39ff14;
-  background:
-    radial-gradient(circle at top, rgba(57, 255, 20, 0.6), rgba(0, 51, 0, 0.9));
+body.theme-matrix .top-menu-btn {
+  border-color: #00e5ff;
 }
 
-/* Низ в Cyber Matrix — чуть более стеклянный */
-body.theme-matrix .bottom-bar {
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.95),
-    rgba(0, 12, 24, 0.9)
-  );
-}
+/* Можно добавить ещё одну тему позже, используя другие классы на body */
 
-/* =========================
-   РЕЖИМ TIGER (поверх темы)
-   ========================= */
+/* ===== TIGER (красный боевой слой поверх текущей темы) ===== */
 
 body.tiger {
-  background: radial-gradient(circle at top, #2b0000 0%, #000000 70%);
-}
-
-body.tiger .app-header {
-  border-bottom-color: rgba(255, 80, 40, 0.9);
-}
-
-body.tiger .app-title {
-  color: #ff3300;
-}
-
-body.tiger .menu-button {
-  border-color: #ff3300;
-  color: #ff3300;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 80, 40, 0.5), #000000);
-  box-shadow: 0 0 18px rgba(255, 60, 0, 0.7);
+  background: radial-gradient(circle at center, #330000 0, #000000 70%);
 }
 
 body.tiger .month-card {
-  border-color: rgba(255, 80, 40, 1);
-  background:
-    radial-gradient(circle at top, rgba(255, 80, 40, 0.4), #200000 55%),
-    radial-gradient(circle at bottom, rgba(255, 0, 0, 0.4), #000000 85%);
-  box-shadow:
-    0 0 32px rgba(255, 40, 0, 0.9),
-    0 0 0 1px rgba(0, 0, 0, 0.9) inset;
+  border-color: #ff3300;
+  background: radial-gradient(circle at top, #330000 0, #000000 75%);
+  box-shadow: 0 0 30px rgba(255, 51, 0, 0.6);
 }
 
 body.tiger .day-cell {
-  border-color: rgba(255, 160, 120, 0.95);
-  background: radial-gradient(circle at top, rgba(255, 80, 40, 0.55), #1a0000);
-  box-shadow:
-    0 0 22px rgba(255, 80, 40, 0.95),
-    0 0 0 1px rgba(0, 0, 0, 0.95) inset;
-  color: #ffe6e6;
+  border-color: #ff3300;
 }
 
 body.tiger .day-cell.today {
-  border-color: #ffffff;
-  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.75), #3a0000);
-  color: #ffffff;
+  border-color: #ff6600;
+  box-shadow: 0 0 12px rgba(255, 102, 0, 0.9);
+  background: radial-gradient(circle, rgba(255, 102, 0, 0.25), rgba(0, 0, 0, 0.85));
 }
 
-body.tiger .day-cell.done {
-  border-color: #00ff99;
-  background: radial-gradient(circle at top, rgba(0, 255, 153, 0.7), #001a0f);
-  color: #e6fff4;
+body.tiger .top-bar {
+  border-bottom-color: #ff3300;
 }
 
-body.tiger .control-button {
+body.tiger .top-title {
+  color: #ff3300;
+}
+
+body.tiger .top-menu-btn {
   border-color: #ff3300;
-  color: #ffccb3;
-  background:
-    radial-gradient(circle at top, rgba(255, 80, 40, 0.6), #000000 70%),
-    linear-gradient(to bottom, #270000, #000000);
-  box-shadow: 0 0 22px rgba(255, 40, 0, 0.9);
 }
 
-/* =========================
-   ПРОЧЕЕ
-   ========================= */
+body.tiger .bottom-bar {
+  background: rgba(0, 0, 0, 0.98);
+}
 
-b {
-  font-weight: 600;
+body.tiger .bottom-btn {
+  border-color: #ff3300;
+  color: #ff3300;
+}
+
+/* ===== ПРОЧЕЕ ===== */
+
+a {
+  color: #00ff66;
 }
