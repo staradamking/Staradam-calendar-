@@ -2,37 +2,44 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <title>Star Adam New Age</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Star Adam New Age</title>
+
+  <!-- Иконки -->
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="neon">
-  <header class="top-bar">
-    <div id="appTitle" class="app-title">STAR ADAM NEW AGE</div>
-    <button id="infoToggle" class="icon-button" aria-label="Информация">
+<body>
+  <audio id="spaceMusic" src="cosmos.mp3" loop></audio>
+
+  <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
+  <header id="topBar">
+    <div id="appTitle">STAR ADAM NEW AGE</div>
+    <button id="menuButton" aria-label="Информация" class="icon-button">
       <span></span><span></span><span></span>
     </button>
   </header>
 
-  <section id="infoPanel" class="info-panel">
-    <div id="infoContent" class="info-content">
-      <!-- наполняется через JS -->
-    </div>
+  <!-- ВЫЕЗЖАЮЩАЯ ИНФО-ПАНЕЛЬ -->
+  <section id="infoPanel">
+    <div id="todayStatus" class="info-block"></div>
+    <div id="dayDetails" class="info-block"></div>
+    <div id="statsPanel" class="info-block"></div>
+    <div id="colorPanel" class="info-block"></div>
   </section>
 
-  <main id="app" class="months-container">
-    <!-- месяцы рендерятся через JS -->
-  </main>
+  <!-- ОСНОВНОЙ КАЛЕНДАРЬ -->
+  <main id="app"></main>
 
-  <footer class="bottom-bar">
+  <!-- НИЖНЯЯ ПАНЕЛЬ -->
+  <footer id="bottomBar">
     <button id="playMusic" class="nav-button">Музыка</button>
     <button id="toggleTheme" class="nav-button">Тема</button>
     <button id="toggleFilter" class="nav-button">Фильтр</button>
-    <button id="toggleTiger" class="nav-button">TIGER</button>
+    <button id="toggleTiger" class="nav-button tiger-btn">TIGER</button>
   </footer>
-
-  <audio id="spaceMusic" src="cosmos.mp3" loop></audio>
 
   <script src="app.js"></script>
 </body>
