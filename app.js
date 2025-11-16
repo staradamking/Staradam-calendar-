@@ -14,52 +14,68 @@ const months = [
   { name: "ЭФИР", dates: "18 авг – 16 сен 2026" }
 ];
 
-// 10-дневная цветовая неделя
+// 10-дневная цветовая неделя + тотемы
 const colorCycle = [
-  { name: "Чёрный",    code: "#000000", meaning: "Пустота, концентрация, старт цикла" },
-  { name: "Коричневый",code: "#7b3f00", meaning: "Земля, база, устойчивость" },
-  { name: "Красный",   code: "#ff0000", meaning: "Атака, действие, энергия" },
-  { name: "Оранжевый", code: "#ff7f00", meaning: "Творчество, открытия, креатив" },
-  { name: "Жёлтый",    code: "#ffff00", meaning: "Ум, фокус, обучение" },
-  { name: "Зелёный",   code: "#00ff00", meaning: "Жизнь, здоровье, восстановление" },
-  { name: "Голубой",   code: "#33ccff", meaning: "Коммуникация, связи, лёгкость" },
-  { name: "Синий",     code: "#0000ff", meaning: "Глубина, серьёзная работа, дисциплина" },
-  { name: "Фиолетовый",code: "#8000ff", meaning: "Магия, смысл, внутренняя работа" },
-  { name: "Белый",     code: "#ffffff", meaning: "Очищение, завершение декады" }
-];
-
-// Названия 30 дней
-const dayMeanings = [
-  "День 1 — Атака",
-  "День 2 — Движение",
-  "День 3 — Стратегия",
-  "День 4 — Дисциплина",
-  "День 5 — Порядок",
-  "День 6 — Манёвр",
-  "День 7 — Подготовка",
-  "День 8 — Прорыв",
-  "День 9 — Укрепление",
-  "День 10 — Перезагрузка",
-  "День 11 — Разведка",
-  "День 12 — Координация",
-  "День 13 — Наступление",
-  "День 14 — Снабжение",
-  "День 15 — Закрепление",
-  "День 16 — Контроль",
-  "День 17 — Очистка",
-  "День 18 — Усиление",
-  "День 19 — Рефлексия",
-  "День 20 — Баланс",
-  "День 21 — Расширение",
-  "День 22 — Консолидация",
-  "День 23 — Перестройка",
-  "День 24 — Смена курса",
-  "День 25 — Стабилизация",
-  "День 26 — Перенастройка",
-  "День 27 — Калибровка",
-  "День 28 — Сбор ресурсов",
-  "День 29 — Спокойствие",
-  "День 30 — Возрождение"
+  {
+    name: "Чёрный",
+    code: "#000000",
+    animal: "Пантера",
+    meaning: "Пустота, концентрация, старт цикла"
+  },
+  {
+    name: "Коричневый",
+    code: "#7b3f00",
+    animal: "Медведь",
+    meaning: "Земля, база, устойчивость"
+  },
+  {
+    name: "Красный",
+    code: "#ff0000",
+    animal: "Дракон",
+    meaning: "Атака, огонь, решительность"
+  },
+  {
+    name: "Оранжевый",
+    code: "#ff7f00",
+    animal: "Лев",
+    meaning: "Творчество, храбрость, лидерство"
+  },
+  {
+    name: "Жёлтый",
+    code: "#ffff00",
+    animal: "Тигр",
+    meaning: "Фокус, охота за целями, обучение"
+  },
+  {
+    name: "Зелёный",
+    code: "#00ff00",
+    animal: "Аллигатор",
+    meaning: "Выносливость, восстановление, жизнь"
+  },
+  {
+    name: "Голубой",
+    code: "#33ccff",
+    animal: "Дельфин",
+    meaning: "Коммуникация, игра, связи"
+  },
+  {
+    name: "Синий",
+    code: "#0000ff",
+    animal: "Кит",
+    meaning: "Глубина, серьёзная работа, дисциплина"
+  },
+  {
+    name: "Фиолетовый",
+    code: "#8000ff",
+    animal: "Фламинго",
+    meaning: "Магия, стиль, внутренний баланс"
+  },
+  {
+    name: "Белый",
+    code: "#ffffff",
+    animal: "Лебедь",
+    meaning: "Очищение, завершение, красота"
+  }
 ];
 
 // Диапазоны реальных дат
@@ -113,13 +129,11 @@ function getStarAdamToday() {
   return null;
 }
 
-// ✅ ИСПРАВЛЕННАЯ ФУНКЦИЯ РЕАЛЬНОЙ ДАТЫ
+// устойчивая к смене времени функция реальной даты
 function getRealDate(monthIndex, dayNumber) {
   const range = monthRanges[monthIndex];
   if (!range) return null;
-  // копируем дату начала месяца
   const d = new Date(range.start.getTime());
-  // смещаем на (dayNumber - 1) календарных дней — устойчиво к смене времени
   d.setDate(d.getDate() + (dayNumber - 1));
   return d;
 }
@@ -167,9 +181,9 @@ function createMonthCard(month, index) {
   // 3 декады по 10 дней
   for (let d = 0; d < 3; d++) {
     const label = document.createElement("div");
-    label.className = "dec-row-label";
-    label.textContent = `Декада ${d + 1}`;
-    content.appendChild(label);
+      label.className = "dec-row-label";
+      label.textContent = `Декада ${d + 1}`;
+      content.appendChild(label);
 
     const grid = document.createElement("div");
     grid.className = "dec-grid";
@@ -254,18 +268,19 @@ function onDayClick(monthIndex, dayNumber, cell) {
   }
 
   const month = months[monthIndex];
-  const meaning =
-    dayMeanings[dayNumber - 1] || `День ${dayNumber} — без названия`;
-  const color = colorCycle[(dayNumber - 1) % 10];
+  const colorIndex = (dayNumber - 1) % 10;
+  const color = colorCycle[colorIndex];
   const real = getRealDate(monthIndex, dayNumber);
   const decada = Math.floor((dayNumber - 1) / 10) + 1;
   const done = !!doneMap[key];
 
+  // Новая строка смысла дня: цвет + тотем
+  const meaningLine = `День ${dayNumber} — ${color.name} (${color.animal})`;
+
   const detailsEl = document.getElementById("dayDetails");
   detailsEl.innerHTML = `
     Выбран: <b>${month.name}</b>, день <b>${dayNumber}</b> (Декада ${decada})<br>
-    ${meaning}<br>
-    Цвет недели: <b style="color:${color.code}">${color.name}</b><br>
+    ${meaningLine}<br>
     Реальная дата: <b>${real ? formatDateRu(real) : "вне диапазона года Звезды"}</b><br>
     Статус дисциплины: <b>${done ? "ВЫПОЛНЕНО" : "пока не выполнено"}</b><br>
     <span style="opacity:0.8;font-size:11px;">Нажми ещё раз по этому дню, чтобы переключить статус.</span><br>
@@ -275,14 +290,14 @@ function onDayClick(monthIndex, dayNumber, cell) {
   const btn = detailsEl.querySelector(".add-to-calendar");
   if (btn && real) {
     btn.addEventListener("click", () => {
-      createIcsEvent(month, dayNumber, meaning, real);
+      createIcsEvent(month, dayNumber, meaningLine, real);
     });
   }
 }
 
 // --- .ICS СОБЫТИЕ ---
 
-function createIcsEvent(month, dayNumber, meaning, date) {
+function createIcsEvent(month, dayNumber, meaningLine, date) {
   const pad = n => (n < 10 ? "0" + n : "" + n);
   const dateStr =
     date.getFullYear().toString() +
@@ -301,7 +316,7 @@ function createIcsEvent(month, dayNumber, meaning, date) {
     "Z";
 
   const summary = `StarAdam: ${month.name}, день ${dayNumber}`;
-  const desc = meaning.replace(/\n/g, " ");
+  const desc = meaningLine.replace(/\n/g, " ");
 
   const ics =
     "BEGIN:VCALENDAR\r\n" +
@@ -337,14 +352,14 @@ function renderColorPanel() {
     .map(
       (c, i) => `
       <div class="color-item">
-        <b style="color:${c.code}">${i + 1}. ${c.name}</b><br>
+        <b style="color:${c.code}">${i + 1}. ${c.name} (${c.animal})</b><br>
         <span>${c.meaning}</span>
       </div>
     `
     )
     .join("");
   panel.innerHTML = `
-    <div><b>10 цветов декады Star Adam</b></div>
+    <div><b>10 цветов и тотемов декады Star Adam</b></div>
     <div class="color-list">${items}</div>
   `;
 }
@@ -396,7 +411,7 @@ function renderApp() {
     status.innerHTML = `
       Сегодня в Star Adam New Age:
       <b>${m.name}</b>, день <b>${starToday.dayNumber}</b>
-      — цвет <b style="color:${color.code}">${color.name}</b>
+      — цвет <b style="color:${color.code}">${color.name}</b> (${color.animal})
     `;
   } else {
     status.textContent =
