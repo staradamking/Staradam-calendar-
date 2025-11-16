@@ -375,3 +375,59 @@ body.tiger .bottom-btn {
   border-color: #ff8c00;
   color: #ff8c00;
 }
+
+/* --- TIGER MODE: красная боевая тема --- */
+
+body.tiger {
+  /* если где-то используются переменные — они станут красными */
+  --accent-main: #ff0000;
+  --accent-main-soft: rgba(255, 0, 0, 0.25);
+  --accent-main-strong: #ff0000;
+
+  background: radial-gradient(circle at top, #220000 0%, #050000 40%, #000000 100%);
+}
+
+/* рамки и панели */
+body.tiger .month-card,
+body.tiger .top-panel,
+body.tiger .stats-panel,
+body.tiger .day-details {
+  border-color: #ff0000;
+}
+
+/* заголовки и текст */
+body.tiger .app-title,
+body.tiger .app-subtitle,
+body.tiger .today-status,
+body.tiger .month-name,
+body.tiger .month-dates,
+body.tiger .month-toggle,
+body.tiger .stats-panel,
+body.tiger .day-details {
+  color: #ff4d4d;
+}
+
+/* клетки дней */
+body.tiger .day-cell {
+  border-color: #ff0000;
+}
+
+body.tiger .day-cell.today {
+  background: rgba(255, 0, 0, 0.2);
+  box-shadow: 0 0 16px rgba(255, 0, 0, 0.85);
+}
+
+/* нижняя панель и кнопки */
+body.tiger .bottom-bar {
+  background: rgba(0, 0, 0, 0.9);
+  border-top: 1px solid #ff0000;
+}
+
+body.tiger .bottom-btn {
+  border-color: #ff0000;
+  color: #ff4d4d;
+}
+
+body.tiger .bottom-btn:hover {
+  background: rgba(255, 0, 0, 0.2);
+}
