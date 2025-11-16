@@ -1,45 +1,45 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Star Adam New Age</title>
-
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Star Adam New Age</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-
-<div class="top-panel">
+  <div class="top-panel">
     <h1 class="app-title">STAR ADAM NEW AGE</h1>
     <h2 class="app-subtitle">Календарь StarAdam · Год Звезды 2025–2026</h2>
 
     <div class="today-status">
-        Сегодня в Star Adam New Age:
-        <span id="todayMonth"></span>,
-        день <span id="todayDay"></span> —
-        <span id="todayColor"></span>
+      Сегодня в Star Adam New Age:
+      <span id="todayMonth"></span>,
+      день <span id="todayDay"></span> —
+      <span id="todayColor"></span>
     </div>
 
     <div class="progress">
-        Дней выполнено: <span id="doneCount">0</span> из 360 (<span id="donePercent">0</span>%)
+      Дней выполнено:
+      <span id="doneCount">0</span> из 360
+      (<span id="donePercent">0</span>%)
     </div>
-</div>
+  </div>
 
-<div id="monthsContainer"></div>
+  <div id="monthsContainer"></div>
 
-<!-- Нижняя панель -->
-<div class="bottom-bar">
+  <!-- Нижняя панель управления -->
+  <div class="bottom-bar">
     <button class="bottom-btn" id="musicBtn">Музыка</button>
     <button class="bottom-btn" id="themeBtn">Тема</button>
     <button class="bottom-btn" id="filterBtn">Фильтр</button>
     <button class="bottom-btn" id="tigerBtn">TIGER</button>
-</div>
+  </div>
 
-<audio id="bgMusic" loop>
-    <source src="cosmos.mp3" type="audio/mpeg">
-</audio>
+  <!-- ФоноваЯ музыка -->
+  <audio id="bgMusic" loop>
+    <source src="cosmos.mp3" type="audio/mpeg" />
+  </audio>
 
-<script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
