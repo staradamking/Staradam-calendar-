@@ -28,7 +28,7 @@ const colorCycle = [
   { name: "Белый",     code: "#ffffff", meaning: "Очищение, завершение декады" }
 ];
 
-// Названия 30 дней (можешь потом переписать под свои операции)
+// Названия 30 дней
 const dayMeanings = [
   "День 1 — Атака",
   "День 2 — Движение",
@@ -83,7 +83,7 @@ const monthRanges = [
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
-// хранилище дисциплины (выполнен / не выполнен)
+// хранилище дисциплины
 const DISC_KEY = "staradam_discipline_v1";
 let doneMap = {};
 try {
@@ -91,11 +91,14 @@ try {
   if (saved) doneMap = JSON.parse(saved);
 } catch (_) {}
 
-// последняя выборка дня
 let selectedCell = null;
 let selectedMeta = null;
+let filterMode = "all"; // all | done | undone
 
-// Сегодня в системе Star Adam
+const starToday = getStarAdamToday();
+
+// --- ВСПОМОГАТЕЛЬНЫЕ ---
+
 function getStarAdamToday() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -110,7 +113,6 @@ function getStarAdamToday() {
   return null;
 }
 
-// Реальная дата для дня Star Adam
 function getRealDate(monthIndex, dayNumber) {
   const range = monthRanges[monthIndex];
   if (!range) return null;
@@ -125,14 +127,12 @@ function formatDateRu(date) {
   return `${date.getDate()} ${monthsRu[date.getMonth()]} ${date.getFullYear()}`;
 }
 
-const starToday = getStarAdamToday();
-
-// ключ для карты выполненных дней
 function dayKey(monthIndex, dayNumber) {
   return `${monthIndex}_${dayNumber}`;
 }
 
-// Создание карточки месяца
+// --- ОТРИСОВКА МЕСЯЦЕВ ---
+
 function createMonthCard(month, index) {
   const card = document.createElement("div");
   card.className = "month-card";
@@ -175,7 +175,9 @@ function createMonthCard(month, index) {
       cell.className = "day-cell";
       cell.textContent = dayNumber;
 
-      // Сегодня
+      cell.dataset.monthIndex = index;
+      cell.dataset.dayNumber = dayNumber;
+
       if (
         starToday &&
         starToday.monthIndex === index &&
@@ -184,7 +186,6 @@ function createMonthCard(month, index) {
         cell.classList.add("today");
       }
 
-      // Выполненный день
       if (doneMap[dayKey(index, dayNumber)]) {
         cell.classList.add("done");
       }
@@ -210,28 +211,35 @@ function createMonthCard(month, index) {
   return card;
 }
 
-// Клик по дню
+// --- КЛИК ПО ДНЮ ---
+
 function onDayClick(monthIndex, dayNumber, cell) {
   const key = dayKey(monthIndex, dayNumber);
 
-  // Если уже выбран этот же день — переключаем статус "выполнено"
   if (
     selectedMeta &&
     selectedMeta.monthIndex === monthIndex &&
     selectedMeta.dayNumber === dayNumber
   ) {
+    // переключаем статус выполнено/нет
     const newState = !doneMap[key];
     doneMap[key] = newState;
     if (!newState) delete doneMap[key];
 
     cell.classList.toggle("done", !!newState);
 
+    // лёгкая вибрация при отметке «сделано»
+    if (newState && typeof navigator !== "undefined" && navigator.vibrate) {
+      navigator.vibrate(20);
+    }
+
     try {
       localStorage.setItem(DISC_KEY, JSON.stringify(doneMap));
     } catch (_) {}
 
+    updateStats();
+    applyFilter();
   } else {
-    // Новый выбранный день
     if (selectedCell && selectedCell !== cell) {
       selectedCell.classList.remove("selected");
     }
@@ -267,7 +275,8 @@ function onDayClick(monthIndex, dayNumber, cell) {
   }
 }
 
-// .ics событие для календаря
+// --- .ICS СОБЫТИЕ ---
+
 function createIcsEvent(month, dayNumber, meaning, date) {
   const pad = n => (n < 10 ? "0" + n : "" + n);
   const dateStr =
@@ -315,7 +324,8 @@ function createIcsEvent(month, dayNumber, meaning, date) {
   }, 0);
 }
 
-// Панель цветов
+// --- ПАНЕЛЬ ЦВЕТОВ ---
+
 function renderColorPanel() {
   const panel = document.getElementById("colorPanel");
   const items = colorCycle
@@ -334,7 +344,38 @@ function renderColorPanel() {
   `;
 }
 
-// Рендер всего приложения
+// --- СТАТИСТИКА ---
+
+function updateStats() {
+  const statsEl = document.getElementById("statsPanel");
+  const totalDays = months.length * 30;
+  const doneCount = Object.keys(doneMap).length;
+  const percent = Math.round((doneCount * 100) / totalDays);
+  statsEl.innerHTML = `
+    Дней выполнено: <b>${doneCount}</b> из <b>${totalDays}</b> (${percent}%)
+  `;
+}
+
+// --- ФИЛЬТР ---
+
+function applyFilter() {
+  const cells = document.querySelectorAll(".day-cell");
+  cells.forEach(cell => {
+    cell.classList.remove("filtered-out");
+    const m = parseInt(cell.dataset.monthIndex, 10);
+    const d = parseInt(cell.dataset.dayNumber, 10);
+    const isDone = !!doneMap[dayKey(m, d)];
+
+    if (filterMode === "done" && !isDone) {
+      cell.classList.add("filtered-out");
+    } else if (filterMode === "undone" && isDone) {
+      cell.classList.add("filtered-out");
+    }
+  });
+}
+
+// --- РЕНДЕР ВСЕГО ПРИЛОЖЕНИЯ ---
+
 function renderApp() {
   const app = document.getElementById("app");
   app.innerHTML = "";
@@ -358,7 +399,11 @@ function renderApp() {
   }
 
   renderColorPanel();
+  updateStats();
+  applyFilter();
 }
+
+// --- ИНИЦИАЛИЗАЦИЯ ---
 
 document.addEventListener("DOMContentLoaded", () => {
   renderApp();
@@ -367,18 +412,37 @@ document.addEventListener("DOMContentLoaded", () => {
   const playBtn = document.getElementById("playMusic");
   let playing = false;
 
+  // автомузыка по желанию
+  const autoMusic = localStorage.getItem("starMusicAuto") === "1";
+  if (autoMusic) {
+    playBtn.textContent = "Музыка: Авто";
+    const autoStart = () => {
+      if (!playing) {
+        music.volume = 0.25;
+        music.play().catch(() => {});
+        playing = true;
+        playBtn.textContent = "Музыка: Вкл";
+      }
+    };
+    document.addEventListener("touchstart", autoStart, { once: true });
+    document.addEventListener("click", autoStart, { once: true });
+  }
+
   playBtn.addEventListener("click", () => {
     if (!playing) {
       try {
         music.volume = 0.25;
         music.play();
       } catch (_) {}
+      playing = true;
       playBtn.textContent = "Музыка: Вкл";
+      localStorage.setItem("starMusicAuto", "1");
     } else {
       music.pause();
+      playing = false;
       playBtn.textContent = "Музыка";
+      localStorage.setItem("starMusicAuto", "0");
     }
-    playing = !playing;
   });
 
   const themeBtn = document.getElementById("toggleTheme");
@@ -388,7 +452,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const tigerBtn = document.getElementById("toggleTiger");
   tigerBtn.addEventListener("click", () => {
-    document.body.classList.toggle("tiger");
+    const on = document.body.classList.toggle("tiger");
+    tigerBtn.textContent = on ? "TIGER: ON" : "TIGER";
   });
 
   const colorsBtn = document.getElementById("toggleColors");
@@ -397,5 +462,26 @@ document.addEventListener("DOMContentLoaded", () => {
   colorsBtn.addEventListener("click", () => {
     colorsVisible = !colorsVisible;
     colorPanel.style.display = colorsVisible ? "block" : "none";
+  });
+
+  const filterBtn = document.getElementById("toggleFilter");
+  filterBtn.addEventListener("click", () => {
+    if (filterMode === "all") {
+      filterMode = "done";
+      filterBtn.textContent = "Фильтр: ✔";
+    } else if (filterMode === "done") {
+      filterMode = "undone";
+      filterBtn.textContent = "Фильтр: ☐";
+    } else {
+      filterMode = "all";
+      filterBtn.textContent = "Фильтр";
+    }
+    applyFilter();
+  });
+
+  const mapBtn = document.getElementById("toggleMap");
+  mapBtn.addEventListener("click", () => {
+    const on = document.body.classList.toggle("map");
+    mapBtn.textContent = on ? "Карта: ON" : "Карта";
   });
 });
